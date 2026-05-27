@@ -1,0 +1,612 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "upload",
+        "responseMode": "lastNode",
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1920,
+        -40
+      ],
+      "id": "10e22703-7343-4da9-81fb-12106ea830ac",
+      "name": "Webhook",
+      "webhookId": "f5deb7e0-2d86-4877-8577-d441938168b4"
+    },
+    {
+      "parameters": {
+        "command": "rm -f /tmp/upload* 2>/dev/null; echo 'limpeza ok'"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -1700,
+        -40
+      ],
+      "id": "c976899e-1791-4c40-b3fd-67471d727837",
+      "name": "Limpar Temp"
+    },
+    {
+      "parameters": {
+        "jsCode": "// FIX: Execute Command descarta o binário do Webhook.\n// Recupera o binário original para o próximo nó poder salvar o arquivo.\nconst webhookItem = $('Webhook').first();\nreturn [{\n  json: webhookItem.json,\n  binary: webhookItem.binary\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1480,
+        -40
+      ],
+      "id": "fd187ffa-af01-4128-94ea-2623a1dd4cc2",
+      "name": "Restaurar Binário"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/tmp/upload.{{$binary.data0.fileExtension}}",
+        "dataPropertyName": "data0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -1260,
+        -40
+      ],
+      "id": "27c83704-3e57-4386-a611-443d90027203",
+      "name": "Salvar Arquivo"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "18c96931-712a-4d38-af50-9e43741ca773",
+              "leftValue": "={{$binary.data0.fileExtension}}",
+              "rightValue": "pdf",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1040,
+        -40
+      ],
+      "id": "6be46c04-5409-4b91-8548-5f6ca85d8a12",
+      "name": "É PDF?"
+    },
+    {
+      "parameters": {
+        "command": "python3 -c \"\nfrom pdf2image import convert_from_path\nimport pytesseract\nimport json\nimport sys\n\narquivo = '/tmp/upload.pdf'\ntexto = ''\n\ntry:\n    paginas = convert_from_path(arquivo, dpi=300)\n    for pagina in paginas:\n        pagina = pagina.convert('L')\n        texto_pagina = pytesseract.image_to_string(\n            pagina,\n            lang='por',\n            config='--oem 3 --psm 4'\n        )\n        texto += texto_pagina + '\\\\n'\n    print(json.dumps({'texto': texto}, ensure_ascii=False))\nexcept Exception as e:\n    print(json.dumps({'erro': str(e)}, ensure_ascii=False))\n    sys.exit(1)\n\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -160
+      ],
+      "id": "1db8b8f0-110a-4abb-a26a-f505bd1f13fc",
+      "name": "OCR PDF"
+    },
+    {
+      "parameters": {
+        "command": "=python3 -c \"\nimport os\nimport json\nimport sys\nfrom PIL import Image\nimport pytesseract\n\nextensao = '{{$binary.data0.fileExtension}}'\narquivo = f'/tmp/upload.{extensao}'\n\nif not os.path.exists(arquivo):\n    print(json.dumps({'erro': 'arquivo nao encontrado: ' + arquivo}))\n    sys.exit(1)\n\ntry:\n    img = Image.open(arquivo).convert('L')\n    img = img.point(lambda x: 0 if x < 160 else 255, '1')\n\n    texto = pytesseract.image_to_string(img, lang='por', config='--oem 3 --psm 4')\n\n    if len(texto.strip()) < 50:\n        img2 = Image.open(arquivo).convert('L')\n        texto = pytesseract.image_to_string(img2, lang='por', config='--oem 3 --psm 6')\n\n    print(json.dumps({'texto': texto}, ensure_ascii=False))\nexcept Exception as e:\n    print(json.dumps({'erro': str(e)}, ensure_ascii=False))\n    sys.exit(1)\n\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        80
+      ],
+      "id": "d364d482-4c8a-4113-bd47-ccd7cf5053af",
+      "name": "OCR Imagem"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.stdout;\n\nif (!raw) {\n  throw new Error('Nenhum stdout recebido do OCR');\n}\n\nconst data = JSON.parse(raw);\n\nif (data.erro) {\n  throw new Error('Erro no OCR: ' + data.erro);\n}\n\nreturn [{ json: { texto: data.texto } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -600,
+        -40
+      ],
+      "id": "ae795825-b72a-4163-ad68-4a167470fecc",
+      "name": "Parse JSON"
+    },
+    {
+      "parameters": {
+        "jsCode": "let texto = $json.texto || '';\n\n// Junta palavras quebradas no fim da linha com hífen\ntexto = texto.replace(/-\\n/g, '');\n\n// Remove quebras de linha duplicadas\ntexto = texto.replace(/\\n{2,}/g, '\\n');\n\n// Remove espaços e tabs duplicados\ntexto = texto.replace(/[ \\t]+/g, ' ');\n\n// Remove linhas com apenas lixo (menos de 3 chars não-alfanuméricos)\ntexto = texto.replace(/\\n[^\\wÀ-ÿ]{1,3}\\n/g, '\\n');\n\n// Trim geral\ntexto = texto.trim();\n\nreturn [{ json: { texto_limpo: texto } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -380,
+        -40
+      ],
+      "id": "cc1ea0e4-601e-4710-8d5f-989c75a32ecd",
+      "name": "Limpar Texto"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Você é um assistente especializado em extrair dados estruturados de currículos e gerar comandos SQL.\n\nTexto do currículo:\n{{ $json.texto_limpo }}\n\nGere um comando SQL INSERT para a tabela \"candidatos\" com as seguintes regras:\n\n1. Mapeie os campos encontrados no texto:\n   - Nome completo → nome_completo\n   - Cargo pretendido / área de atuação → cargo_pretendido\n   - Habilidades / tecnologias / ferramentas → habilidades\n   - Resumo de experiências → experiencia_resumida\n   - E-mail → email\n   - Telefone → telefone\n   - Cidade / estado → localizacao\n\n2. Inclua APENAS os campos que estiverem presentes no texto\n3. Escape aspas simples duplicando-as (ex: O'Brien → O''Brien)\n4. Retorne SOMENTE o comando SQL, sem explicações, sem blocos de código markdown\n\nFormato esperado:\nINSERT INTO candidatos (campo1, campo2, campo3)\nVALUES ('valor1', 'valor2', 'valor3');"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -160,
+        -40
+      ],
+      "id": "41ffcfac-9871-49cf-b59e-ca1861eb47b9",
+      "name": "Gerar INSERT SQL",
+      "credentials": {
+        "openAiApi": {
+          "id": "SuXAI1qhimy7ZqAO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extrai o SQL da resposta da IA\n// O nó OpenAI pode retornar o conteúdo em campos diferentes dependendo da versão\nconst content =\n  $json.content ||\n  $json.message?.content ||\n  $json.choices?.[0]?.message?.content ||\n  $json.text ||\n  '';\n\nif (!content) {\n  throw new Error(\n    'Não foi possível extrair o SQL da resposta da IA.\\nJSON recebido: ' +\n    JSON.stringify($json, null, 2)\n  );\n}\n\n// Remove blocos de código markdown caso a IA os inclua (```sql ... ```)\nlet sql = content.trim();\nsql = sql.replace(/```sql\\s*/gi, '').replace(/```\\s*/g, '').trim();\n\n// Validação básica\nif (!sql.toUpperCase().startsWith('INSERT')) {\n  throw new Error('A IA não retornou um INSERT válido.\\nResposta: ' + sql);\n}\n\nreturn [{ json: { sql_insert: sql } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        -40
+      ],
+      "id": "3fe7deaf-3a48-41fd-bf0b-d804431f6ec2",
+      "name": "Extrair SQL"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{ $json.sql_insert }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        440,
+        -40
+      ],
+      "id": "439668cc-5f08-475b-8447-1b34c0d04947",
+      "name": "Salvar no Banco",
+      "credentials": {
+        "postgres": {
+          "id": "xYdS1NxKJpebw0xh",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "buscar",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1920,
+        440
+      ],
+      "id": "e2d6711b-68c4-4fce-83be-165e32efc716",
+      "name": "Webhook Buscar",
+      "webhookId": "d8099363-8eab-4009-a434-c9013285eb60"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json;\nconst vaga = body.vaga || '';\nconst cargo = body.cargo || '';\nconst local = body.localizacao || '';\nconst skill = body.habilidade || '';\nconst limite = Math.min(parseInt(body.limite) || 10, 50);\n\nconst esc = s => (s || '').replace(/'/g, \"''\");\n\nconst conditions = [];\nif (cargo) conditions.push(`cargo_pretendido ILIKE '%${esc(cargo)}%'`);\nif (local)  conditions.push(`localizacao ILIKE '%${esc(local)}%'`);\nif (skill)  conditions.push(`habilidades ILIKE '%${esc(skill)}%'`);\n\nconst where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';\n\nconst sql = `SELECT COALESCE(json_agg(row_to_json(c)), '[]'::json) AS candidatos FROM (SELECT * FROM candidatos ${where} LIMIT ${limite}) c`;\n\nreturn [{ json: { sql, vaga, limite } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1700,
+        440
+      ],
+      "id": "94c3ef59-f8b3-4d26-afdc-7efef096defc",
+      "name": "Montar SQL"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{ $json.sql }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -1480,
+        440
+      ],
+      "id": "feb09829-fecd-470e-808e-58aa699479f9",
+      "name": "Buscar no Banco",
+      "credentials": {
+        "postgres": {
+          "id": "xYdS1NxKJpebw0xh",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let candidatos = $json.candidatos;\nif (typeof candidatos === 'string') {\n  try { candidatos = JSON.parse(candidatos); } catch(e) { candidatos = []; }\n}\nif (!Array.isArray(candidatos)) { candidatos = []; }\nreturn [{ json: { candidatos } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1260,
+        440
+      ],
+      "id": "f2d9c645-0015-49c4-a474-a2975edbd1e5",
+      "name": "Normalizar Resultado"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b2000000-0000-0000-0000-000000000001",
+              "leftValue": "={{ $json.candidatos.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1040,
+        440
+      ],
+      "id": "00bde709-0381-466b-9cbf-d997d76eecd1",
+      "name": "Tem Candidatos?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const candidatos = $json.candidatos;\nconst vaga = $('Montar SQL').first().json.vaga;\n\nconst candidatosStr = candidatos.map((c, i) =>\n  `[${i + 1}] ID:${c.id} | Nome:${c.nome_completo || 'N/A'} | Cargo:${c.cargo_pretendido || 'N/A'} | Habilidades:${c.habilidades || 'N/A'} | Local:${c.localizacao || 'N/A'} | Experiencia:${(c.experiencia_resumida || '').substring(0, 150)}`\n).join('\\n');\n\nreturn [{ json: {\n  vaga,\n  candidatos_str: candidatosStr,\n  candidatos_json: JSON.stringify(candidatos)\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -820,
+        320
+      ],
+      "id": "a70a8855-9b9c-4190-9d6e-a0c94c18a0b9",
+      "name": "Preparar para IA"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { candidatos: [] } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -820,
+        560
+      ],
+      "id": "a64e9be9-7db5-4586-b7aa-5a28bd170302",
+      "name": "Resposta Vazia"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Voce e especialista em recrutamento e selecao de talentos. Analise os candidatos abaixo e ranqueie-os para a vaga descrita.\n\nVAGA DESEJADA:\n{{ $json.vaga }}\n\nCANDIDATOS DISPONIVEIS:\n{{ $json.candidatos_str }}\n\nRetorne SOMENTE um array JSON valido, sem texto adicional, sem blocos de codigo markdown:\n[\n  {\"indice\": 1, \"score\": 0.95, \"justificativa\": \"Experiencia solida e alinhada com a vaga.\"},\n  {\"indice\": 2, \"score\": 0.70, \"justificativa\": \"Bom perfil mas faltam algumas habilidades.\"}\n]\n\nRegras:\n- score: numero de 0 a 1 (1.0 = candidato perfeito para a vaga)\n- justificativa: 1-2 frases em portugues explicando a compatibilidade\n- Inclua TODOS os candidatos listados, mesmo os menos adequados\n- Ordene do score mais alto ao mais baixo\n- Retorne APENAS o JSON, absolutamente nada mais"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -600,
+        320
+      ],
+      "id": "256498c6-db2c-4823-8fd2-b581c2d05be3",
+      "name": "Ranquear com GPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "SuXAI1qhimy7ZqAO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const content =\n  $json.content ||\n  ($json.message && $json.message.content) ||\n  ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) ||\n  '[]';\n\nconst raw = content.replace(/```json\\s*/gi, '').replace(/```\\s*/g, '').trim();\n\nlet rankings;\ntry {\n  rankings = JSON.parse(raw);\n} catch (e) {\n  throw new Error('IA retornou JSON invalido: ' + raw.substring(0, 200));\n}\n\nconst candidatos = JSON.parse($('Preparar para IA').first().json.candidatos_json);\n\nconst resultado = rankings.map(r => {\n  const c = candidatos[r.indice - 1];\n  if (!c) return null;\n  return Object.assign({}, c, { score: r.score, justificativa: r.justificativa });\n}).filter(Boolean);\n\nreturn [{ json: { candidatos: resultado } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -140,
+        480
+      ],
+      "id": "b4aa3ffb-a05e-4394-b72f-2b8126cbc6a7",
+      "name": "Montar Resposta Final"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Limpar Temp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limpar Temp": {
+      "main": [
+        [
+          {
+            "node": "Restaurar Binário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Restaurar Binário": {
+      "main": [
+        [
+          {
+            "node": "Salvar Arquivo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar Arquivo": {
+      "main": [
+        [
+          {
+            "node": "É PDF?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "É PDF?": {
+      "main": [
+        [
+          {
+            "node": "OCR PDF",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OCR Imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OCR PDF": {
+      "main": [
+        [
+          {
+            "node": "Parse JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OCR Imagem": {
+      "main": [
+        [
+          {
+            "node": "Parse JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse JSON": {
+      "main": [
+        [
+          {
+            "node": "Limpar Texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limpar Texto": {
+      "main": [
+        [
+          {
+            "node": "Gerar INSERT SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar INSERT SQL": {
+      "main": [
+        [
+          {
+            "node": "Extrair SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair SQL": {
+      "main": [
+        [
+          {
+            "node": "Salvar no Banco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Buscar": {
+      "main": [
+        [
+          {
+            "node": "Montar SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar SQL": {
+      "main": [
+        [
+          {
+            "node": "Buscar no Banco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar no Banco": {
+      "main": [
+        [
+          {
+            "node": "Normalizar Resultado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar Resultado": {
+      "main": [
+        [
+          {
+            "node": "Tem Candidatos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tem Candidatos?": {
+      "main": [
+        [
+          {
+            "node": "Preparar para IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta Vazia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar para IA": {
+      "main": [
+        [
+          {
+            "node": "Ranquear com GPT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ranquear com GPT": {
+      "main": [
+        [
+          {
+            "node": "Montar Resposta Final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "67067cb3-5cd2-4926-a0df-4cf5b729e9ca",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3c87b76396f56eba8c5bd2072ddb33a4830148466ed7e057bce91424bc992759"
+  },
+  "id": "IKlYvtIdFaFAf0VD",
+  "tags": []
+}

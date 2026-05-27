@@ -1,0 +1,268 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "upload",
+        "responseMode": "lastNode",
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        180,
+        0
+      ],
+      "id": "fc0b0bb6-9600-4022-ac90-a817399882d8",
+      "name": "Webhook",
+      "webhookId": "f5deb7e0-2d86-4877-8577-d441938168b4"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/tmp/upload.{{$binary.data0.fileExtension}}",
+        "dataPropertyName": "data0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        420,
+        100
+      ],
+      "id": "1b3af41b-5053-4b6b-9a20-2b0857111bef",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "18c96931-712a-4d38-af50-9e43741ca773",
+              "leftValue": "={{$binary.data0.fileExtension}}",
+              "rightValue": "pdf",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        640,
+        100
+      ],
+      "id": "c788a689-2c0a-4caa-8154-e1b3806fd886",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "command": "=python3 -c \"\nimport os\nimport json\nfrom PIL import Image\nimport pytesseract\n\narquivo = '/tmp/upload.jpeg'\n\nif not os.path.exists(arquivo):\n    print(json.dumps({'erro': 'arquivo nao encontrado'}))\n    exit()\n\nimg = Image.open(arquivo).convert('L')\n\n# melhora contraste\nimg = img.point(lambda x: 0 if x < 160 else 255, '1')\n\n# tenta modo mais estruturado\nconfig = '--oem 3 --psm 4'\n\ntexto = pytesseract.image_to_string(img, lang='por', config=config)\n\n# fallback se vier ruim\nif len(texto) < 50:\n    config = '--oem 3 --psm 6'\n    texto = pytesseract.image_to_string(img, lang='por', config=config)\n\nprint(json.dumps({'texto': texto}, ensure_ascii=False))\n\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        920,
+        220
+      ],
+      "id": "5f21b948-8d2b-4201-98f8-adaa34079aa8",
+      "name": "Execute Command1"
+    },
+    {
+      "parameters": {
+        "command": "=python3 -c \"\nfrom pdf2image import convert_from_path\nimport pytesseract\nimport json\n\narquivo = '/tmp/upload.pdf'\n\ntexto = ''\n\n# 🔥 IMPORTANTE: DPI alto\npaginas = convert_from_path(arquivo, dpi=300)\n\nfor pagina in paginas:\n    # melhora imagem antes do OCR\n    pagina = pagina.convert('L')\n\n    texto_pagina = pytesseract.image_to_string(\n        pagina,\n        lang='por',\n        config='--oem 3 --psm 4'\n    )\n\n    texto += texto_pagina + '\\\\n'\n\nprint(json.dumps({'texto': texto}, ensure_ascii=False))\n\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        920,
+        40
+      ],
+      "id": "f2b6ef31-f23d-4813-b0c6-8b83a164be9a",
+      "name": "Execute Command2"
+    },
+    {
+      "parameters": {
+        "command": "rm -f /tmp/upload*"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        420,
+        -100
+      ],
+      "id": "df996a66-2f58-4c56-ad44-bc3d280d7c4f",
+      "name": "Execute Command"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = JSON.parse($json.stdout);\n\nreturn [\n  {\n    json: {\n      texto: data.texto\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        40
+      ],
+      "id": "c2ac0394-a1e0-499f-97ae-db3e72b78b79",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "let texto = $json.texto;\n\n// junta linhas quebradas\ntexto = texto.replace(/-\\n/g, '');\ntexto = texto.replace(/\\n+/g, '\\n');\n\n// remove espaços duplicados\ntexto = texto.replace(/[ \\t]+/g, ' ');\n\n// remove lixo isolado\ntexto = texto.replace(/\\n[^\\wÀ-ÿ]{1,3}\\n/g, '\\n');\n\nreturn [\n  {\n    json: {\n      texto_limpo: texto\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        40
+      ],
+      "id": "ce2cf664-254c-47be-8fdb-688c2c37bddc",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Você é um assistente que gera comandos SQL UPDATE baseado em dados recebidos.\n\nCom base nos seguintes dados do currículo em texto plano:\n\n{DADOS_DO_CURRICULO}\n\nIdentifique o campo que serve como identificador único do registro (ex: CPF, email, ID, ou nome completo dependendo do que estiver disponível).\n\nGere um comando SQL UPDATE para a tabela \"candidatos\" seguindo estas regras:\n\n1. Use o identificador encontrado no WHERE clause (ex: WHERE id = 'valor' OU WHERE email = 'valor')\n2. Atualize APENAS os campos presentes nos dados\n3. Mapeie os campos assim:\n   - nome_completo → nome ou nome_completo\n   - cargo_pretendido → cargo\n   - habilidades_principais → habilidades\n   - experiencia → experiencia_resumida\n\n4. Se o identificador for nome, use LIKE para maior flexibilidade\n5. Retorne APENAS o comando SQL, sem explicações\n\nExemplo de formato:\nUPDATE candidatos \nSET campo1 = 'valor1',\n    campo2 = 'valor2'\nWHERE identificador = 'valor_identificador';"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1540,
+        40
+      ],
+      "id": "75e5876f-72a8-4dc1-9ef3-20d6f1603142",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Q22Qx3CiS2eBz1HE",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Execute Command",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Execute Command2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute Command1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command": {
+      "main": [
+        []
+      ]
+    },
+    "Execute Command2": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "24fb442a-4c0c-45d8-9617-29ef55edaea5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3c87b76396f56eba8c5bd2072ddb33a4830148466ed7e057bce91424bc992759"
+  },
+  "id": "6vDai5WnBYmZ8yMc",
+  "tags": []
+}
