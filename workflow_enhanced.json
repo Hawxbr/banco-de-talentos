@@ -1,0 +1,1175 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "upload",
+        "responseMode": "lastNode",
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2420,
+        -40
+      ],
+      "id": "10e22703-7343-4da9-81fb-12106ea830ac",
+      "name": "Webhook",
+      "webhookId": "f5deb7e0-2d86-4877-8577-d441938168b4"
+    },
+    {
+      "parameters": {
+        "command": "rm -f /tmp/upload* 2>/dev/null; echo 'limpeza ok'"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -2200,
+        -40
+      ],
+      "id": "c976899e-1791-4c40-b3fd-67471d727837",
+      "name": "Limpar Temp"
+    },
+    {
+      "parameters": {
+        "jsCode": "// FIX: Execute Command descarta o binário do Webhook.\n// Recupera o binário original para o próximo nó poder salvar o arquivo.\nconst webhookItem = $('Webhook').first();\nreturn [{\n  json: webhookItem.json,\n  binary: webhookItem.binary\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1980,
+        -40
+      ],
+      "id": "fd187ffa-af01-4128-94ea-2623a1dd4cc2",
+      "name": "Restaurar Binário"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/tmp/upload.{{$binary.data0.fileExtension}}",
+        "dataPropertyName": "data0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -1760,
+        -40
+      ],
+      "id": "27c83704-3e57-4386-a611-443d90027203",
+      "name": "Salvar Arquivo"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "18c96931-712a-4d38-af50-9e43741ca773",
+              "leftValue": "={{$binary.data0.fileExtension}}",
+              "rightValue": "pdf",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1540,
+        -40
+      ],
+      "id": "6be46c04-5409-4b91-8548-5f6ca85d8a12",
+      "name": "É PDF?"
+    },
+    {
+      "parameters": {
+        "command": "python3 -c \"\nfrom pdf2image import convert_from_path\nimport pytesseract\nimport json\nimport sys\n\narquivo = '/tmp/upload.pdf'\ntexto = ''\n\ntry:\n    paginas = convert_from_path(arquivo, dpi=300)\n    for pagina in paginas:\n        pagina = pagina.convert('L')\n        texto_pagina = pytesseract.image_to_string(\n            pagina,\n            lang='por',\n            config='--oem 3 --psm 4'\n        )\n        texto += texto_pagina + '\\\\n'\n    print(json.dumps({'texto': texto}, ensure_ascii=False))\nexcept Exception as e:\n    print(json.dumps({'erro': str(e)}, ensure_ascii=False))\n    sys.exit(1)\n\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -1320,
+        -160
+      ],
+      "id": "1db8b8f0-110a-4abb-a26a-f505bd1f13fc",
+      "name": "OCR PDF"
+    },
+    {
+      "parameters": {
+        "command": "=python3 -c \"\nimport os\nimport json\nimport sys\nfrom PIL import Image\nimport pytesseract\n\nextensao = '{{$binary.data0.fileExtension}}'\narquivo = f'/tmp/upload.{extensao}'\n\nif not os.path.exists(arquivo):\n    print(json.dumps({'erro': 'arquivo nao encontrado: ' + arquivo}))\n    sys.exit(1)\n\ntry:\n    img = Image.open(arquivo).convert('L')\n    img = img.point(lambda x: 0 if x < 160 else 255, '1')\n\n    texto = pytesseract.image_to_string(img, lang='por', config='--oem 3 --psm 4')\n\n    if len(texto.strip()) < 50:\n        img2 = Image.open(arquivo).convert('L')\n        texto = pytesseract.image_to_string(img2, lang='por', config='--oem 3 --psm 6')\n\n    print(json.dumps({'texto': texto}, ensure_ascii=False))\nexcept Exception as e:\n    print(json.dumps({'erro': str(e)}, ensure_ascii=False))\n    sys.exit(1)\n\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -1320,
+        80
+      ],
+      "id": "d364d482-4c8a-4113-bd47-ccd7cf5053af",
+      "name": "OCR Imagem"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.stdout;\n\nif (!raw) {\n  throw new Error('Nenhum stdout recebido do OCR');\n}\n\nconst data = JSON.parse(raw);\n\nif (data.erro) {\n  throw new Error('Erro no OCR: ' + data.erro);\n}\n\nreturn [{ json: { texto: data.texto } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -600,
+        -40
+      ],
+      "id": "ae795825-b72a-4163-ad68-4a167470fecc",
+      "name": "Parse JSON"
+    },
+    {
+      "parameters": {
+        "jsCode": "let texto = $json.texto || '';\n\n// Junta palavras quebradas no fim da linha com hífen\ntexto = texto.replace(/-\\n/g, '');\n\n// Remove quebras de linha duplicadas\ntexto = texto.replace(/\\n{2,}/g, '\\n');\n\n// Remove espaços e tabs duplicados\ntexto = texto.replace(/[ \\t]+/g, ' ');\n\n// Remove linhas com apenas lixo (menos de 3 chars não-alfanuméricos)\ntexto = texto.replace(/\\n[^\\wÀ-ÿ]{1,3}\\n/g, '\\n');\n\n// Trim geral\ntexto = texto.trim();\n\nreturn [{ json: { texto_limpo: texto } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -380,
+        -40
+      ],
+      "id": "cc1ea0e4-601e-4710-8d5f-989c75a32ecd",
+      "name": "Limpar Texto"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Você é um assistente especializado em extrair dados estruturados de currículos e gerar comandos SQL.\n\nTexto do currículo:\n{{ $json.texto_limpo }}\n\nGere um comando SQL INSERT para a tabela \"candidatos\" com as seguintes regras:\n\n1. Mapeie os campos encontrados no texto:\n   - Nome completo → nome_completo\n   - Cargo pretendido / área de atuação → cargo_pretendido\n   - Habilidades / tecnologias / ferramentas → habilidades\n   - Resumo de experiências → experiencia_resumida\n   - E-mail → email\n   - Telefone → telefone\n   - Cidade / estado → localizacao\n\n2. Inclua APENAS os campos que estiverem presentes no texto\n3. Escape aspas simples duplicando-as (ex: O'Brien → O''Brien)\n4. Retorne SOMENTE o comando SQL, sem explicações, sem blocos de código markdown\n\nFormato esperado:\nINSERT INTO candidatos (campo1, campo2, campo3)\nVALUES ('valor1', 'valor2', 'valor3');"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        280,
+        -220
+      ],
+      "id": "41ffcfac-9871-49cf-b59e-ca1861eb47b9",
+      "name": "Gerar INSERT SQL",
+      "credentials": {
+        "openAiApi": {
+          "id": "SuXAI1qhimy7ZqAO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extrai o SQL da resposta da IA\n// O nó OpenAI pode retornar o conteúdo em campos diferentes dependendo da versão\nconst content =\n  $json.content ||\n  $json.message?.content ||\n  $json.choices?.[0]?.message?.content ||\n  $json.text ||\n  '';\n\nif (!content) {\n  throw new Error(\n    'Não foi possível extrair o SQL da resposta da IA.\\nJSON recebido: ' +\n    JSON.stringify($json, null, 2)\n  );\n}\n\n// Remove blocos de código markdown caso a IA os inclua (```sql ... ```)\nlet sql = content.trim();\nsql = sql.replace(/```sql\\s*/gi, '').replace(/```\\s*/g, '').trim();\n\n// Validação básica\nif (!sql.toUpperCase().startsWith('INSERT')) {\n  throw new Error('A IA não retornou um INSERT válido.\\nResposta: ' + sql);\n}\n\nreturn [{ json: { sql_insert: sql } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        -220
+      ],
+      "id": "3fe7deaf-3a48-41fd-bf0b-d804431f6ec2",
+      "name": "Extrair SQL"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{ $json.sql_insert }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        720,
+        -220
+      ],
+      "id": "439668cc-5f08-475b-8447-1b34c0d04947",
+      "name": "Salvar no Banco",
+      "credentials": {
+        "postgres": {
+          "id": "xYdS1NxKJpebw0xh",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "var texto = $json.texto_limpo || '';\nvar logs = [];\nvar ts = new Date().toISOString();\n\nlogs.push('[' + ts + '][LEITURA] Texto extraido: ' + texto.length + ' caracteres');\nlogs.push('[' + ts + '][VALIDACAO] Verificando campos obrigatorios: nome e telefone');\n\n// Detectar digitos (indicador de telefone)\nvar soDigitos = texto.replace(/[^0-9]/g, '');\nvar temTelefone = soDigitos.length >= 8;\n\n// Detectar palavras (indicador de nome)\nvar palavras = texto.split(' ').filter(function(p) { return p.trim().length > 2; });\nvar temNome = palavras.length >= 3;\n\nvar campos_ok = temTelefone && temNome;\n\nif (temNome) {\n  logs.push('[' + ts + '][OK] Indicadores de nome presentes no texto');\n} else {\n  logs.push('[' + ts + '][AVISO] Texto insuficiente para identificar nome');\n}\nif (temTelefone) {\n  logs.push('[' + ts + '][OK] Sequencia de digitos compativel com telefone encontrada');\n} else {\n  logs.push('[' + ts + '][AVISO] Nenhuma sequencia de digitos compativel com telefone');\n}\n\nlogs.push('[' + ts + '][RESULTADO] ' + (campos_ok ? 'COMPLETO - seguindo fluxo direto' : 'INCOMPLETO - encaminhando para analise por IA'));\n\nreturn [{ json: {\n  texto_limpo: texto,\n  campos_ok: campos_ok,\n  logs: logs,\n  retry_count: 0\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        -40
+      ],
+      "id": "aa000001-0000-4000-a000-000000000001",
+      "name": "Validar Campos Iniciais"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "campos-ok-check",
+              "leftValue": "={{ $json.campos_ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        60,
+        -40
+      ],
+      "id": "aa000002-0000-4000-a000-000000000002",
+      "name": "Dados Completos?"
+    },
+    {
+      "parameters": {
+        "jsCode": "var logs = $('Validar Campos Iniciais').first().json.logs || [];\nvar ts = new Date().toISOString();\nvar logsFinal = logs.slice();\nlogsFinal.push('[' + ts + '][SUCESSO] Candidato salvo no banco de dados (fluxo direto - campos completos no OCR)');\nreturn [{ json: {\n  status: 'sucesso',\n  metodo: 'direto',\n  mensagem: 'Candidato processado e salvo com sucesso',\n  log_completo: logsFinal.join('\\n'),\n  timestamp: ts\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        -220
+      ],
+      "id": "aa000003-0000-4000-a000-000000000003",
+      "name": "Resposta Sucesso Direto"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Voce e um especialista em extracao de dados de curriculos, incluindo textos com erros de OCR.\n\nAnalise o texto abaixo com atencao especial aos CAMPOS OBRIGATORIOS. Seja criativo e tolerante com erros de leitura.\n\nCAMPOS OBRIGATORIOS (extraia se existirem, mesmo com grafia imperfeita):\n- nome_completo: Nome completo do candidato\n- telefone: Numero de telefone (qualquer formato)\n\nCAMPOS OPCIONAIS:\n- cargo_pretendido\n- habilidades\n- experiencia_resumida\n- email\n- localizacao\n\nTEXTO DO CURRICULO:\n{{ $json.texto_limpo }}\n\nRetorne APENAS um JSON valido, sem texto adicional, sem markdown:\n{\"nome_completo\": \"...\", \"telefone\": \"...\", \"cargo_pretendido\": \"...\", \"habilidades\": \"...\", \"experiencia_resumida\": \"...\", \"email\": \"...\", \"localizacao\": \"...\"}\n\nSe um campo nao existir no texto, use null."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        280,
+        120
+      ],
+      "id": "aa000004-0000-4000-a000-000000000004",
+      "name": "OpenAI Fix T1",
+      "continueOnFail": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "SuXAI1qhimy7ZqAO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "var textoLimpo = $('Validar Campos Iniciais').first().json.texto_limpo;\nvar logsAnterior = $('Validar Campos Iniciais').first().json.logs || [];\nvar logs = logsAnterior.slice();\nvar tentativa = 1;\nvar ts = new Date().toISOString();\n\nlogs.push('[' + ts + '][T' + tentativa + '] Processando resposta da OpenAI (tentativa ' + tentativa + ' de 4)');\n\n// Verificar se o no falhou (continueOnFail)\nif ($json.error) {\n  logs.push('[' + ts + '][T' + tentativa + '][ERRO] Falha na API OpenAI: ' + JSON.stringify($json.error));\n  return [{ json: {\n    texto_limpo: textoLimpo,\n    dados_extraidos: {},\n    campos_ok: false,\n    erro: String($json.error),\n    tentativa: tentativa,\n    retry_count: tentativa,\n    logs: logs\n  } }];\n}\n\n// Extrair conteudo da resposta (multiplos formatos possiveis)\nvar content = '';\nif ($json.content) content = $json.content;\nelse if ($json.message && $json.message.content) content = $json.message.content;\nelse if ($json.choices && $json.choices[0] && $json.choices[0].message) content = $json.choices[0].message.content;\nelse if ($json.text) content = $json.text;\n\nlogs.push('[' + ts + '][T' + tentativa + '] Conteudo recebido: ' + content.length + ' chars');\n\n// Parse do JSON retornado pela IA\nvar dadosIA = {};\nvar erro_parse = null;\ntry {\n  var limpo = content.trim();\n  limpo = limpo.replace(/```json/g, '').replace(/```/g, '').trim();\n  dadosIA = JSON.parse(limpo);\n  logs.push('[' + ts + '][T' + tentativa + '][OK] JSON da IA parseado com sucesso');\n} catch(e) {\n  erro_parse = e.message;\n  logs.push('[' + ts + '][T' + tentativa + '][ERRO] Falha ao parsear JSON: ' + e.message);\n  logs.push('[' + ts + '][T' + tentativa + '][DEBUG] Resposta bruta: ' + content.substring(0, 300));\n}\n\n// Validar campos obrigatorios\nvar nomeOk = !!(dadosIA.nome_completo && dadosIA.nome_completo !== 'null' && String(dadosIA.nome_completo).trim().length > 2);\nvar telOk = !!(dadosIA.telefone && dadosIA.telefone !== 'null' && String(dadosIA.telefone).trim().length > 5);\nvar campos_ok = nomeOk && telOk && !erro_parse;\n\nif (nomeOk) logs.push('[' + ts + '][T' + tentativa + '][OK] Nome: ' + dadosIA.nome_completo);\nelse logs.push('[' + ts + '][T' + tentativa + '][AVISO] Nome ausente ou invalido');\n\nif (telOk) logs.push('[' + ts + '][T' + tentativa + '][OK] Telefone: ' + dadosIA.telefone);\nelse logs.push('[' + ts + '][T' + tentativa + '][AVISO] Telefone ausente ou invalido');\n\nlogs.push('[' + ts + '][T' + tentativa + '] Status: ' + (campos_ok ? 'DADOS COMPLETOS' : 'DADOS INCOMPLETOS'));\n\nreturn [{ json: {\n  texto_limpo: textoLimpo,\n  dados_extraidos: dadosIA,\n  campos_ok: campos_ok,\n  erro_parse: erro_parse,\n  tentativa: tentativa,\n  retry_count: tentativa,\n  logs: logs\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        120
+      ],
+      "id": "aa000005-0000-4000-a000-000000000005",
+      "name": "Parse Validar T1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "t1-ok-cond",
+              "leftValue": "={{ $json.campos_ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        120
+      ],
+      "id": "aa000006-0000-4000-a000-000000000006",
+      "name": "T1 OK?"
+    },
+    {
+      "parameters": {
+        "jsCode": "var dados = $json.dados_extraidos || {};\nvar logs = ($json.logs || []).slice();\nvar ts = new Date().toISOString();\nvar sq = String.fromCharCode(39);\nvar escape = function(v) { return String(v).split(sq).join(sq + sq); };\n\nvar campos = [];\nvar valores = [];\n\nif (dados.nome_completo) { campos.push('nome_completo'); valores.push(sq + escape(dados.nome_completo) + sq); }\nif (dados.cargo_pretendido) { campos.push('cargo_pretendido'); valores.push(sq + escape(dados.cargo_pretendido) + sq); }\nif (dados.habilidades) { campos.push('habilidades'); valores.push(sq + escape(dados.habilidades) + sq); }\nif (dados.experiencia_resumida) { campos.push('experiencia_resumida'); valores.push(sq + escape(dados.experiencia_resumida) + sq); }\nif (dados.email) { campos.push('email'); valores.push(sq + escape(dados.email) + sq); }\nif (dados.telefone) { campos.push('telefone'); valores.push(sq + escape(dados.telefone) + sq); }\nif (dados.localizacao) { campos.push('localizacao'); valores.push(sq + escape(dados.localizacao) + sq); }\n\nvar sql = 'INSERT INTO candidatos (' + campos.join(', ') + ') VALUES (' + valores.join(', ') + ');';\n\nlogs.push('[' + ts + '][SUCESSO] INSERT SQL montado via IA com ' + campos.length + ' campos (tentativa ' + ($json.tentativa || '?') + ')');\n\nreturn [{ json: {\n  sql_insert: sql,\n  dados_extraidos: dados,\n  logs: logs,\n  tentativa: $json.tentativa || 0,\n  status: 'pronto_para_salvar'\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1380,
+        -40
+      ],
+      "id": "aa000007-0000-4000-a000-000000000007",
+      "name": "Montar INSERT SQL IA"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{ $json.sql_insert }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1600,
+        -40
+      ],
+      "id": "aa000008-0000-4000-a000-000000000008",
+      "name": "Salvar no Banco IA",
+      "credentials": {
+        "postgres": {
+          "id": "xYdS1NxKJpebw0xh",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "var logs = ($json.logs || []).slice();\nvar ts = new Date().toISOString();\nlogs.push('[' + ts + '][SUCESSO] Candidato salvo no banco de dados via IA (tentativa ' + ($json.tentativa || '?') + ')');\nreturn [{ json: {\n  status: 'sucesso',\n  metodo: 'ia',\n  tentativa: $json.tentativa || 0,\n  mensagem: 'Candidato processado pela IA e salvo com sucesso',\n  log_completo: logs.join('\\n'),\n  timestamp: ts\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1820,
+        -40
+      ],
+      "id": "aa000009-0000-4000-a000-000000000009",
+      "name": "Resposta Sucesso IA"
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 5,
+        "unit": "seconds"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        940,
+        120
+      ],
+      "id": "aa000010-0000-4000-a000-000000000010",
+      "name": "Wait 5s",
+      "webhookId": "aa000010-0000-4000-a000-000000000010"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Voce e um especialista em extracao de dados de curriculos, incluindo textos com erros de OCR.\n\nAnalise o texto abaixo com atencao especial aos CAMPOS OBRIGATORIOS. Seja criativo e tolerante com erros de leitura.\n\nCAMPOS OBRIGATORIOS (extraia se existirem, mesmo com grafia imperfeita):\n- nome_completo: Nome completo do candidato\n- telefone: Numero de telefone (qualquer formato)\n\nCAMPOS OPCIONAIS:\n- cargo_pretendido\n- habilidades\n- experiencia_resumida\n- email\n- localizacao\n\nTEXTO DO CURRICULO:\n{{ $json.texto_limpo }}\n\nRetorne APENAS um JSON valido, sem texto adicional, sem markdown:\n{\"nome_completo\": \"...\", \"telefone\": \"...\", \"cargo_pretendido\": \"...\", \"habilidades\": \"...\", \"experiencia_resumida\": \"...\", \"email\": \"...\", \"localizacao\": \"...\"}\n\nSe um campo nao existir no texto, use null."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1160,
+        120
+      ],
+      "id": "aa000011-0000-4000-a000-000000000011",
+      "name": "OpenAI Fix T2",
+      "continueOnFail": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "SuXAI1qhimy7ZqAO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "var textoLimpo = $('Validar Campos Iniciais').first().json.texto_limpo;\nvar logsAnterior = $('Wait 5s').first().json.logs || [];\nvar logs = logsAnterior.slice();\nvar tentativa = 2;\nvar ts = new Date().toISOString();\n\nlogs.push('[' + ts + '][T' + tentativa + '] Processando resposta da OpenAI (tentativa ' + tentativa + ' de 4)');\n\n// Verificar se o no falhou (continueOnFail)\nif ($json.error) {\n  logs.push('[' + ts + '][T' + tentativa + '][ERRO] Falha na API OpenAI: ' + JSON.stringify($json.error));\n  return [{ json: {\n    texto_limpo: textoLimpo,\n    dados_extraidos: {},\n    campos_ok: false,\n    erro: String($json.error),\n    tentativa: tentativa,\n    retry_count: tentativa,\n    logs: logs\n  } }];\n}\n\n// Extrair conteudo da resposta (multiplos formatos possiveis)\nvar content = '';\nif ($json.content) content = $json.content;\nelse if ($json.message && $json.message.content) content = $json.message.content;\nelse if ($json.choices && $json.choices[0] && $json.choices[0].message) content = $json.choices[0].message.content;\nelse if ($json.text) content = $json.text;\n\nlogs.push('[' + ts + '][T' + tentativa + '] Conteudo recebido: ' + content.length + ' chars');\n\n// Parse do JSON retornado pela IA\nvar dadosIA = {};\nvar erro_parse = null;\ntry {\n  var limpo = content.trim();\n  limpo = limpo.replace(/```json/g, '').replace(/```/g, '').trim();\n  dadosIA = JSON.parse(limpo);\n  logs.push('[' + ts + '][T' + tentativa + '][OK] JSON da IA parseado com sucesso');\n} catch(e) {\n  erro_parse = e.message;\n  logs.push('[' + ts + '][T' + tentativa + '][ERRO] Falha ao parsear JSON: ' + e.message);\n  logs.push('[' + ts + '][T' + tentativa + '][DEBUG] Resposta bruta: ' + content.substring(0, 300));\n}\n\n// Validar campos obrigatorios\nvar nomeOk = !!(dadosIA.nome_completo && dadosIA.nome_completo !== 'null' && String(dadosIA.nome_completo).trim().length > 2);\nvar telOk = !!(dadosIA.telefone && dadosIA.telefone !== 'null' && String(dadosIA.telefone).trim().length > 5);\nvar campos_ok = nomeOk && telOk && !erro_parse;\n\nif (nomeOk) logs.push('[' + ts + '][T' + tentativa + '][OK] Nome: ' + dadosIA.nome_completo);\nelse logs.push('[' + ts + '][T' + tentativa + '][AVISO] Nome ausente ou invalido');\n\nif (telOk) logs.push('[' + ts + '][T' + tentativa + '][OK] Telefone: ' + dadosIA.telefone);\nelse logs.push('[' + ts + '][T' + tentativa + '][AVISO] Telefone ausente ou invalido');\n\nlogs.push('[' + ts + '][T' + tentativa + '] Status: ' + (campos_ok ? 'DADOS COMPLETOS' : 'DADOS INCOMPLETOS'));\n\nreturn [{ json: {\n  texto_limpo: textoLimpo,\n  dados_extraidos: dadosIA,\n  campos_ok: campos_ok,\n  erro_parse: erro_parse,\n  tentativa: tentativa,\n  retry_count: tentativa,\n  logs: logs\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1380,
+        120
+      ],
+      "id": "aa000012-0000-4000-a000-000000000012",
+      "name": "Parse Validar T2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "t2-ok-cond",
+              "leftValue": "={{ $json.campos_ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1600,
+        120
+      ],
+      "id": "aa000013-0000-4000-a000-000000000013",
+      "name": "T2 OK?"
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 15,
+        "unit": "seconds"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1820,
+        120
+      ],
+      "id": "aa000014-0000-4000-a000-000000000014",
+      "name": "Wait 15s",
+      "webhookId": "aa000014-0000-4000-a000-000000000014"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Voce e um especialista em extracao de dados de curriculos, incluindo textos com erros de OCR.\n\nAnalise o texto abaixo com atencao especial aos CAMPOS OBRIGATORIOS. Seja criativo e tolerante com erros de leitura.\n\nCAMPOS OBRIGATORIOS (extraia se existirem, mesmo com grafia imperfeita):\n- nome_completo: Nome completo do candidato\n- telefone: Numero de telefone (qualquer formato)\n\nCAMPOS OPCIONAIS:\n- cargo_pretendido\n- habilidades\n- experiencia_resumida\n- email\n- localizacao\n\nTEXTO DO CURRICULO:\n{{ $json.texto_limpo }}\n\nRetorne APENAS um JSON valido, sem texto adicional, sem markdown:\n{\"nome_completo\": \"...\", \"telefone\": \"...\", \"cargo_pretendido\": \"...\", \"habilidades\": \"...\", \"experiencia_resumida\": \"...\", \"email\": \"...\", \"localizacao\": \"...\"}\n\nSe um campo nao existir no texto, use null."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2040,
+        120
+      ],
+      "id": "aa000015-0000-4000-a000-000000000015",
+      "name": "OpenAI Fix T3",
+      "continueOnFail": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "SuXAI1qhimy7ZqAO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "var textoLimpo = $('Validar Campos Iniciais').first().json.texto_limpo;\nvar logsAnterior = $('Wait 15s').first().json.logs || [];\nvar logs = logsAnterior.slice();\nvar tentativa = 3;\nvar ts = new Date().toISOString();\n\nlogs.push('[' + ts + '][T' + tentativa + '] Processando resposta da OpenAI (tentativa ' + tentativa + ' de 4)');\n\n// Verificar se o no falhou (continueOnFail)\nif ($json.error) {\n  logs.push('[' + ts + '][T' + tentativa + '][ERRO] Falha na API OpenAI: ' + JSON.stringify($json.error));\n  return [{ json: {\n    texto_limpo: textoLimpo,\n    dados_extraidos: {},\n    campos_ok: false,\n    erro: String($json.error),\n    tentativa: tentativa,\n    retry_count: tentativa,\n    logs: logs\n  } }];\n}\n\n// Extrair conteudo da resposta (multiplos formatos possiveis)\nvar content = '';\nif ($json.content) content = $json.content;\nelse if ($json.message && $json.message.content) content = $json.message.content;\nelse if ($json.choices && $json.choices[0] && $json.choices[0].message) content = $json.choices[0].message.content;\nelse if ($json.text) content = $json.text;\n\nlogs.push('[' + ts + '][T' + tentativa + '] Conteudo recebido: ' + content.length + ' chars');\n\n// Parse do JSON retornado pela IA\nvar dadosIA = {};\nvar erro_parse = null;\ntry {\n  var limpo = content.trim();\n  limpo = limpo.replace(/```json/g, '').replace(/```/g, '').trim();\n  dadosIA = JSON.parse(limpo);\n  logs.push('[' + ts + '][T' + tentativa + '][OK] JSON da IA parseado com sucesso');\n} catch(e) {\n  erro_parse = e.message;\n  logs.push('[' + ts + '][T' + tentativa + '][ERRO] Falha ao parsear JSON: ' + e.message);\n  logs.push('[' + ts + '][T' + tentativa + '][DEBUG] Resposta bruta: ' + content.substring(0, 300));\n}\n\n// Validar campos obrigatorios\nvar nomeOk = !!(dadosIA.nome_completo && dadosIA.nome_completo !== 'null' && String(dadosIA.nome_completo).trim().length > 2);\nvar telOk = !!(dadosIA.telefone && dadosIA.telefone !== 'null' && String(dadosIA.telefone).trim().length > 5);\nvar campos_ok = nomeOk && telOk && !erro_parse;\n\nif (nomeOk) logs.push('[' + ts + '][T' + tentativa + '][OK] Nome: ' + dadosIA.nome_completo);\nelse logs.push('[' + ts + '][T' + tentativa + '][AVISO] Nome ausente ou invalido');\n\nif (telOk) logs.push('[' + ts + '][T' + tentativa + '][OK] Telefone: ' + dadosIA.telefone);\nelse logs.push('[' + ts + '][T' + tentativa + '][AVISO] Telefone ausente ou invalido');\n\nlogs.push('[' + ts + '][T' + tentativa + '] Status: ' + (campos_ok ? 'DADOS COMPLETOS' : 'DADOS INCOMPLETOS'));\n\nreturn [{ json: {\n  texto_limpo: textoLimpo,\n  dados_extraidos: dadosIA,\n  campos_ok: campos_ok,\n  erro_parse: erro_parse,\n  tentativa: tentativa,\n  retry_count: tentativa,\n  logs: logs\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2260,
+        120
+      ],
+      "id": "aa000016-0000-4000-a000-000000000016",
+      "name": "Parse Validar T3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "t3-ok-cond",
+              "leftValue": "={{ $json.campos_ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2480,
+        120
+      ],
+      "id": "aa000017-0000-4000-a000-000000000017",
+      "name": "T3 OK?"
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 30,
+        "unit": "seconds"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2700,
+        120
+      ],
+      "id": "aa000018-0000-4000-a000-000000000018",
+      "name": "Wait 30s",
+      "webhookId": "aa000018-0000-4000-a000-000000000018"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Voce e um especialista em extracao de dados de curriculos, incluindo textos com erros de OCR.\n\nAnalise o texto abaixo com atencao especial aos CAMPOS OBRIGATORIOS. Seja criativo e tolerante com erros de leitura.\n\nCAMPOS OBRIGATORIOS (extraia se existirem, mesmo com grafia imperfeita):\n- nome_completo: Nome completo do candidato\n- telefone: Numero de telefone (qualquer formato)\n\nCAMPOS OPCIONAIS:\n- cargo_pretendido\n- habilidades\n- experiencia_resumida\n- email\n- localizacao\n\nTEXTO DO CURRICULO:\n{{ $json.texto_limpo }}\n\nRetorne APENAS um JSON valido, sem texto adicional, sem markdown:\n{\"nome_completo\": \"...\", \"telefone\": \"...\", \"cargo_pretendido\": \"...\", \"habilidades\": \"...\", \"experiencia_resumida\": \"...\", \"email\": \"...\", \"localizacao\": \"...\"}\n\nSe um campo nao existir no texto, use null."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2920,
+        120
+      ],
+      "id": "aa000019-0000-4000-a000-000000000019",
+      "name": "OpenAI Fix T4 Final",
+      "continueOnFail": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "SuXAI1qhimy7ZqAO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "var textoLimpo = $('Validar Campos Iniciais').first().json.texto_limpo;\nvar logsAnterior = $('Wait 30s').first().json.logs || [];\nvar logs = logsAnterior.slice();\nvar tentativa = 4;\nvar ts = new Date().toISOString();\n\nlogs.push('[' + ts + '][T' + tentativa + '] Processando resposta da OpenAI (tentativa ' + tentativa + ' de 4)');\n\n// Verificar se o no falhou (continueOnFail)\nif ($json.error) {\n  logs.push('[' + ts + '][T' + tentativa + '][ERRO] Falha na API OpenAI: ' + JSON.stringify($json.error));\n  return [{ json: {\n    texto_limpo: textoLimpo,\n    dados_extraidos: {},\n    campos_ok: false,\n    erro: String($json.error),\n    tentativa: tentativa,\n    retry_count: tentativa,\n    logs: logs\n  } }];\n}\n\n// Extrair conteudo da resposta (multiplos formatos possiveis)\nvar content = '';\nif ($json.content) content = $json.content;\nelse if ($json.message && $json.message.content) content = $json.message.content;\nelse if ($json.choices && $json.choices[0] && $json.choices[0].message) content = $json.choices[0].message.content;\nelse if ($json.text) content = $json.text;\n\nlogs.push('[' + ts + '][T' + tentativa + '] Conteudo recebido: ' + content.length + ' chars');\n\n// Parse do JSON retornado pela IA\nvar dadosIA = {};\nvar erro_parse = null;\ntry {\n  var limpo = content.trim();\n  limpo = limpo.replace(/```json/g, '').replace(/```/g, '').trim();\n  dadosIA = JSON.parse(limpo);\n  logs.push('[' + ts + '][T' + tentativa + '][OK] JSON da IA parseado com sucesso');\n} catch(e) {\n  erro_parse = e.message;\n  logs.push('[' + ts + '][T' + tentativa + '][ERRO] Falha ao parsear JSON: ' + e.message);\n  logs.push('[' + ts + '][T' + tentativa + '][DEBUG] Resposta bruta: ' + content.substring(0, 300));\n}\n\n// Validar campos obrigatorios\nvar nomeOk = !!(dadosIA.nome_completo && dadosIA.nome_completo !== 'null' && String(dadosIA.nome_completo).trim().length > 2);\nvar telOk = !!(dadosIA.telefone && dadosIA.telefone !== 'null' && String(dadosIA.telefone).trim().length > 5);\nvar campos_ok = nomeOk && telOk && !erro_parse;\n\nif (nomeOk) logs.push('[' + ts + '][T' + tentativa + '][OK] Nome: ' + dadosIA.nome_completo);\nelse logs.push('[' + ts + '][T' + tentativa + '][AVISO] Nome ausente ou invalido');\n\nif (telOk) logs.push('[' + ts + '][T' + tentativa + '][OK] Telefone: ' + dadosIA.telefone);\nelse logs.push('[' + ts + '][T' + tentativa + '][AVISO] Telefone ausente ou invalido');\n\nlogs.push('[' + ts + '][T' + tentativa + '] Status: ' + (campos_ok ? 'DADOS COMPLETOS' : 'DADOS INCOMPLETOS'));\n\nreturn [{ json: {\n  texto_limpo: textoLimpo,\n  dados_extraidos: dadosIA,\n  campos_ok: campos_ok,\n  erro_parse: erro_parse,\n  tentativa: tentativa,\n  retry_count: tentativa,\n  logs: logs\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3140,
+        120
+      ],
+      "id": "aa000020-0000-4000-a000-000000000020",
+      "name": "Parse Validar T4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "t4-ok-cond",
+              "leftValue": "={{ $json.campos_ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3360,
+        120
+      ],
+      "id": "aa000021-0000-4000-a000-000000000021",
+      "name": "T4 OK?"
+    },
+    {
+      "parameters": {
+        "jsCode": "var logs = ($json.logs || []).slice();\nvar tentativa = $json.tentativa || $json.retry_count || 0;\nvar textoLimpo = $json.texto_limpo || '';\nvar ts = new Date().toISOString();\n\nlogs.push('[' + ts + '][ERRO FINAL] Todas as ' + tentativa + ' tentativas de extracao via IA falharam');\nlogs.push('[' + ts + '][ERRO FINAL] Campos obrigatorios (nome e/ou telefone) nao puderam ser extraidos');\nlogs.push('[' + ts + '][ERRO FINAL] Arquivo encaminhado para fila de revisao manual');\n\nvar motivo = 'Extracao falhou apos ' + tentativa + ' tentativas: campos obrigatorios ausentes (nome e/ou telefone)';\n\nreturn [{ json: {\n  status: 'revisao_manual',\n  motivo_erro: motivo,\n  tentativas_realizadas: tentativa,\n  texto_trecho: textoLimpo.substring(0, 1000),\n  log_completo: logs.join('\\n'),\n  timestamp: ts\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3580,
+        120
+      ],
+      "id": "aa000022-0000-4000-a000-000000000022",
+      "name": "Log Erro Final"
+    },
+    {
+      "parameters": {
+        "jsCode": "var sq = String.fromCharCode(39);\nvar escape = function(v) { return String(v).split(sq).join(sq + sq); };\n\nvar texto = escape(($json.texto_trecho || '').substring(0, 1000));\nvar motivo = escape($json.motivo_erro || 'Erro desconhecido');\nvar logTxt = escape(($json.log_completo || '').substring(0, 5000));\nvar tentativas = parseInt($json.tentativas_realizadas || 0);\n\nvar sql = 'INSERT INTO revisao_manual (texto_trecho, motivo_erro, log_completo, tentativas_realizadas, criado_em) VALUES (' + sq + texto + sq + ', ' + sq + motivo + sq + ', ' + sq + logTxt + sq + ', ' + tentativas + ', NOW());';\n\nreturn [{ json: {\n  sql_revisao: sql,\n  motivo_erro: $json.motivo_erro,\n  log_completo: $json.log_completo,\n  tentativas: tentativas\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3800,
+        120
+      ],
+      "id": "aa000023-0000-4000-a000-000000000023",
+      "name": "Preparar SQL Revisao"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{ $json.sql_revisao }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        4020,
+        120
+      ],
+      "id": "aa000024-0000-4000-a000-000000000024",
+      "name": "Salvar Revisao Manual",
+      "credentials": {
+        "postgres": {
+          "id": "xYdS1NxKJpebw0xh",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: {\n  status: 'erro',\n  mensagem: $json.motivo_erro || 'Falha no processamento',\n  tentativas_realizadas: $json.tentativas,\n  log_completo: $json.log_completo,\n  timestamp: new Date().toISOString()\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4240,
+        120
+      ],
+      "id": "aa000025-0000-4000-a000-000000000025",
+      "name": "Resposta Erro Final"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Limpar Temp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limpar Temp": {
+      "main": [
+        [
+          {
+            "node": "Restaurar Binário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Restaurar Binário": {
+      "main": [
+        [
+          {
+            "node": "Salvar Arquivo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar Arquivo": {
+      "main": [
+        [
+          {
+            "node": "É PDF?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "É PDF?": {
+      "main": [
+        [
+          {
+            "node": "OCR PDF",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OCR Imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OCR PDF": {
+      "main": [
+        [
+          {
+            "node": "Parse JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OCR Imagem": {
+      "main": [
+        [
+          {
+            "node": "Parse JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse JSON": {
+      "main": [
+        [
+          {
+            "node": "Limpar Texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limpar Texto": {
+      "main": [
+        [
+          {
+            "node": "Validar Campos Iniciais",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar INSERT SQL": {
+      "main": [
+        [
+          {
+            "node": "Extrair SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair SQL": {
+      "main": [
+        [
+          {
+            "node": "Salvar no Banco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar no Banco": {
+      "main": [
+        [
+          {
+            "node": "Resposta Sucesso Direto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Campos Iniciais": {
+      "main": [
+        [
+          {
+            "node": "Dados Completos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados Completos?": {
+      "main": [
+        [
+          {
+            "node": "Gerar INSERT SQL",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OpenAI Fix T1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Fix T1": {
+      "main": [
+        [
+          {
+            "node": "Parse Validar T1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Validar T1": {
+      "main": [
+        [
+          {
+            "node": "T1 OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "T1 OK?": {
+      "main": [
+        [
+          {
+            "node": "Montar INSERT SQL IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 5s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 5s": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Fix T2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Fix T2": {
+      "main": [
+        [
+          {
+            "node": "Parse Validar T2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Validar T2": {
+      "main": [
+        [
+          {
+            "node": "T2 OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "T2 OK?": {
+      "main": [
+        [
+          {
+            "node": "Montar INSERT SQL IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 15s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 15s": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Fix T3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Fix T3": {
+      "main": [
+        [
+          {
+            "node": "Parse Validar T3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Validar T3": {
+      "main": [
+        [
+          {
+            "node": "T3 OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "T3 OK?": {
+      "main": [
+        [
+          {
+            "node": "Montar INSERT SQL IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 30s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 30s": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Fix T4 Final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Fix T4 Final": {
+      "main": [
+        [
+          {
+            "node": "Parse Validar T4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Validar T4": {
+      "main": [
+        [
+          {
+            "node": "T4 OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "T4 OK?": {
+      "main": [
+        [
+          {
+            "node": "Montar INSERT SQL IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Erro Final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar INSERT SQL IA": {
+      "main": [
+        [
+          {
+            "node": "Salvar no Banco IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar no Banco IA": {
+      "main": [
+        [
+          {
+            "node": "Resposta Sucesso IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Erro Final": {
+      "main": [
+        [
+          {
+            "node": "Preparar SQL Revisao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar SQL Revisao": {
+      "main": [
+        [
+          {
+            "node": "Salvar Revisao Manual",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar Revisao Manual": {
+      "main": [
+        [
+          {
+            "node": "Resposta Erro Final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3c87b76396f56eba8c5bd2072ddb33a4830148466ed7e057bce91424bc992759"
+  }
+}

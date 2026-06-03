@@ -1,18 +1,23 @@
 {
-  "name": "Buscar Candidatos com IA",
   "nodes": [
     {
       "parameters": {
         "httpMethod": "POST",
         "path": "buscar",
         "responseMode": "lastNode",
-        "options": {}
+        "options": {
+          "binaryPropertyName": "data"
+        }
       },
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [0, 0],
-      "id": "a1000000-0000-0000-0000-000000000001",
-      "name": "Webhook Buscar"
+      "position": [
+        -6960,
+        -660
+      ],
+      "id": "b1035db9-cbdd-441d-a9a1-f519b0876cdb",
+      "name": "Webhook Buscar",
+      "webhookId": "96a37c55-8154-4bac-b0b5-f4534ced1819"
     },
     {
       "parameters": {
@@ -20,8 +25,11 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [220, 0],
-      "id": "a1000000-0000-0000-0000-000000000002",
+      "position": [
+        -6740,
+        -660
+      ],
+      "id": "56004297-69e0-4e61-928a-8fe860fb7388",
       "name": "Montar SQL"
     },
     {
@@ -32,13 +40,16 @@
       },
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
-      "position": [440, 0],
-      "id": "a1000000-0000-0000-0000-000000000003",
+      "position": [
+        -6520,
+        -660
+      ],
+      "id": "344e67a6-0459-4592-bfa4-a3dad81a5218",
       "name": "Buscar no Banco",
       "credentials": {
         "postgres": {
-          "id": "SEU_CREDENTIAL_ID",
-          "name": "Recrutamento DB"
+          "id": "xYdS1NxKJpebw0xh",
+          "name": "Postgres account"
         }
       }
     },
@@ -48,8 +59,11 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [660, 0],
-      "id": "a1000000-0000-0000-0000-000000000004",
+      "position": [
+        -6300,
+        -660
+      ],
+      "id": "2850ae84-1ac0-41d9-9d6b-7e9c56d5c647",
       "name": "Normalizar Resultado"
     },
     {
@@ -78,8 +92,11 @@
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [880, 0],
-      "id": "a1000000-0000-0000-0000-000000000005",
+      "position": [
+        -6080,
+        -660
+      ],
+      "id": "b0539e30-d73b-4c08-b88a-0342a9f96853",
       "name": "Tem Candidatos?"
     },
     {
@@ -88,8 +105,11 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1100, -120],
-      "id": "a1000000-0000-0000-0000-000000000006",
+      "position": [
+        -5860,
+        -780
+      ],
+      "id": "cc240026-44ca-48ed-b971-db2bc6d9e7fa",
       "name": "Preparar para IA"
     },
     {
@@ -98,8 +118,11 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1100, 120],
-      "id": "a1000000-0000-0000-0000-000000000007",
+      "position": [
+        -5860,
+        -540
+      ],
+      "id": "b2199509-bf20-4de5-a54b-f0f02621398f",
       "name": "Resposta Vazia"
     },
     {
@@ -121,12 +144,15 @@
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
-      "position": [1320, -120],
-      "id": "a1000000-0000-0000-0000-000000000008",
+      "position": [
+        -5640,
+        -780
+      ],
+      "id": "4e4c7315-ebaa-4c30-a43c-369b03f2fd5d",
       "name": "Ranquear com GPT",
       "credentials": {
         "openAiApi": {
-          "id": "Q22Qx3CiS2eBz1HE",
+          "id": "SuXAI1qhimy7ZqAO",
           "name": "OpenAi account"
         }
       }
@@ -137,46 +163,103 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1540, -120],
-      "id": "a1000000-0000-0000-0000-000000000009",
+      "position": [
+        -5220,
+        -780
+      ],
+      "id": "adfeebcd-d923-43df-937c-f85bce357845",
       "name": "Montar Resposta Final"
     }
   ],
-  "pinData": {},
   "connections": {
     "Webhook Buscar": {
-      "main": [[{ "node": "Montar SQL", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Montar SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Montar SQL": {
-      "main": [[{ "node": "Buscar no Banco", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Buscar no Banco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Buscar no Banco": {
-      "main": [[{ "node": "Normalizar Resultado", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Normalizar Resultado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Normalizar Resultado": {
-      "main": [[{ "node": "Tem Candidatos?", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Tem Candidatos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Tem Candidatos?": {
       "main": [
-        [{ "node": "Preparar para IA", "type": "main", "index": 0 }],
-        [{ "node": "Resposta Vazia",   "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Preparar para IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta Vazia",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Preparar para IA": {
-      "main": [[{ "node": "Ranquear com GPT", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Ranquear com GPT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Ranquear com GPT": {
-      "main": [[{ "node": "Montar Resposta Final", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Montar Resposta Final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": false,
-  "settings": {
-    "executionOrder": "v1"
-  },
-  "versionId": "buscar-candidatos-v1",
+  "pinData": {},
   "meta": {
-    "templateCredsSetupCompleted": true
-  },
-  "id": "buscar-candidatos",
-  "tags": []
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3c87b76396f56eba8c5bd2072ddb33a4830148466ed7e057bce91424bc992759"
+  }
 }
