@@ -1,0 +1,108 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "avaliacoes/candidato",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2180,
+        -60
+      ],
+      "id": "bf2f24da-004e-40fc-a356-33242455e4d3",
+      "name": "Webhook Buscar Avaliações",
+      "webhookId": "e82af7d6-a883-443e-95e8-417e44222a05"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json;\n\n// Aceita qualquer formato: (11) 90810-2064 | 11 90810-2064 | 11908102064\nconst rawPhone = String(body.telefone || '').trim();\n\nif (!rawPhone) {\n  throw new Error('Campo obrigatório ausente: telefone');\n}\n\n// Remove tudo que não for dígito para comparação\nconst digits = rawPhone.replace(/\\D/g, '');\n\nif (digits.length < 8) {\n  throw new Error('Telefone inválido: ' + rawPhone);\n}\n\n// A query normaliza AMBOS os lados: tanto o buscado quanto o armazenado\n// Isso garante match independente do formato salvo no banco\nconst sql = `\n  SELECT\n    id,\n    telefone_candidato,\n    tipo_avaliacao,\n    export_date,\n    resultado,\n    criado_em\n  FROM candidato_avaliacoes\n  WHERE REGEXP_REPLACE(telefone_candidato, '[^0-9]', '', 'g') = '${digits}'\n  ORDER BY criado_em DESC\n  LIMIT 10\n`;\n\nreturn [{ json: { sql, telefone_original: rawPhone, digits } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1960,
+        -60
+      ],
+      "id": "8967faac-4c5d-4ee6-a265-fd03656ce2c4",
+      "name": "Normalizar Telefone e Montar SQL"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{ $json.sql }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -1740,
+        -60
+      ],
+      "id": "ab56817b-8ade-4be9-ba61-b070674431a4",
+      "name": "Buscar Avaliações no Banco",
+      "credentials": {
+        "postgres": {
+          "id": "t6nrrjZHceBz1qJ5",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const sqlNode = $('Normalizar Telefone e Montar SQL').first().json;\nconst rows    = $input.all().map(i => i.json).filter(r => r && r.id);\n\n// Parse do campo resultado (JSON string → objeto)\nconst avaliacoes = rows.map(r => {\n  let resultado = r.resultado;\n  if (typeof resultado === 'string') {\n    try { resultado = JSON.parse(resultado); } catch(e) { resultado = null; }\n  }\n  return {\n    id:                  r.id,\n    telefone_candidato:  r.telefone_candidato,\n    tipo_avaliacao:      r.tipo_avaliacao,\n    export_date:         r.export_date,\n    criado_em:           r.criado_em,\n    // Dados do participante extraídos do resultado\n    participante:        resultado && resultado.participant ? resultado.participant : null,\n    // Scores resumidos para exibição rápida\n    scores:              resultado && resultado.scores     ? resultado.scores     : null,\n    // Resultado completo (opcional — remova se quiser resposta menor)\n    resultado\n  };\n});\n\nreturn [{\n  json: {\n    telefone_buscado: sqlNode.telefone_original,\n    total:            avaliacoes.length,\n    avaliacoes\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1520,
+        -60
+      ],
+      "id": "b8753e30-1f8d-4b4d-a6b3-88ccbe3a7884",
+      "name": "Formatar Resposta"
+    }
+  ],
+  "connections": {
+    "Webhook Buscar Avaliações": {
+      "main": [
+        [
+          {
+            "node": "Normalizar Telefone e Montar SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar Telefone e Montar SQL": {
+      "main": [
+        [
+          {
+            "node": "Buscar Avaliações no Banco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Avaliações no Banco": {
+      "main": [
+        [
+          {
+            "node": "Formatar Resposta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "17dd8513543fcd007fcbf2cc7b308d8668611290d926c6048b7fe95ea7af77ef"
+  }
+}

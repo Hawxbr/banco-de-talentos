@@ -1,0 +1,108 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// Recupera as palavras buscadas do nó anterior\nconst palavras = $('Montar SQL1').first().json.palavras;\n\n// Faz o parse do resultado do banco\nlet candidatos = $json.candidatos;\nif (typeof candidatos === 'string') {\n  try { candidatos = JSON.parse(candidatos); } catch(e) { candidatos = []; }\n}\nif (!Array.isArray(candidatos)) { candidatos = []; }\n\n// Retorno direto: encontrou ou não\nif (candidatos.length === 0) {\n  return [{ json: {\n    total: 0,\n    palavras_buscadas: palavras,\n    candidatos: [],\n    mensagem: 'Nenhum candidato encontrado para as palavras-chave informadas.'\n  }}];\n}\n\nreturn [{ json: {\n  total: candidatos.length,\n  palavras_buscadas: palavras,\n  candidatos\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1540,
+        -1280
+      ],
+      "id": "0bca8fb0-3dd2-414c-83b8-af6d931a2681",
+      "name": "Montar Resposta"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "buscar",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2200,
+        -1280
+      ],
+      "id": "a598f34a-6bd5-49e3-8dd8-d19c9221867b",
+      "name": "Webhook Buscar1",
+      "webhookId": "96a37c55-8154-4bac-b0b5-f4534ced1819"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Payload esperado:\n// { \"palavras\": [\"Desenvolvimento\", \"Software\"], \"limite\": 10 }\n\nconst body = $json.body || $json;\n\n// Aceita tanto array (novo) quanto string separada por vírgula (compatibilidade)\nlet palavras = body.palavras || [];\nif (typeof palavras === 'string') {\n  palavras = palavras.split(',').map(p => p.trim()).filter(Boolean);\n}\n\nconst limite = Math.min(parseInt(body.limite) || 10, 50);\n\nconst esc = s => (s || '').replace(/'/g, \"''\");\n\n// Busca full-text: cada palavra é procurada em TODOS os campos relevantes\nconst conditions = palavras.map(p => {\n  const v = esc(p);\n  return `(\n    nome_completo    ILIKE '%${v}%' OR\n    cargo_pretendido ILIKE '%${v}%' OR\n    habilidades      ILIKE '%${v}%' OR\n    localizacao      ILIKE '%${v}%' OR\n    texto_curriculo  ILIKE '%${v}%'\n  )`;\n});\n\n// AND entre palavras (todas devem aparecer), OR entre campos\nconst where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';\n\nconst sql = `\n  SELECT COALESCE(json_agg(row_to_json(c)), '[]'::json) AS candidatos\n  FROM (\n    SELECT\n      telefone,\n      nome_completo,\n      cargo_pretendido,\n      habilidades,\n      localizacao,\n      nome_arquivo,\n      LEFT(texto_curriculo, 300) AS experiencia_resumida,\n      criado_em\n    FROM candidatos\n    ${where}\n    LIMIT ${limite}\n  ) c\n`;\n\nreturn [{ json: { sql, palavras, limite } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1980,
+        -1280
+      ],
+      "id": "ebbfc7f5-e96b-4c48-809f-edf40eb44298",
+      "name": "Montar SQL1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{ $json.sql }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -1760,
+        -1280
+      ],
+      "id": "9d1796ca-76f4-4b36-9763-2fc501c62af4",
+      "name": "Buscar no Banco1",
+      "credentials": {
+        "postgres": {
+          "id": "t6nrrjZHceBz1qJ5",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Buscar1": {
+      "main": [
+        [
+          {
+            "node": "Montar SQL1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar SQL1": {
+      "main": [
+        [
+          {
+            "node": "Buscar no Banco1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar no Banco1": {
+      "main": [
+        [
+          {
+            "node": "Montar Resposta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "17dd8513543fcd007fcbf2cc7b308d8668611290d926c6048b7fe95ea7af77ef"
+  }
+}

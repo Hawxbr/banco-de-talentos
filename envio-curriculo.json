@@ -12,10 +12,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -2420,
-        -40
+        -2140,
+        560
       ],
-      "id": "10e22703-7343-4da9-81fb-12106ea830ac",
+      "id": "2ca501fd-8cec-4384-8b19-1e9d7135fa69",
       "name": "Webhook",
       "webhookId": "f5deb7e0-2d86-4877-8577-d441938168b4"
     },
@@ -26,10 +26,10 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        -2200,
-        -40
+        -1920,
+        560
       ],
-      "id": "c976899e-1791-4c40-b3fd-67471d727837",
+      "id": "67c55d4d-a061-49f6-bb97-eb79fda72d62",
       "name": "Limpar Temp"
     },
     {
@@ -39,33 +39,17 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1980,
-        -40
+        -1700,
+        560
       ],
-      "id": "fd187ffa-af01-4128-94ea-2623a1dd4cc2",
+      "id": "088a8c81-0975-4082-8901-66418aa0a175",
       "name": "Restaurar Binário"
-    },
-    {
-      "parameters": {
-        "operation": "write",
-        "fileName": "=/tmp/upload.{{$binary.data0.fileExtension}}",
-        "dataPropertyName": "data0",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.readWriteFile",
-      "typeVersion": 1,
-      "position": [
-        -1760,
-        -40
-      ],
-      "id": "27c83704-3e57-4386-a611-443d90027203",
-      "name": "Salvar Arquivo"
     },
     {
       "parameters": {
         "conditions": {
           "options": {
-            "caseSensitive": false,
+            "caseSensitive": true,
             "leftValue": "",
             "typeValidation": "strict",
             "version": 2
@@ -89,23 +73,23 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1540,
-        -40
+        -1220,
+        560
       ],
-      "id": "6be46c04-5409-4b91-8548-5f6ca85d8a12",
+      "id": "a5030451-d12c-4c7a-9255-3d0c2b258735",
       "name": "É PDF?"
     },
     {
       "parameters": {
-        "command": "python3 -c \"\nfrom pdf2image import convert_from_path\nimport pytesseract\nimport json\nimport sys\n\narquivo = '/tmp/upload.pdf'\ntexto = ''\n\ntry:\n    paginas = convert_from_path(arquivo, dpi=300)\n    for pagina in paginas:\n        pagina = pagina.convert('L')\n        texto_pagina = pytesseract.image_to_string(\n            pagina,\n            lang='por',\n            config='--oem 3 --psm 4'\n        )\n        texto += texto_pagina + '\\\\n'\n    print(json.dumps({'texto': texto}, ensure_ascii=False))\nexcept Exception as e:\n    print(json.dumps({'erro': str(e)}, ensure_ascii=False))\n    sys.exit(1)\n\""
+        "command": "=python3 -c \"\nfrom pdf2image import convert_from_path\nimport pytesseract\nimport json\nimport sys\n\narquivo = '/tmp/upload.pdf'\ntexto = ''\n\ntry:\n    paginas = convert_from_path(arquivo, dpi=300)\n    for pagina in paginas:\n        pagina = pagina.convert('L')\n        texto_pagina = pytesseract.image_to_string(\n            pagina,\n            lang='por',\n            config='--oem 3 --psm 4'\n        )\n        texto += texto_pagina + '\\\\n'\n    print(json.dumps({'texto': texto}, ensure_ascii=False))\nexcept Exception as e:\n    print(json.dumps({'erro': str(e)}, ensure_ascii=False))\n    sys.exit(1)\n\""
       },
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        -1320,
-        -160
+        -1000,
+        440
       ],
-      "id": "1db8b8f0-110a-4abb-a26a-f505bd1f13fc",
+      "id": "0ab1c83d-e481-4156-b3f6-0feda95e9dec",
       "name": "OCR PDF"
     },
     {
@@ -115,10 +99,10 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        -1320,
-        80
+        -1000,
+        680
       ],
-      "id": "d364d482-4c8a-4113-bd47-ccd7cf5053af",
+      "id": "e6d714aa-622c-4e99-8c8d-daae606ae05a",
       "name": "OCR Imagem"
     },
     {
@@ -128,10 +112,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -600,
-        -40
+        -460,
+        560
       ],
-      "id": "ae795825-b72a-4163-ad68-4a167470fecc",
+      "id": "6193cecc-ab84-4b57-adcb-7e3ad30341ca",
       "name": "Parse JSON"
     },
     {
@@ -141,109 +125,29 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -380,
-        -40
+        -180,
+        560
       ],
-      "id": "cc1ea0e4-601e-4710-8d5f-989c75a32ecd",
+      "id": "3d073917-b360-431a-8f43-4bfb6a109d9a",
       "name": "Limpar Texto"
-    },
-    {
-      "parameters": {
-        "modelId": {
-          "__rl": true,
-          "value": "gpt-4.1-mini",
-          "mode": "list",
-          "cachedResultName": "GPT-4.1-MINI"
-        },
-        "messages": {
-          "values": [
-            {
-              "content": "=Você é um assistente especializado em extrair dados estruturados de currículos e gerar comandos SQL.\n\nTexto do currículo:\n{{ $json.texto_limpo }}\n\nGere um comando SQL INSERT para a tabela \"candidatos\" com as seguintes regras:\n\n1. Mapeie os campos encontrados no texto:\n   - Nome completo → nome_completo\n   - Cargo pretendido / área de atuação → cargo_pretendido\n   - Habilidades / tecnologias / ferramentas → habilidades\n   - Resumo de experiências → experiencia_resumida\n   - E-mail → email\n   - Telefone → telefone\n   - Cidade / estado → localizacao\n\n2. Inclua APENAS os campos que estiverem presentes no texto\n3. Escape aspas simples duplicando-as (ex: O'Brien → O''Brien)\n4. Retorne SOMENTE o comando SQL, sem explicações, sem blocos de código markdown\n\nFormato esperado:\nINSERT INTO candidatos (campo1, campo2, campo3)\nVALUES ('valor1', 'valor2', 'valor3');"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.openAi",
-      "typeVersion": 1.8,
-      "position": [
-        280,
-        -220
-      ],
-      "id": "41ffcfac-9871-49cf-b59e-ca1861eb47b9",
-      "name": "Gerar INSERT SQL",
-      "credentials": {
-        "openAiApi": {
-          "id": "SuXAI1qhimy7ZqAO",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "// Extrai o SQL da resposta da IA\n// O nó OpenAI pode retornar o conteúdo em campos diferentes dependendo da versão\nconst content =\n  $json.content ||\n  $json.message?.content ||\n  $json.choices?.[0]?.message?.content ||\n  $json.text ||\n  '';\n\nif (!content) {\n  throw new Error(\n    'Não foi possível extrair o SQL da resposta da IA.\\nJSON recebido: ' +\n    JSON.stringify($json, null, 2)\n  );\n}\n\n// Remove blocos de código markdown caso a IA os inclua (```sql ... ```)\nlet sql = content.trim();\nsql = sql.replace(/```sql\\s*/gi, '').replace(/```\\s*/g, '').trim();\n\n// Validação básica\nif (!sql.toUpperCase().startsWith('INSERT')) {\n  throw new Error('A IA não retornou um INSERT válido.\\nResposta: ' + sql);\n}\n\nreturn [{ json: { sql_insert: sql } }];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        500,
-        -220
-      ],
-      "id": "3fe7deaf-3a48-41fd-bf0b-d804431f6ec2",
-      "name": "Extrair SQL"
-    },
-    {
-      "parameters": {
-        "operation": "executeQuery",
-        "query": "={{ $json.sql_insert }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.5,
-      "position": [
-        720,
-        -220
-      ],
-      "id": "439668cc-5f08-475b-8447-1b34c0d04947",
-      "name": "Salvar no Banco",
-      "credentials": {
-        "postgres": {
-          "id": "xYdS1NxKJpebw0xh",
-          "name": "Postgres account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "var texto = $json.texto_limpo || '';\nvar logs = [];\nvar ts = new Date().toISOString();\n\nlogs.push('[' + ts + '][LEITURA] Texto extraido: ' + texto.length + ' caracteres');\nlogs.push('[' + ts + '][VALIDACAO] Verificando campos obrigatorios: nome e telefone');\n\n// Detectar digitos (indicador de telefone)\nvar soDigitos = texto.replace(/[^0-9]/g, '');\nvar temTelefone = soDigitos.length >= 8;\n\n// Detectar palavras (indicador de nome)\nvar palavras = texto.split(' ').filter(function(p) { return p.trim().length > 2; });\nvar temNome = palavras.length >= 3;\n\nvar campos_ok = temTelefone && temNome;\n\nif (temNome) {\n  logs.push('[' + ts + '][OK] Indicadores de nome presentes no texto');\n} else {\n  logs.push('[' + ts + '][AVISO] Texto insuficiente para identificar nome');\n}\nif (temTelefone) {\n  logs.push('[' + ts + '][OK] Sequencia de digitos compativel com telefone encontrada');\n} else {\n  logs.push('[' + ts + '][AVISO] Nenhuma sequencia de digitos compativel com telefone');\n}\n\nlogs.push('[' + ts + '][RESULTADO] ' + (campos_ok ? 'COMPLETO - seguindo fluxo direto' : 'INCOMPLETO - encaminhando para analise por IA'));\n\nreturn [{ json: {\n  texto_limpo: texto,\n  campos_ok: campos_ok,\n  logs: logs,\n  retry_count: 0\n} }];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -160,
-        -40
-      ],
-      "id": "aa000001-0000-4000-a000-000000000001",
-      "name": "Validar Campos Iniciais"
     },
     {
       "parameters": {
         "conditions": {
           "options": {
-            "caseSensitive": false,
+            "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "loose",
+            "typeValidation": "strict",
             "version": 2
           },
           "conditions": [
             {
               "id": "campos-ok-check",
-              "leftValue": "={{ $json.campos_ok }}",
-              "rightValue": true,
+              "leftValue": "={{ $json.message.content }}",
+              "rightValue": "aprovado\": true",
               "operator": {
-                "type": "boolean",
-                "operation": "equals",
-                "name": "filter.operator.equals"
+                "type": "string",
+                "operation": "contains"
               }
             }
           ],
@@ -254,57 +158,41 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        60,
-        -40
+        380,
+        560
       ],
-      "id": "aa000002-0000-4000-a000-000000000002",
+      "id": "1307e711-d1b7-48d4-8122-b49bec27a516",
       "name": "Dados Completos?"
     },
     {
       "parameters": {
-        "jsCode": "var logs = $('Validar Campos Iniciais').first().json.logs || [];\nvar ts = new Date().toISOString();\nvar logsFinal = logs.slice();\nlogsFinal.push('[' + ts + '][SUCESSO] Candidato salvo no banco de dados (fluxo direto - campos completos no OCR)');\nreturn [{ json: {\n  status: 'sucesso',\n  metodo: 'direto',\n  mensagem: 'Candidato processado e salvo com sucesso',\n  log_completo: logsFinal.join('\\n'),\n  timestamp: ts\n} }];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        940,
-        -220
-      ],
-      "id": "aa000003-0000-4000-a000-000000000003",
-      "name": "Resposta Sucesso Direto"
-    },
-    {
-      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
         "modelId": {
           "__rl": true,
-          "value": "gpt-4.1-mini",
+          "value": "gpt-4o",
           "mode": "list",
-          "cachedResultName": "GPT-4.1-MINI"
+          "cachedResultName": "GPT-4O"
         },
-        "messages": {
-          "values": [
-            {
-              "content": "=Voce e um especialista em extracao de dados de curriculos, incluindo textos com erros de OCR.\n\nAnalise o texto abaixo com atencao especial aos CAMPOS OBRIGATORIOS. Seja criativo e tolerante com erros de leitura.\n\nCAMPOS OBRIGATORIOS (extraia se existirem, mesmo com grafia imperfeita):\n- nome_completo: Nome completo do candidato\n- telefone: Numero de telefone (qualquer formato)\n\nCAMPOS OPCIONAIS:\n- cargo_pretendido\n- habilidades\n- experiencia_resumida\n- email\n- localizacao\n\nTEXTO DO CURRICULO:\n{{ $json.texto_limpo }}\n\nRetorne APENAS um JSON valido, sem texto adicional, sem markdown:\n{\"nome_completo\": \"...\", \"telefone\": \"...\", \"cargo_pretendido\": \"...\", \"habilidades\": \"...\", \"experiencia_resumida\": \"...\", \"email\": \"...\", \"localizacao\": \"...\"}\n\nSe um campo nao existir no texto, use null."
-            }
-          ]
-        },
+        "inputType": "base64",
+        "binaryPropertyName": "={{$binary.data0.fileExtension}}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        280,
-        120
+        600,
+        720
       ],
-      "id": "aa000004-0000-4000-a000-000000000004",
+      "id": "3fcf2efe-0435-473c-8ea4-c219c18a360f",
       "name": "OpenAI Fix T1",
-      "continueOnFail": true,
       "credentials": {
         "openAiApi": {
-          "id": "SuXAI1qhimy7ZqAO",
+          "id": "PnKMlSiSgiq3YqKI",
           "name": "OpenAi account"
         }
-      }
+      },
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -313,10 +201,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        500,
-        120
+        920,
+        960
       ],
-      "id": "aa000005-0000-4000-a000-000000000005",
+      "id": "6ddbe81e-c9cd-4efc-91d6-bd37a0d9442f",
       "name": "Parse Validar T1"
     },
     {
@@ -347,10 +235,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        720,
-        120
+        1040,
+        720
       ],
-      "id": "aa000006-0000-4000-a000-000000000006",
+      "id": "f7048528-ec22-4b0a-8a5a-33acbeb8d28a",
       "name": "T1 OK?"
     },
     {
@@ -360,10 +248,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1380,
-        -40
+        1440,
+        560
       ],
-      "id": "aa000007-0000-4000-a000-000000000007",
+      "id": "3d3caaeb-7e2e-4be4-8f4b-a17cbf3595ed",
       "name": "Montar INSERT SQL IA"
     },
     {
@@ -375,14 +263,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        1600,
-        -40
+        1920,
+        560
       ],
-      "id": "aa000008-0000-4000-a000-000000000008",
+      "id": "e03cfdaa-8e85-47d8-b665-2cdd64560036",
       "name": "Salvar no Banco IA",
       "credentials": {
         "postgres": {
-          "id": "xYdS1NxKJpebw0xh",
+          "id": "t6nrrjZHceBz1qJ5",
           "name": "Postgres account"
         }
       }
@@ -394,25 +282,21 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1820,
-        -40
+        2140,
+        560
       ],
-      "id": "aa000009-0000-4000-a000-000000000009",
+      "id": "ba3302be-ca98-4367-aa13-06617581f8eb",
       "name": "Resposta Sucesso IA"
     },
     {
-      "parameters": {
-        "resume": "timeInterval",
-        "amount": 5,
-        "unit": "seconds"
-      },
+      "parameters": {},
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        940,
-        120
+        1260,
+        720
       ],
-      "id": "aa000010-0000-4000-a000-000000000010",
+      "id": "c12800bf-4c9d-4ea1-aeb5-51a3aaa710fb",
       "name": "Wait 5s",
       "webhookId": "aa000010-0000-4000-a000-000000000010"
     },
@@ -436,18 +320,18 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        1160,
-        120
+        1480,
+        720
       ],
-      "id": "aa000011-0000-4000-a000-000000000011",
+      "id": "8e158921-53d7-4d32-8b0a-0a4e8d08b890",
       "name": "OpenAI Fix T2",
-      "continueOnFail": true,
       "credentials": {
         "openAiApi": {
-          "id": "SuXAI1qhimy7ZqAO",
+          "id": "PnKMlSiSgiq3YqKI",
           "name": "OpenAi account"
         }
-      }
+      },
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -456,10 +340,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1380,
-        120
+        1760,
+        1160
       ],
-      "id": "aa000012-0000-4000-a000-000000000012",
+      "id": "9ec6ea66-ddd3-4796-bc49-aacd2b3be75f",
       "name": "Parse Validar T2"
     },
     {
@@ -490,25 +374,23 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1600,
-        120
+        1920,
+        720
       ],
-      "id": "aa000013-0000-4000-a000-000000000013",
+      "id": "521ca50f-fa41-4638-9682-e9e0f580945d",
       "name": "T2 OK?"
     },
     {
       "parameters": {
-        "resume": "timeInterval",
-        "amount": 15,
-        "unit": "seconds"
+        "amount": 15
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1820,
-        120
+        2140,
+        720
       ],
-      "id": "aa000014-0000-4000-a000-000000000014",
+      "id": "32c5e509-3372-4b64-b1ec-a1a71715a558",
       "name": "Wait 15s",
       "webhookId": "aa000014-0000-4000-a000-000000000014"
     },
@@ -532,18 +414,18 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        2040,
-        120
+        2360,
+        720
       ],
-      "id": "aa000015-0000-4000-a000-000000000015",
+      "id": "356095dd-72e4-4182-816c-ff8b63e4f9ab",
       "name": "OpenAI Fix T3",
-      "continueOnFail": true,
       "credentials": {
         "openAiApi": {
-          "id": "SuXAI1qhimy7ZqAO",
+          "id": "PnKMlSiSgiq3YqKI",
           "name": "OpenAi account"
         }
-      }
+      },
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -552,10 +434,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2260,
-        120
+        2680,
+        1020
       ],
-      "id": "aa000016-0000-4000-a000-000000000016",
+      "id": "7c2fc647-7bfd-4593-a24a-fb2390510186",
       "name": "Parse Validar T3"
     },
     {
@@ -586,25 +468,23 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2480,
-        120
+        2800,
+        720
       ],
-      "id": "aa000017-0000-4000-a000-000000000017",
+      "id": "7f41d43b-14c1-4b82-82f6-109ede0a467c",
       "name": "T3 OK?"
     },
     {
       "parameters": {
-        "resume": "timeInterval",
-        "amount": 30,
-        "unit": "seconds"
+        "amount": 30
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2700,
-        120
+        3020,
+        720
       ],
-      "id": "aa000018-0000-4000-a000-000000000018",
+      "id": "54370c9e-cb74-4059-a6e4-335d2ab2c80b",
       "name": "Wait 30s",
       "webhookId": "aa000018-0000-4000-a000-000000000018"
     },
@@ -628,18 +508,18 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        2920,
-        120
+        3240,
+        720
       ],
-      "id": "aa000019-0000-4000-a000-000000000019",
+      "id": "04459465-7a91-43f7-962a-0325fa393661",
       "name": "OpenAI Fix T4 Final",
-      "continueOnFail": true,
       "credentials": {
         "openAiApi": {
-          "id": "SuXAI1qhimy7ZqAO",
+          "id": "PnKMlSiSgiq3YqKI",
           "name": "OpenAi account"
         }
-      }
+      },
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -648,10 +528,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3140,
-        120
+        3480,
+        1060
       ],
-      "id": "aa000020-0000-4000-a000-000000000020",
+      "id": "392f1a40-3d6d-4765-be07-af8a401e31f5",
       "name": "Parse Validar T4"
     },
     {
@@ -682,10 +562,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        3360,
-        120
+        3680,
+        720
       ],
-      "id": "aa000021-0000-4000-a000-000000000021",
+      "id": "c0d3290b-4d68-4f5c-8b2c-ecb44d198d35",
       "name": "T4 OK?"
     },
     {
@@ -695,10 +575,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3580,
-        120
+        3900,
+        720
       ],
-      "id": "aa000022-0000-4000-a000-000000000022",
+      "id": "46c08f46-0e02-471b-8a12-d1d03babe136",
       "name": "Log Erro Final"
     },
     {
@@ -708,10 +588,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3800,
-        120
+        4120,
+        720
       ],
-      "id": "aa000023-0000-4000-a000-000000000023",
+      "id": "10fabb76-f6fe-4cd0-af93-11ea7f9146ea",
       "name": "Preparar SQL Revisao"
     },
     {
@@ -723,14 +603,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        4020,
-        120
+        4340,
+        720
       ],
-      "id": "aa000024-0000-4000-a000-000000000024",
+      "id": "66653464-315a-4e65-9a64-f3187a33818d",
       "name": "Salvar Revisao Manual",
       "credentials": {
         "postgres": {
-          "id": "xYdS1NxKJpebw0xh",
+          "id": "t6nrrjZHceBz1qJ5",
           "name": "Postgres account"
         }
       }
@@ -742,11 +622,238 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4240,
-        120
+        4560,
+        720
       ],
-      "id": "aa000025-0000-4000-a000-000000000025",
+      "id": "24182ec3-2ff6-43a3-8aab-b8fb8c565e99",
       "name": "Resposta Erro Final"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Você é um validador de currículos.\n\nAnalise o texto abaixo e verifique se ele contém:\n\n1. Nome completo da pessoa (nome e sobrenome identificáveis).\n2. Telefone de contato válido (aceite formatos nacionais e internacionais, com ou sem DDD, parênteses, espaços, hífens ou código do país).\n\nTexto do currículo:\n{{ $json.texto_limpo }}\n\nRegras de validação:\n- Considere aprovado somente se os dois itens estiverem presentes.\n- Se houver apenas nome ou apenas telefone, considere reprovado.\n- Se houver dúvida sobre a existência de um nome completo, considere reprovado.\n- Ignore e-mails, endereços, links e outras informações que não sejam nome e telefone.\n\nRetorne exclusivamente um JSON válido, sem explicações, comentários ou texto adicional:\n\nSe aprovado:\n{\"aprovado\": true}\n\nSe reprovado:\n{\"aprovado\": false}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        40,
+        560
+      ],
+      "id": "3647d45e-fc8a-48f5-ae89-f335cc2288f1",
+      "name": "Verificação de dados",
+      "credentials": {
+        "openAiApi": {
+          "id": "PnKMlSiSgiq3YqKI",
+          "name": "OpenAi account"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/tmp/upload.{{$binary.data0.fileExtension}}",
+        "dataPropertyName": "data0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -1480,
+        560
+      ],
+      "id": "2b19b1a0-f76d-4f54-a09f-4f587f035cde",
+      "name": "Salvar Arquivo1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nif (items.length === 0 || !items[0].json || !items[0].json.telefone) {\n  return [{ json: { existe: false, telefone: $('Extrair Telefone1').item.json.telefone } }];\n}\n\nconst telefoneFormatado = items[0].json.telefone;\n\nreturn [{ json: { existe: true, telefone: telefoneFormatado } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        300
+      ],
+      "id": "0b4c215f-ea8c-4e6f-98f3-ae42de183ae5",
+      "name": "Tratar Resultado Busca"
+    },
+    {
+      "parameters": {
+        "jsCode": "const texto = $('Limpar Texto').item.json.texto_limpo || '';\n\nconst regex = /(\\(?\\d{2}\\)?)\\s?[9]?\\d{4}[-\\s]?\\d{4}/g;\nconst matches = texto.match(regex);\n\nif (!matches || matches.length === 0) {\n  throw new Error('Nenhum telefone encontrado no currículo.');\n}\n\nconst telefone = matches[0].replace(/\\D/g, '');\n\nreturn [{ json: { telefone, texto_limpo: texto } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        400
+      ],
+      "id": "407e8769-bd80-429e-bd55-264aa172b9a9",
+      "name": "Extrair Telefone1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT telefone FROM candidatos WHERE REGEXP_REPLACE(telefone, '[^0-9]', '', 'g') = '{{ $json.telefone }}' LIMIT 1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        880,
+        300
+      ],
+      "id": "08a9ea99-51e9-48f6-a522-37310c6ef288",
+      "name": "Buscar no Banco2",
+      "credentials": {
+        "postgres": {
+          "id": "t6nrrjZHceBz1qJ5",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "registro-existe",
+              "leftValue": "={{ $json.existe }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        300
+      ],
+      "id": "80862fa0-0d76-4657-8ee8-0dccde368dc3",
+      "name": "Já Existe?1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Você é um assistente especializado em extrair dados estruturados de currículos e gerar comandos SQL.\n\nTexto do currículo:\n{{ $('Limpar Texto').item.json.texto_limpo }}\n\nTelefone (chave primária já existente, use exatamente este valor no WHERE): {{ $('Tratar Resultado Busca').item.json.telefone }}\n\nGere um comando SQL UPDATE para a tabela \"candidatos\" com as seguintes regras:\n\n1. Mapeie os campos encontrados no texto:\n   - Nome completo → nome_completo\n   - Cargo pretendido / área de atuação → cargo_pretendido\n   - Habilidades / tecnologias / ferramentas → habilidades\n   - Cidade / estado → localizacao\n   - E-mail → email\n   - Nome do arquivo → nome_arquivo\n   - Texto completo → texto_curriculo\n\n2. Inclua APENAS os campos que estiverem presentes no texto\n3. Escape aspas simples duplicando-as (ex: O'Brien → O''Brien)\n4. Use o telefone fornecido no WHERE sem modificações\n5. Retorne SOMENTE o comando SQL, sem explicações, sem blocos de código markdown\n\nFormato esperado:\nUPDATE candidatos SET campo1 = 'valor1', campo2 = 'valor2' WHERE telefone = 'numero';"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1420,
+        200
+      ],
+      "id": "70bfe17b-7753-4933-bd93-63f13a388659",
+      "name": "Gerar UPDATE SQL1",
+      "credentials": {
+        "openAiApi": {
+          "id": "PnKMlSiSgiq3YqKI",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Você é um assistente especializado em extrair dados estruturados de currículos e gerar comandos SQL.\n\nTexto do currículo:\n{{ $('Limpar Texto').item.json.texto_limpo }}\n\nGere um comando SQL INSERT para a tabela \"candidatos\" com as seguintes regras:\n\n1. Mapeie os campos encontrados no texto:\n   - Nome completo → nome_completo\n   - Cargo pretendido / área de atuação → cargo_pretendido\n   - Habilidades / tecnologias / ferramentas → habilidades\n   - Resumo de experiências → texto_curriculo\n   - E-mail → email\n   - Telefone → telefone\n   - Cidade / estado → localizacao\n\n2. Inclua APENAS os campos que estiverem presentes no texto\n3. Escape aspas simples duplicando-as (ex: O'Brien → O''Brien)\n4. Retorne SOMENTE o comando SQL, sem explicações, sem blocos de código markdown\n\n5. Estrutura da tabela:\ntelefone VARCHAR(50) PRIMARY KEY,\nnome_completo VARCHAR(255) NOT NULL,\ncargo_pretendido VARCHAR(255),\nhabilidades TEXT,\nlocalizacao VARCHAR(255),\nemail VARCHAR(255),\nnome_arquivo VARCHAR(255),\ntexto_curriculo TEXT\n\nFormato esperado:\nINSERT INTO candidatos (campo1, campo2, campo3)\nVALUES ('valor1', 'valor2', 'valor3');"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1420,
+        380
+      ],
+      "id": "31a38577-f1a3-4a93-8ab5-8355503ba54c",
+      "name": "Gerar INSERT SQL",
+      "credentials": {
+        "openAiApi": {
+          "id": "PnKMlSiSgiq3YqKI",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const content =\n  $json.content ||\n  $json.message?.content ||\n  $json.choices?.[0]?.message?.content ||\n  $json.text ||\n  '';\n\nif (!content) {\n  throw new Error(\n    'Não foi possível extrair o SQL da resposta da IA.\\nJSON recebido: ' +\n    JSON.stringify($json, null, 2)\n  );\n}\n\nlet sql = content.trim();\nsql = sql.replace(/```sql\\s*/gi, '').replace(/```\\s*/g, '').trim();\n\nconst upperSql = sql.toUpperCase();\nif (!upperSql.startsWith('INSERT') && !upperSql.startsWith('UPDATE')) {\n  throw new Error('A IA não retornou um INSERT ou UPDATE válido.\\nResposta: ' + sql);\n}\n\nreturn [{ json: { sql_insert: sql } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        280
+      ],
+      "id": "affc9853-db20-4786-81c1-e6da3265b8a2",
+      "name": "Extrair SQL"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{ $json.sql_insert }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        2140,
+        280
+      ],
+      "id": "43ff5e95-32e8-4d24-acc0-d8af4adc05a9",
+      "name": "Salvar no Banco",
+      "credentials": {
+        "postgres": {
+          "id": "t6nrrjZHceBz1qJ5",
+          "name": "Postgres account"
+        }
+      }
     }
   ],
   "connections": {
@@ -776,18 +883,7 @@
       "main": [
         [
           {
-            "node": "Salvar Arquivo",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Salvar Arquivo": {
-      "main": [
-        [
-          {
-            "node": "É PDF?",
+            "node": "Salvar Arquivo1",
             "type": "main",
             "index": 0
           }
@@ -849,51 +945,7 @@
       "main": [
         [
           {
-            "node": "Validar Campos Iniciais",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Gerar INSERT SQL": {
-      "main": [
-        [
-          {
-            "node": "Extrair SQL",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Extrair SQL": {
-      "main": [
-        [
-          {
-            "node": "Salvar no Banco",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Salvar no Banco": {
-      "main": [
-        [
-          {
-            "node": "Resposta Sucesso Direto",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Validar Campos Iniciais": {
-      "main": [
-        [
-          {
-            "node": "Dados Completos?",
+            "node": "Verificação de dados",
             "type": "main",
             "index": 0
           }
@@ -904,7 +956,7 @@
       "main": [
         [
           {
-            "node": "Gerar INSERT SQL",
+            "node": "Extrair Telefone1",
             "type": "main",
             "index": 0
           }
@@ -952,6 +1004,28 @@
         [
           {
             "node": "Wait 5s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar INSERT SQL IA": {
+      "main": [
+        [
+          {
+            "node": "Salvar no Banco IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar no Banco IA": {
+      "main": [
+        [
+          {
+            "node": "Resposta Sucesso IA",
             "type": "main",
             "index": 0
           }
@@ -1111,28 +1185,6 @@
         ]
       ]
     },
-    "Montar INSERT SQL IA": {
-      "main": [
-        [
-          {
-            "node": "Salvar no Banco IA",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Salvar no Banco IA": {
-      "main": [
-        [
-          {
-            "node": "Resposta Sucesso IA",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Log Erro Final": {
       "main": [
         [
@@ -1165,11 +1217,117 @@
           }
         ]
       ]
+    },
+    "Verificação de dados": {
+      "main": [
+        [
+          {
+            "node": "Dados Completos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar Arquivo1": {
+      "main": [
+        [
+          {
+            "node": "É PDF?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tratar Resultado Busca": {
+      "main": [
+        [
+          {
+            "node": "Já Existe?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair Telefone1": {
+      "main": [
+        [
+          {
+            "node": "Buscar no Banco2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar no Banco2": {
+      "main": [
+        [
+          {
+            "node": "Tratar Resultado Busca",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Já Existe?1": {
+      "main": [
+        [
+          {
+            "node": "Gerar UPDATE SQL1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gerar INSERT SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar UPDATE SQL1": {
+      "main": [
+        [
+          {
+            "node": "Extrair SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar INSERT SQL": {
+      "main": [
+        [
+          {
+            "node": "Extrair SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair SQL": {
+      "main": [
+        [
+          {
+            "node": "Salvar no Banco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "3c87b76396f56eba8c5bd2072ddb33a4830148466ed7e057bce91424bc992759"
+    "instanceId": "17dd8513543fcd007fcbf2cc7b308d8668611290d926c6048b7fe95ea7af77ef"
   }
 }

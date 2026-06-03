@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESAF – Assessment Hogan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS — ESAF palette
+   ═══════════════════════════════════════════════ */
+:root {
+  --brand:       #14343E;
+  --brand-mid:   #0B7473;
+  --accent:      #00A193;
+  --accent-soft: rgba(0,161,147,0.10);
+
+  --bg:          #D9E5E7;
+  --bg2:         #ffffff;
+  --bg3:         #EEF4F5;
+  --surface:     #ffffff;
+  --border:      #C2D2D5;
+  --border2:     #9BB4B8;
+
+  --text:        #0D2830;
+  --text-sec:    #2B5260;
+  --muted:       #4A6870;
+
+  --success:     #1a7a42;
+  --error:       #c8102e;
+  --warn:        #c97d00;
+
+  --shadow-sm:   0 1px 4px rgba(20,52,62,0.07);
+  --shadow:      0 4px 16px rgba(20,52,62,0.09);
+  --shadow-md:   0 6px 24px rgba(20,52,62,0.12);
+
+  /* accents por módulo */
+  --accent-hpi:  #00A193;
+  --accent-hds:  #c8102e;
+  --accent-mvpi: #0B7473;
+
+  --font-display: 'Inter', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --radius:       8px;
+  --radius-sm:    6px;
+}
+
+/* ── reset / base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── layout ── */
+.shell { max-width: 820px; margin: 0 auto; padding: 0 24px 80px; }
+
+/* ── ESAF header ── */
+.esaf-header {
+  background: var(--brand);
+  position: sticky; top: 0; z-index: 100;
+  padding: 0 32px; height: 64px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+.esaf-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
+.esaf-logo img { height: 28px; width: auto; display: block; }
+.esaf-logo-divider { width: 1px; height: 24px; background: rgba(255,255,255,0.20); }
+.esaf-logo-label { display: flex; flex-direction: column; gap: 1px; }
+.esaf-logo-title { font-size: 12px; font-weight: 700; color: #fff; line-height: 1.2; letter-spacing: -0.01em; }
+.esaf-logo-sub { font-size: 10px; color: rgba(255,255,255,0.50); font-weight: 400; letter-spacing: 0.05em; text-transform: uppercase; }
+.esaf-header-meta { flex: 1; text-align: center; font-size: 12px; color: rgba(255,255,255,0.55); }
+.esaf-header-meta strong { color: rgba(255,255,255,0.90); }
+.esaf-header-right { display: flex; gap: 6px; align-items: center; }
+.esaf-icon-btn {
+  width: 34px; height: 34px; border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,0.18); background: transparent;
+  color: rgba(255,255,255,0.65); display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.15s; font-size: 14px;
+}
+.esaf-icon-btn:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.35); }
+.autofill-icon-btn { background: rgba(200,16,46,0.25) !important; border-color: rgba(200,16,46,0.50) !important; }
+.autofill-icon-btn:hover { background: rgba(200,16,46,0.40) !important; }
+
+/* ── progress bar (global) ── */
+.global-progress {
+  position: fixed; top: 64px; left: 0; right: 0; height: 3px;
+  background: var(--border); z-index: 99;
+}
+.global-progress-fill {
+  height: 100%; background: var(--accent);
+  transition: width 0.4s ease, background 0.4s;
+}
+
+/* ── section header ── */
+.section-intro { text-align: center; padding: 40px 0 44px; }
+.section-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 4px 13px; border-radius: 20px;
+  border: 1px solid; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.7px; text-transform: uppercase; margin-bottom: 18px;
+}
+.badge-hpi  { color: var(--accent-hpi);  border-color: var(--accent-hpi);  background: var(--accent-soft); }
+.badge-hds  { color: var(--accent-hds);  border-color: var(--accent-hds);  background: rgba(200,16,46,0.06); }
+.badge-mvpi { color: var(--accent-mvpi); border-color: var(--accent-mvpi); background: rgba(11,116,115,0.08); }
+.section-title {
+  font-family: 'Inter', sans-serif; font-size: clamp(22px,4vw,32px);
+  font-weight: 800; line-height: 1.2; margin-bottom: 10px;
+  letter-spacing: -0.03em; color: var(--text);
+}
+.section-desc { color: var(--muted); max-width: 520px; margin: 0 auto 24px; font-size: 13px; }
+
+/* ── module nav pills ── */
+.module-nav { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+.mod-pill {
+  padding: 5px 16px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--muted); cursor: default; transition: all 0.2s;
+}
+.mod-pill.active-hpi  { color: var(--accent-hpi);  border-color: var(--accent-hpi);  background: var(--accent-soft); }
+.mod-pill.active-hds  { color: var(--accent-hds);  border-color: var(--accent-hds);  background: rgba(200,16,46,0.06); }
+.mod-pill.active-mvpi { color: var(--accent-mvpi); border-color: var(--accent-mvpi); background: rgba(11,116,115,0.08); }
+.mod-pill.done { opacity: 0.5; }
+
+/* ── progress within section ── */
+.section-progress {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 24px; font-size: 12px; color: var(--muted);
+}
+.section-progress-bar { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.section-progress-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+.fill-hpi  { background: var(--accent-hpi); }
+.fill-hds  { background: var(--accent-hds); }
+.fill-mvpi { background: var(--accent-mvpi); }
+
+/* ── scale group ── */
+.scale-group { margin-bottom: 28px; }
+.scale-header {
+  display: flex; align-items: baseline; gap: 10px;
+  margin-bottom: 12px; padding-bottom: 8px;
+  border-bottom: 2px solid var(--accent-soft);
+}
+.scale-name { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; }
+.scale-count { font-size: 11px; color: var(--muted); }
+
+/* ── item card ── */
+.item-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 20px;
+  margin-bottom: 8px; transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative; box-shadow: var(--shadow-sm);
+}
+.item-card:hover { border-color: var(--border2); box-shadow: var(--shadow); }
+.item-card.answered { border-left: 3px solid var(--accent); }
+.item-meta { font-size: 11px; color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.item-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--bg3); border: 1px solid var(--border);
+  font-size: 10px; color: var(--muted); flex-shrink: 0;
+}
+.item-text { font-size: 14px; line-height: 1.6; color: var(--text); margin-bottom: 14px; }
+
+/* ── answer buttons ── */
+.item-answers { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-vf {
+  padding: 8px 20px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--bg3);
+  color: var(--text-sec); font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-vf:hover { border-color: var(--border2); color: var(--text); }
+.btn-vf.sel-V  { background: var(--accent-soft); border-color: var(--accent-hpi); color: var(--accent-hpi); font-weight: 600; }
+.btn-vf.sel-F  { background: var(--bg3); border-color: var(--border2); color: var(--text); font-weight: 600; }
+.btn-vf.hds-sel-V { background: rgba(200,16,46,0.07); border-color: var(--accent-hds); color: var(--accent-hds); font-weight: 600; }
+.item-card.answered.sel-V-card { border-left: 3px solid var(--accent-hpi); }
+.likert-wrap { width: 100%; }
+.likert-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+.likert-btns { display: flex; gap: 6px; }
+.btn-likert {
+  flex: 1; padding: 10px 4px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--bg3);
+  color: var(--text-sec); font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.btn-likert:hover { border-color: var(--accent-mvpi); color: var(--text); }
+.btn-likert.sel { background: rgba(11,116,115,0.10); border-color: var(--accent-mvpi); color: var(--accent-mvpi); font-weight: 600; }
+
+/* ── navigation ── */
+.nav-bar {
+  position: sticky; bottom: 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 18px;
+  margin-top: 24px; box-shadow: var(--shadow-md);
+}
+.nav-info { font-size: 12px; color: var(--muted); }
+.nav-info strong { color: var(--text); }
+.nav-btns { display: flex; gap: 8px; }
+.btn-primary {
+  padding: 9px 22px; border-radius: var(--radius-sm);
+  border: none; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-primary.hpi-btn  { background: var(--accent-hpi);  color: #fff; }
+.btn-primary.hds-btn  { background: var(--brand);        color: #fff; }
+.btn-primary.mvpi-btn { background: var(--brand-mid);    color: #fff; }
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: var(--shadow); }
+.btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-sec {
+  padding: 9px 18px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-sec); font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-sec:hover { border-color: var(--border2); color: var(--text); background: var(--bg3); }
+.btn-sec:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ── welcome screen ── */
+.welcome { padding: 52px 0; text-align: center; }
+.welcome-eyebrow { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+.welcome-title {
+  font-family: 'Inter', sans-serif; font-size: clamp(26px,5vw,40px);
+  font-weight: 800; line-height: 1.15; margin-bottom: 14px; letter-spacing: -0.04em; color: var(--text);
+}
+.welcome-title em { font-style: italic; color: var(--accent); }
+.welcome-desc { color: var(--muted); max-width: 480px; margin: 0 auto 36px; line-height: 1.7; font-size: 13px; }
+.modules-preview { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 32px; text-align: left; }
+@media(max-width:560px) { .modules-preview { grid-template-columns: 1fr; } }
+.mod-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow-sm);
+}
+.mod-card-accent { width: 28px; height: 3px; border-radius: 2px; margin-bottom: 12px; }
+.mod-card-title { font-size: 12px; font-weight: 700; margin-bottom: 3px; color: var(--text); }
+.mod-card-sub { font-size: 11px; color: var(--muted); }
+.mod-card-count { font-size: 22px; font-weight: 800; font-family: 'Inter', sans-serif; margin-top: 12px; }
+/* ── participant form ── */
+.participant-form {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px 26px;
+  max-width: 420px; margin: 0 auto 24px; text-align: left;
+  box-shadow: var(--shadow-sm);
+}
+.participant-form-title {
+  font-size: 12px; font-weight: 700; color: var(--text);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 7px;
+  letter-spacing: 0.03em; text-transform: uppercase;
+  padding-bottom: 10px; border-bottom: 1px solid var(--border);
+}
+.participant-field { margin-bottom: 12px; }
+.participant-field:last-child { margin-bottom: 0; }
+.participant-label {
+  display: block; font-size: 10px; font-weight: 700;
+  color: var(--muted); letter-spacing: 0.07em;
+  text-transform: uppercase; margin-bottom: 5px;
+}
+.participant-input {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text);
+  font-family: 'Inter', sans-serif; font-size: 13px; padding: 9px 12px;
+  outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+}
+.participant-input:focus {
+  border-color: var(--accent); background: var(--surface);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.participant-input::placeholder { color: var(--muted); }
+.participant-input.error { border-color: var(--error); box-shadow: 0 0 0 3px rgba(200,16,46,0.08); }
+.result-participant {
+  font-size: 14px; font-weight: 600; color: var(--text-sec); margin-top: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.result-participant-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 20px;
+  background: var(--accent-soft); border: 1px solid rgba(0,161,147,0.25);
+  color: var(--accent-hpi); font-size: 11px; font-weight: 600;
+}
+
+.start-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.btn-start {
+  padding: 11px 34px; border-radius: var(--radius-sm);
+  background: var(--brand); color: #fff;
+  border: none; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow-sm);
+}
+.btn-start:hover { background: #1a4555; box-shadow: var(--shadow); transform: translateY(-1px); }
+.time-note { font-size: 12px; color: var(--muted); }
+
+/* ── RESULTADO ── */
+.result-page { padding: 36px 0; }
+.result-hero { text-align: center; margin-bottom: 44px; }
+.result-hero-title {
+  font-family: 'Inter', sans-serif; font-size: clamp(22px,4vw,34px);
+  font-weight: 800; line-height: 1.2; margin-bottom: 6px; letter-spacing: -0.04em; color: var(--brand);
+}
+.result-hero-sub { color: var(--muted); font-size: 13px; }
+.result-section { margin-bottom: 36px; }
+.result-section-title {
+  font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700;
+  color: var(--muted); margin-bottom: 14px; padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.result-section-title span { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+.scale-result {
+  display: grid; grid-template-columns: 180px 1fr 48px 80px;
+  align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+@media(max-width:600px) {
+  .scale-result { grid-template-columns: 1fr 60px; }
+  .scale-result .sr-bar { grid-column: 1/-1; }
+  .scale-result .sr-pct { grid-column: 2; grid-row: 1; }
+}
+.sr-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.sr-sub  { font-size: 11px; color: var(--muted); }
+.sr-bar-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.sr-bar-fill  { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); }
+.sr-score { font-size: 18px; font-family: 'Inter', sans-serif; font-weight: 700; text-align: right; }
+.sr-label {
+  font-size: 10px; padding: 3px 8px; border-radius: 10px;
+  text-align: center; font-weight: 600; letter-spacing: 0.4px;
+}
+.lbl-alto   { background: var(--accent-soft);           color: var(--accent-hpi); border: 1px solid rgba(0,161,147,0.25); }
+.lbl-medio  { background: rgba(201,125,0,0.09);         color: var(--warn);       border: 1px solid rgba(201,125,0,0.25); }
+.lbl-baixo  { background: var(--bg3);                   color: var(--muted);      border: 1px solid var(--border); }
+.lbl-risco  { background: rgba(200,16,46,0.07);         color: var(--error);      border: 1px solid rgba(200,16,46,0.20); }
+.lbl-atencao{ background: rgba(201,125,0,0.09);         color: var(--warn);       border: 1px solid rgba(201,125,0,0.25); }
+.lbl-ok     { background: rgba(26,122,66,0.07);         color: var(--success);    border: 1px solid rgba(26,122,66,0.20); }
+.risk-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 8px; }
+.risk-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px; border-left: 3px solid; box-shadow: var(--shadow-sm);
+}
+.risk-card.high { border-left-color: var(--error); }
+.risk-card.med  { border-left-color: var(--warn); }
+.risk-card.low  { border-left-color: var(--border); }
+.risk-card-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.risk-card-cluster { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.risk-card-score { font-size: 24px; font-family: 'Inter', sans-serif; font-weight: 700; color: var(--text); }
+.risk-card-max  { font-size: 12px; color: var(--muted); }
+.risk-card-bar  { height: 4px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+.risk-card-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+.mvpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 8px; }
+.mvpi-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow-sm);
+}
+.mvpi-card-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.mvpi-card-avg  { font-size: 26px; font-family: 'Inter', sans-serif; font-weight: 700; color: var(--brand-mid); margin: 8px 0 6px; }
+.mvpi-card-bar  { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.mvpi-card-fill { height: 100%; background: var(--brand-mid); border-radius: 2px; transition: width 1s ease; }
+.mvpi-card-label{ font-size: 11px; color: var(--muted); margin-top: 6px; }
+.result-actions { display: flex; gap: 8px; justify-content: center; padding: 24px 0; flex-wrap: wrap; }
+.btn-action {
+  padding: 9px 22px; border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-restart { background: var(--surface); border: 1px solid var(--border); color: var(--text-sec); box-shadow: var(--shadow-sm); }
+.btn-restart:hover { border-color: var(--border2); color: var(--text); box-shadow: var(--shadow); }
+.btn-print { background: var(--brand); border: none; color: #fff; box-shadow: var(--shadow-sm); }
+.btn-print:hover { background: #1a4555; box-shadow: var(--shadow); }
+
+/* ── admin panel ── */
+.admin-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(20,52,62,0.55); z-index: 200;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.admin-overlay.open { display: flex; }
+.admin-panel {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); max-width: 760px; width: 100%;
+  max-height: 85vh; display: flex; flex-direction: column; box-shadow: var(--shadow-md);
+}
+.admin-header { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.admin-title { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
+.admin-close {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--bg3); border: 1px solid var(--border); color: var(--muted);
+  cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+}
+.admin-close:hover { background: var(--border); color: var(--text); }
+.admin-body { padding: 20px 22px; overflow-y: auto; flex: 1; }
+.admin-tabs { display: flex; gap: 6px; margin-bottom: 18px; }
+.admin-tab {
+  padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s;
+}
+.admin-tab.active { color: var(--text); border-color: var(--border2); background: var(--bg3); }
+.admin-section-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; color: var(--muted); margin-bottom: 10px; margin-top: 16px; }
+.admin-input {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 9px 12px;
+  color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px;
+  margin-bottom: 8px; outline: none; transition: border-color 0.15s;
+}
+.admin-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.admin-select {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 8px 12px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px;
+  outline: none; cursor: pointer; transition: border-color 0.15s;
+}
+.admin-select:focus { border-color: var(--accent); }
+.item-edit-row { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 6px; }
+.item-edit-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.item-edit-num { font-size: 11px; color: var(--muted); min-width: 28px; }
+.item-edit-scale { font-size: 11px; color: var(--muted); }
+.item-edit-text { font-size: 13px; color: var(--text); flex: 1; }
+.item-edit-scoring { font-size: 10px; padding: 2px 8px; border-radius: 10px; background: var(--border); color: var(--muted); flex-shrink: 0; }
+.item-edit-actions { display: flex; gap: 8px; margin-top: 8px; }
+.btn-sm {
+  padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.15s;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text-sec);
+}
+.btn-sm:hover { border-color: var(--border2); color: var(--text); }
+.btn-sm.danger { border-color: rgba(200,16,46,0.3); color: var(--error); }
+.btn-sm.danger:hover { background: rgba(200,16,46,0.06); }
+.btn-sm.primary { border-color: rgba(0,161,147,0.35); color: var(--accent); }
+.btn-sm.primary:hover { background: var(--accent-soft); }
+.config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.config-row { display: flex; flex-direction: column; gap: 4px; }
+.config-label { font-size: 11px; color: var(--muted); font-weight: 600; }
+.admin-save-bar { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.save-hint { font-size: 12px; color: var(--muted); }
+
+/* ── inline edit overlay ── */
+.edit-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(20,52,62,0.55); z-index: 300;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.edit-overlay.open { display: flex; }
+.edit-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px; max-width: 580px; width: 100%; box-shadow: var(--shadow-md);
+}
+.edit-box-title { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+.edit-textarea {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 11px 13px;
+  color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.6;
+  min-height: 90px; resize: vertical; outline: none; margin-bottom: 13px; transition: border-color 0.15s;
+}
+.edit-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.edit-row { display: flex; gap: 10px; margin-bottom: 13px; align-items: center; flex-wrap: wrap; }
+.edit-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+/* ── history modal ── */
+.history-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(20,52,62,0.55); z-index: 200;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.history-overlay.open { display: flex; }
+.history-panel {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); max-width: 680px; width: 100%;
+  max-height: 85vh; display: flex; flex-direction: column; box-shadow: var(--shadow-md);
+}
+.history-header { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.history-title { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
+.history-body { padding: 18px 22px; overflow-y: auto; flex: 1; }
+.history-entry { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 8px; }
+.history-entry-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.history-entry-date { font-size: 13px; font-weight: 600; color: var(--text); }
+.history-entry-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.history-entry-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.history-section-lbl { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; margin-top: 8px; font-weight: 700; }
+.history-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.history-empty { text-align: center; padding: 44px 20px; color: var(--muted); }
+.history-empty-icon { font-size: 36px; margin-bottom: 12px; }
+
+/* ── toast ── */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--brand); border: none;
+  border-radius: var(--radius-sm); padding: 10px 18px;
+  font-size: 13px; font-weight: 500; color: #fff; opacity: 0; transition: all 0.3s;
+  pointer-events: none; white-space: nowrap; z-index: 400; box-shadow: var(--shadow-md);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── animations ── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.fade-up   { animation: fadeUp 0.28s ease both; }
+.fade-up-2 { animation: fadeUp 0.28s 0.06s ease both; }
+.fade-up-3 { animation: fadeUp 0.28s 0.12s ease both; }
+
+/* ── print ── */
+@media print {
+  .esaf-header, .nav-bar, .global-progress, .result-actions,
+  .admin-overlay, .edit-overlay, .history-overlay, .toast { display: none !important; }
+  @page { margin: 18mm 20mm; }
+  body { background: #fff !important; }
+  .shell { max-width: 100%; padding: 0; }
+}
+
+/* ── scrollbar ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ GLOBAL PROGRESS BAR ═══ -->
+<div class="global-progress"><div class="global-progress-fill" id="globalFill"></div></div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ ESAF HEADER ═══ -->
+<header class="esaf-header">
+  <a class="esaf-logo" href="#">
+    <img src="https://esaf.com.br/wp-content/uploads/2024/07/esaf_logo.png" alt="ESAF" />
+    <div class="esaf-logo-divider"></div>
+    <div class="esaf-logo-label">
+      <span class="esaf-logo-title">Assessment Hogan</span>
+      <span class="esaf-logo-sub">Avaliação de Perfil</span>
+    </div>
+  </a>
+  <div class="esaf-header-meta" id="headerMeta"></div>
+  <div class="esaf-header-right">
+    <button type="button" class="esaf-icon-btn autofill-icon-btn" onclick="autoFillAll()" title="Auto-preencher (teste)">🎲</button>
+    <button type="button" class="esaf-icon-btn" onclick="showHistory()" title="Histórico">📋</button>
+    <button type="button" class="esaf-icon-btn" onclick="openAdmin()" title="Configurações">⚙</button>
+  </div>
+</header>
+
+<!-- ═══ HISTORY OVERLAY ═══ -->
+<div class="history-overlay" id="historyOverlay">
+  <div class="history-panel">
+    <div class="history-header">
+      <span class="history-title">Histórico de Resultados</span>
+      <button class="admin-close" onclick="closeHistory()">✕</button>
+    </div>
+    <div class="history-body" id="historyList"></div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN OVERLAY ═══ -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-panel">
+    <div class="admin-header">
+      <span class="admin-title">Painel de Configuração</span>
+      <button class="admin-close" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="admin-body">
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchAdminTab('items',this)">Afirmações</button>
+        <button class="admin-tab" onclick="switchAdminTab('scores',this)">Pesos / Scoring</button>
+        <button class="admin-tab" onclick="switchAdminTab('meta',this)">Metadados</button>
+        <button class="admin-tab" onclick="switchAdminTab('export',this)">Exportar</button>
+      </div>
+      <div id="adminItems"></div>
+      <div id="adminScores"  style="display:none"></div>
+      <div id="adminMeta"    style="display:none"></div>
+      <div id="adminExport"  style="display:none"></div>
+    </div>
+    <div class="admin-save-bar">
+      <span class="save-hint">Alterações são salvas automaticamente no navegador</span>
+      <button class="btn-primary hpi-btn" onclick="saveAndClose()">Salvar e fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EDIT OVERLAY ═══ -->
+<div class="edit-overlay" id="editOverlay">
+  <div class="edit-box">
+    <div class="edit-box-title">Editar afirmação</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px" id="editMeta"></div>
+    <textarea class="edit-textarea" id="editText" placeholder="Texto da afirmação"></textarea>
+    <div class="edit-row">
+      <span style="font-size:12px;color:var(--muted)">Scoring:</span>
+      <select class="admin-select" id="editScoring">
+        <option value="N">N — Normal (Verdadeiro = 1)</option>
+        <option value="R">R — Reverso (Falso = 1)</option>
+      </select>
+      <span style="font-size:12px;color:var(--muted);margin-left:12px">Peso:</span>
+      <input type="number" class="admin-input" id="editWeight" min="0.1" max="5" step="0.1" style="width:80px;margin:0">
+    </div>
+    <div class="edit-actions">
+      <button class="btn-sm" onclick="closeEdit()">Cancelar</button>
+      <button class="btn-sm primary" onclick="saveEdit()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN APP ═══ -->
+<div class="shell" id="app"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+//  DADOS — fonte única de verdade extraída do Excel
+//  Para editar: use o painel ⚙ ou edite diretamente este JSON
+// ═══════════════════════════════════════════════════════════════════
+const SOURCE_DATA = {"hpi": [{"id": 1, "scale": "Ajustamento", "subscale": "Estabilidade emocional", "text": "Raramente me sinto ansioso ou preocupado sem motivo claro.", "scoring": "N"}, {"id": 2, "scale": "Ajustamento", "subscale": "Estabilidade emocional", "text": "Consigo manter a calma mesmo em situações de alta pressão.", "scoring": "N"}, {"id": 3, "scale": "Ajustamento", "subscale": "Autoconfiança", "text": "Costumo duvidar das minhas próprias decisões após tomá-las.", "scoring": "R"}, {"id": 4, "scale": "Ajustamento", "subscale": "Autoconfiança", "text": "Sinto-me seguro sobre quem sou e o que represento.", "scoring": "N"}, {"id": 5, "scale": "Ajustamento", "subscale": "Resiliência", "text": "Me recupero rapidamente de críticas ou rejeições.", "scoring": "N"}, {"id": 6, "scale": "Ajustamento", "subscale": "Resiliência", "text": "Erros do passado continuam me perturbando por muito tempo.", "scoring": "R"}, {"id": 7, "scale": "Ajustamento", "subscale": "Temperamento", "text": "Raramente perco a paciência com colegas de trabalho.", "scoring": "N"}, {"id": 8, "scale": "Ajustamento", "subscale": "Temperamento", "text": "Quando estou frustrado, as pessoas ao redor percebem facilmente.", "scoring": "R"}, {"id": 9, "scale": "Ajustamento", "subscale": "Empatia", "text": "Consigo entender o ponto de vista das pessoas mesmo quando discordo.", "scoring": "N"}, {"id": 10, "scale": "Ajustamento", "subscale": "Empatia", "text": "Tenho dificuldade em separar minhas emoções das situações de trabalho.", "scoring": "R"}, {"id": 11, "scale": "Ajustamento", "subscale": "Autocontrole", "text": "Mantenho minha produtividade mesmo em ambientes caóticos.", "scoring": "N"}, {"id": 12, "scale": "Ajustamento", "subscale": "Autocontrole", "text": "Me sinto esgotado com frequência sem razão aparente.", "scoring": "R"}, {"id": 13, "scale": "Ambição", "subscale": "Competitividade", "text": "Gosto de situações onde posso me destacar em relação aos outros.", "scoring": "N"}, {"id": 14, "scale": "Ambição", "subscale": "Competitividade", "text": "Prefiro colaborar a competir com meus colegas.", "scoring": "R"}, {"id": 15, "scale": "Ambição", "subscale": "Orientação a resultados", "text": "Estabeleço metas claras e faço questão de atingi-las.", "scoring": "N"}, {"id": 16, "scale": "Ambição", "subscale": "Orientação a resultados", "text": "Frequentemente começo projetos sem definir objetivos específicos.", "scoring": "R"}, {"id": 17, "scale": "Ambição", "subscale": "Liderança", "text": "Naturalmente assumo o controle em situações sem liderança definida.", "scoring": "N"}, {"id": 18, "scale": "Ambição", "subscale": "Liderança", "text": "Prefiro seguir orientações a dar direcionamentos.", "scoring": "R"}, {"id": 19, "scale": "Ambição", "subscale": "Energia", "text": "Trabalho com alta energia mesmo quando a tarefa é repetitiva.", "scoring": "N"}, {"id": 20, "scale": "Ambição", "subscale": "Energia", "text": "Perco o interesse rapidamente quando os desafios diminuem.", "scoring": "R"}, {"id": 21, "scale": "Ambição", "subscale": "Autoconfiança", "text": "Acredito que sou capaz de realizar coisas que outros consideram difíceis.", "scoring": "N"}, {"id": 22, "scale": "Ambição", "subscale": "Autoconfiança", "text": "Hesito em me candidatar a posições que me parecem além do meu nível.", "scoring": "R"}, {"id": 23, "scale": "Ambição", "subscale": "Persistência", "text": "Continuo tentando mesmo após várias tentativas malsucedidas.", "scoring": "N"}, {"id": 24, "scale": "Ambição", "subscale": "Persistência", "text": "Desisto de objetivos que parecem muito difíceis de alcançar.", "scoring": "R"}, {"id": 25, "scale": "Sociabilidade", "subscale": "Interação social", "text": "Fico energizado após longos períodos de interação com pessoas.", "scoring": "N"}, {"id": 26, "scale": "Sociabilidade", "subscale": "Interação social", "text": "Prefiro trabalhar sozinho a trabalhar em grupo.", "scoring": "R"}, {"id": 27, "scale": "Sociabilidade", "subscale": "Expressividade", "text": "Me sinto confortável falando em público ou apresentando ideias.", "scoring": "N"}, {"id": 28, "scale": "Sociabilidade", "subscale": "Expressividade", "text": "Evito situações onde preciso me apresentar para grupos grandes.", "scoring": "R"}, {"id": 29, "scale": "Sociabilidade", "subscale": "Rede de relacionamentos", "text": "Mantenho uma rede ampla de contatos profissionais.", "scoring": "N"}, {"id": 30, "scale": "Sociabilidade", "subscale": "Rede de relacionamentos", "text": "Tenho dificuldade em manter contato com pessoas que não vejo regularmente.", "scoring": "R"}, {"id": 31, "scale": "Sociabilidade", "subscale": "Entretenimento", "text": "Gosto de organizar eventos e reuniões sociais.", "scoring": "N"}, {"id": 32, "scale": "Sociabilidade", "subscale": "Entretenimento", "text": "Prefiro encontros pequenos e íntimos a grandes eventos sociais.", "scoring": "R"}, {"id": 33, "scale": "Sociabilidade", "subscale": "Comunicação", "text": "Expresso minhas ideias com facilidade em conversas.", "scoring": "N"}, {"id": 34, "scale": "Sociabilidade", "subscale": "Comunicação", "text": "Em reuniões, costumo ouvir mais do que falar.", "scoring": "R"}, {"id": 35, "scale": "Sociabilidade", "subscale": "Abertura", "text": "Fico à vontade para conversar com pessoas que acabei de conhecer.", "scoring": "N"}, {"id": 36, "scale": "Sociabilidade", "subscale": "Abertura", "text": "Demoro para me sentir confortável com pessoas novas.", "scoring": "R"}, {"id": 37, "scale": "Sensibilidade Interpessoal", "subscale": "Tato", "text": "Considero cuidadosamente como minhas palavras afetarão as pessoas.", "scoring": "N"}, {"id": 38, "scale": "Sensibilidade Interpessoal", "subscale": "Tato", "text": "Digo o que penso mesmo sabendo que pode magoar alguém.", "scoring": "R"}, {"id": 39, "scale": "Sensibilidade Interpessoal", "subscale": "Diplomacia", "text": "Consigo dar feedback difícil de forma que as pessoas recebam bem.", "scoring": "N"}, {"id": 40, "scale": "Sensibilidade Interpessoal", "subscale": "Diplomacia", "text": "Tenho dificuldade em criticar o trabalho de alguém pessoalmente.", "scoring": "R"}, {"id": 41, "scale": "Sensibilidade Interpessoal", "subscale": "Cuidado com outros", "text": "Noto facilmente quando alguém ao meu redor está passando por dificuldades.", "scoring": "N"}, {"id": 42, "scale": "Sensibilidade Interpessoal", "subscale": "Cuidado com outros", "text": "Costumo estar tão focado no trabalho que não percebo o estado emocional dos colegas.", "scoring": "R"}, {"id": 43, "scale": "Sensibilidade Interpessoal", "subscale": "Flexibilidade", "text": "Adapto meu estilo de comunicação conforme a pessoa com quem falo.", "scoring": "N"}, {"id": 44, "scale": "Sensibilidade Interpessoal", "subscale": "Flexibilidade", "text": "Trato todos da mesma forma, independente de cargo ou contexto.", "scoring": "R"}, {"id": 45, "scale": "Sensibilidade Interpessoal", "subscale": "Colaboração", "text": "Coloco o bem do time acima dos meus interesses individuais.", "scoring": "N"}, {"id": 46, "scale": "Sensibilidade Interpessoal", "subscale": "Colaboração", "text": "Acredito que cada um deve cuidar dos seus próprios resultados.", "scoring": "R"}, {"id": 47, "scale": "Sensibilidade Interpessoal", "subscale": "Generosidade", "text": "Fico genuinamente satisfeito com o sucesso dos meus colegas.", "scoring": "N"}, {"id": 48, "scale": "Sensibilidade Interpessoal", "subscale": "Generosidade", "text": "Por vezes sinto que reconhecer os outros tira o mérito do meu próprio trabalho.", "scoring": "R"}, {"id": 49, "scale": "Prudência", "subscale": "Autocontrole", "text": "Penso nas consequências antes de agir.", "scoring": "N"}, {"id": 50, "scale": "Prudência", "subscale": "Autocontrole", "text": "Frequentemente ajo por impulso e reflito depois.", "scoring": "R"}, {"id": 51, "scale": "Prudência", "subscale": "Organização", "text": "Mantenho minha área de trabalho e arquivos organizados.", "scoring": "N"}, {"id": 52, "scale": "Prudência", "subscale": "Organização", "text": "Tenho dificuldade em manter um sistema de organização consistente.", "scoring": "R"}, {"id": 53, "scale": "Prudência", "subscale": "Confiabilidade", "text": "Cumpro prazos mesmo quando as circunstâncias são adversas.", "scoring": "N"}, {"id": 54, "scale": "Prudência", "subscale": "Confiabilidade", "text": "As pessoas ao meu redor já me cobraram por atrasos ou esquecimentos.", "scoring": "R"}, {"id": 55, "scale": "Prudência", "subscale": "Atenção a regras", "text": "Sigo as regras e processos estabelecidos, mesmo quando parecem desnecessários.", "scoring": "N"}, {"id": 56, "scale": "Prudência", "subscale": "Atenção a regras", "text": "Adapto ou ignoro procedimentos quando acredito ter um jeito melhor.", "scoring": "R"}, {"id": 57, "scale": "Prudência", "subscale": "Planejamento", "text": "Prefiro planejar com antecedência a improvisar no último momento.", "scoring": "N"}, {"id": 58, "scale": "Prudência", "subscale": "Planejamento", "text": "Trabalho melhor sob pressão e prazos curtos.", "scoring": "R"}, {"id": 59, "scale": "Prudência", "subscale": "Detalhismo", "text": "Reviso meu trabalho cuidadosamente antes de entregá-lo.", "scoring": "N"}, {"id": 60, "scale": "Prudência", "subscale": "Detalhismo", "text": "Entrego o trabalho rapidamente e corrijo os erros depois.", "scoring": "R"}, {"id": 61, "scale": "Inquisitividade", "subscale": "Curiosidade intelectual", "text": "Gosto de explorar ideias novas, mesmo que não tenham aplicação prática imediata.", "scoring": "N"}, {"id": 62, "scale": "Inquisitividade", "subscale": "Curiosidade intelectual", "text": "Prefiro me aprofundar no que já conheço a explorar áreas desconhecidas.", "scoring": "R"}, {"id": 63, "scale": "Inquisitividade", "subscale": "Pensamento estratégico", "text": "Costumo enxergar padrões e conexões que outros não percebem.", "scoring": "N"}, {"id": 64, "scale": "Inquisitividade", "subscale": "Pensamento estratégico", "text": "Foco mais na execução do dia a dia do que em visão de longo prazo.", "scoring": "R"}, {"id": 65, "scale": "Inquisitividade", "subscale": "Inovação", "text": "Questiono ativamente o status quo e proponho novas formas de fazer as coisas.", "scoring": "N"}, {"id": 66, "scale": "Inquisitividade", "subscale": "Inovação", "text": "Prefiro métodos comprovados a experimentar abordagens novas.", "scoring": "R"}, {"id": 67, "scale": "Inquisitividade", "subscale": "Abertura a experiências", "text": "Procuro ativamente aprender sobre áreas fora da minha especialidade.", "scoring": "N"}, {"id": 68, "scale": "Inquisitividade", "subscale": "Abertura a experiências", "text": "Meu desenvolvimento profissional foca principalmente na minha área de atuação.", "scoring": "R"}, {"id": 69, "scale": "Inquisitividade", "subscale": "Imaginação", "text": "Frequentemente imagino cenários futuros e suas possíveis implicações.", "scoring": "N"}, {"id": 70, "scale": "Inquisitividade", "subscale": "Imaginação", "text": "Tenho dificuldade em pensar de forma abstrata ou hipotética.", "scoring": "R"}, {"id": 71, "scale": "Inquisitividade", "subscale": "Análise crítica", "text": "Questiono premissas e busco evidências antes de aceitar uma conclusão.", "scoring": "N"}, {"id": 72, "scale": "Inquisitividade", "subscale": "Análise crítica", "text": "Aceito informações de fontes confiáveis sem necessidade de verificar.", "scoring": "R"}, {"id": 73, "scale": "Aprendizado", "subscale": "Orientação acadêmica", "text": "Gosto de estudar e me aprofundar em assuntos de interesse.", "scoring": "N"}, {"id": 74, "scale": "Aprendizado", "subscale": "Orientação acadêmica", "text": "Prefiro aprender na prática a estudar teorias ou conceitos.", "scoring": "R"}, {"id": 75, "scale": "Aprendizado", "subscale": "Valorização do conhecimento", "text": "Acredito que o aprendizado contínuo é essencial para o sucesso profissional.", "scoring": "N"}, {"id": 76, "scale": "Aprendizado", "subscale": "Valorização do conhecimento", "text": "Sinto que a experiência prática vale mais do que qualificações formais.", "scoring": "R"}, {"id": 77, "scale": "Aprendizado", "subscale": "Busca por feedback", "text": "Busco ativamente feedback para identificar como posso melhorar.", "scoring": "N"}, {"id": 78, "scale": "Aprendizado", "subscale": "Busca por feedback", "text": "Prefiro descobrir minhas áreas de melhoria por conta própria.", "scoring": "R"}, {"id": 79, "scale": "Aprendizado", "subscale": "Desenvolvimento", "text": "Invisto tempo e recursos no meu próprio desenvolvimento profissional.", "scoring": "N"}, {"id": 80, "scale": "Aprendizado", "subscale": "Desenvolvimento", "text": "Só faço treinamentos quando são obrigatórios pela empresa.", "scoring": "R"}, {"id": 81, "scale": "Aprendizado", "subscale": "Aplicação do conhecimento", "text": "Aplico ativamente o que aprendo no meu trabalho cotidiano.", "scoring": "N"}, {"id": 82, "scale": "Aprendizado", "subscale": "Aplicação do conhecimento", "text": "Tenho dificuldade em transferir o que aprendo em cursos para a prática.", "scoring": "R"}, {"id": 83, "scale": "Aprendizado", "subscale": "Curiosidade", "text": "Faço perguntas frequentemente para entender melhor os processos e decisões.", "scoring": "N"}, {"id": 84, "scale": "Aprendizado", "subscale": "Curiosidade", "text": "Aceito explicações sem sentir necessidade de aprofundar meu entendimento.", "scoring": "R"}], "hds": [{"id": 1, "scale": "Excitável", "subscale": "Volatilidade", "text": "Quando algo me frustra no trabalho, as pessoas ao redor percebem rapidamente.", "cluster": "Afastamento"}, {"id": 2, "scale": "Excitável", "subscale": "Volatilidade", "text": "Meu humor no trabalho pode variar bastante ao longo do dia.", "cluster": "Afastamento"}, {"id": 3, "scale": "Excitável", "subscale": "Desencantamento", "text": "Costumo perder o entusiasmo por projetos antes de concluí-los.", "cluster": "Afastamento"}, {"id": 4, "scale": "Excitável", "subscale": "Desencantamento", "text": "Me decepciono facilmente quando as coisas não saem como esperado.", "cluster": "Afastamento"}, {"id": 5, "scale": "Excitável", "subscale": "Instabilidade de direção", "text": "Mudo de opinião sobre prioridades com mais frequência do que deveria.", "cluster": "Afastamento"}, {"id": 6, "scale": "Excitável", "subscale": "Instabilidade de direção", "text": "Pessoas próximas já comentaram que sou difícil de prever.", "cluster": "Afastamento"}, {"id": 7, "scale": "Cético", "subscale": "Desconfiança", "text": "Questiono as motivações das pessoas antes de aceitar o que dizem.", "cluster": "Afastamento"}, {"id": 8, "scale": "Cético", "subscale": "Desconfiança", "text": "Acredito que a maioria das pessoas age em interesse próprio.", "cluster": "Afastamento"}, {"id": 9, "scale": "Cético", "subscale": "Cinismo", "text": "Vejo críticas como tentativas de me prejudicar, mesmo quando parecem construtivas.", "cluster": "Afastamento"}, {"id": 10, "scale": "Cético", "subscale": "Cinismo", "text": "Tenho dificuldade em confiar em pessoas que ainda não me provaram sua lealdade.", "cluster": "Afastamento"}, {"id": 11, "scale": "Cético", "subscale": "Ressentimento", "text": "Guardo na memória quando alguém me trata de forma injusta.", "cluster": "Afastamento"}, {"id": 12, "scale": "Cético", "subscale": "Ressentimento", "text": "Tenho dificuldade em esquecer traições, mesmo após resolvermos o conflito.", "cluster": "Afastamento"}, {"id": 13, "scale": "Cauteloso", "subscale": "Medo de errar", "text": "Prefiro não agir a arriscar tomar uma decisão errada.", "cluster": "Afastamento"}, {"id": 14, "scale": "Cauteloso", "subscale": "Medo de errar", "text": "Peço mais aprovações do que o necessário antes de avançar.", "cluster": "Afastamento"}, {"id": 15, "scale": "Cauteloso", "subscale": "Indecisão", "text": "Demoro mais do que outros para tomar decisões importantes.", "cluster": "Afastamento"}, {"id": 16, "scale": "Cauteloso", "subscale": "Indecisão", "text": "Reviso minhas decisões repetidamente, mesmo após tomá-las.", "cluster": "Afastamento"}, {"id": 17, "scale": "Cauteloso", "subscale": "Evitação de riscos", "text": "Evito projetos inovadores que possam não dar certo.", "cluster": "Afastamento"}, {"id": 18, "scale": "Cauteloso", "subscale": "Evitação de riscos", "text": "Prefiro resultados mediocres previsíveis a resultados excelentes incertos.", "cluster": "Afastamento"}, {"id": 19, "scale": "Reservado", "subscale": "Distanciamento", "text": "As pessoas descrevem minha comunicação como fria ou distante.", "cluster": "Afastamento"}, {"id": 20, "scale": "Reservado", "subscale": "Distanciamento", "text": "Tenho dificuldade em expressar entusiasmo ou reconhecimento pelo trabalho dos outros.", "cluster": "Afastamento"}, {"id": 21, "scale": "Reservado", "subscale": "Independência excessiva", "text": "Prefiro resolver os problemas sozinho a pedir ajuda.", "cluster": "Afastamento"}, {"id": 22, "scale": "Reservado", "subscale": "Independência excessiva", "text": "Pessoas próximas já me disseram que sou difícil de acessar.", "cluster": "Afastamento"}, {"id": 23, "scale": "Reservado", "subscale": "Baixa comunicação", "text": "Compartilho informações importantes apenas quando solicitado.", "cluster": "Afastamento"}, {"id": 24, "scale": "Reservado", "subscale": "Baixa comunicação", "text": "Raramente dou atualizações espontâneas sobre o andamento do meu trabalho.", "cluster": "Afastamento"}, {"id": 25, "scale": "Tranquilo", "subscale": "Passividade", "text": "Concordo com as pessoas na hora, mas faço as coisas do meu jeito depois.", "cluster": "Afastamento"}, {"id": 26, "scale": "Tranquilo", "subscale": "Passividade", "text": "Procrastino tarefas que considero desnecessárias ou impostas.", "cluster": "Afastamento"}, {"id": 27, "scale": "Tranquilo", "subscale": "Resistência passiva", "text": "Quando discordo de uma decisão, raramente a questiono abertamente.", "cluster": "Afastamento"}, {"id": 28, "scale": "Tranquilo", "subscale": "Resistência passiva", "text": "Demoro propositalmente em tarefas que não concordo em fazer.", "cluster": "Afastamento"}, {"id": 29, "scale": "Tranquilo", "subscale": "Senso de direito", "text": "Acredito que mereço mais reconhecimento do que recebo atualmente.", "cluster": "Afastamento"}, {"id": 30, "scale": "Tranquilo", "subscale": "Senso de direito", "text": "Sinto que contribuo mais do que os outros, mas sou menos valorizado.", "cluster": "Afastamento"}, {"id": 31, "scale": "Audacioso", "subscale": "Arrogância", "text": "Acredito que meu julgamento é melhor do que o da maioria das pessoas.", "cluster": "Antagonismo"}, {"id": 32, "scale": "Audacioso", "subscale": "Arrogância", "text": "Tenho dificuldade em aceitar que posso estar errado em algo importante.", "cluster": "Antagonismo"}, {"id": 33, "scale": "Audacioso", "subscale": "Direito ao privilégio", "text": "Espero tratamento especial por conta da minha posição ou contribuições.", "cluster": "Antagonismo"}, {"id": 34, "scale": "Audacioso", "subscale": "Direito ao privilégio", "text": "Regras e processos me parecem menos aplicáveis a mim do que aos outros.", "cluster": "Antagonismo"}, {"id": 35, "scale": "Audacioso", "subscale": "Resistência a feedback", "text": "Quando recebo críticas, minha primeira reação é questionar a competência de quem as faz.", "cluster": "Antagonismo"}, {"id": 36, "scale": "Audacioso", "subscale": "Resistência a feedback", "text": "Raramente mudo minha abordagem por conta do feedback recebido.", "cluster": "Antagonismo"}, {"id": 37, "scale": "Travesso", "subscale": "Busca por adrenalina", "text": "Gosto de testar os limites das regras para ver o que é possível.", "cluster": "Antagonismo"}, {"id": 38, "scale": "Travesso", "subscale": "Busca por adrenalina", "text": "Me entedio facilmente quando o ambiente é muito controlado ou previsível.", "cluster": "Antagonismo"}, {"id": 39, "scale": "Travesso", "subscale": "Impulsividade", "text": "Frequentemente ajo sem pensar nas consequências de longo prazo.", "cluster": "Antagonismo"}, {"id": 40, "scale": "Travesso", "subscale": "Impulsividade", "text": "Tomo decisões arriscadas que mais tarde reconheço como precipitadas.", "cluster": "Antagonismo"}, {"id": 41, "scale": "Travesso", "subscale": "Manipulação", "text": "Uso de charme e persuasão para conseguir o que quero, mesmo que isso signifique contornar processos.", "cluster": "Antagonismo"}, {"id": 42, "scale": "Travesso", "subscale": "Manipulação", "text": "Consigo convencer as pessoas a fazerem coisas que, em princípio, não fariam.", "cluster": "Antagonismo"}, {"id": 43, "scale": "Colorido", "subscale": "Necessidade de atenção", "text": "Sinto desconforto quando não sou o centro das atenções em reuniões importantes.", "cluster": "Antagonismo"}, {"id": 44, "scale": "Colorido", "subscale": "Necessidade de atenção", "text": "Tenho dificuldade em deixar outra pessoa brilhar sem me inserir na conversa.", "cluster": "Antagonismo"}, {"id": 45, "scale": "Colorido", "subscale": "Dramatismo", "text": "Minha reação emocional a eventos profissionais é mais intensa que a média.", "cluster": "Antagonismo"}, {"id": 46, "scale": "Colorido", "subscale": "Dramatismo", "text": "As pessoas já me disseram que exagero nas reações, positivas ou negativas.", "cluster": "Antagonismo"}, {"id": 47, "scale": "Colorido", "subscale": "Superficialidade", "text": "Começo muitas iniciativas mas tenho dificuldade em acompanhá-las até o fim.", "cluster": "Antagonismo"}, {"id": 48, "scale": "Colorido", "subscale": "Superficialidade", "text": "Prefiro ideias novas a executar projetos em andamento.", "cluster": "Antagonismo"}, {"id": 49, "scale": "Imaginativo", "subscale": "Pensamento excêntrico", "text": "Minhas ideias frequentemente surpreendem ou confundem as pessoas ao redor.", "cluster": "Antagonismo"}, {"id": 50, "scale": "Imaginativo", "subscale": "Pensamento excêntrico", "text": "Tenho formas de ver o mundo que são difíceis de explicar para os outros.", "cluster": "Antagonismo"}, {"id": 51, "scale": "Imaginativo", "subscale": "Desconexão da realidade", "text": "Às vezes estou tão focado em possibilidades futuras que ignoro problemas presentes.", "cluster": "Antagonismo"}, {"id": 52, "scale": "Imaginativo", "subscale": "Desconexão da realidade", "text": "As pessoas já me disseram que minhas ideias são interessantes, mas pouco práticas.", "cluster": "Antagonismo"}, {"id": 53, "scale": "Imaginativo", "subscale": "Originalidade excessiva", "text": "Prefiro criar algo completamente novo a melhorar o que já existe.", "cluster": "Antagonismo"}, {"id": 54, "scale": "Imaginativo", "subscale": "Originalidade excessiva", "text": "Me frustro quando preciso trabalhar dentro de estruturas convencionais.", "cluster": "Antagonismo"}, {"id": 55, "scale": "Diligente", "subscale": "Perfeccionismo", "text": "Tenho dificuldade em entregar trabalhos que não considero perfeitos.", "cluster": "Conformidade"}, {"id": 56, "scale": "Diligente", "subscale": "Perfeccionismo", "text": "Reviso meu trabalho muito além do que é necessário para garantir que está correto.", "cluster": "Conformidade"}, {"id": 57, "scale": "Diligente", "subscale": "Microgerenciamento", "text": "Quando delego, continuo monitorando de perto para garantir que tudo será feito corretamente.", "cluster": "Conformidade"}, {"id": 58, "scale": "Diligente", "subscale": "Microgerenciamento", "text": "Tenho dificuldade em confiar que os outros farão o trabalho do jeito certo.", "cluster": "Conformidade"}, {"id": 59, "scale": "Diligente", "subscale": "Rigidez", "text": "Tenho dificuldade em mudar de abordagem quando já decidi como algo deve ser feito.", "cluster": "Conformidade"}, {"id": 60, "scale": "Diligente", "subscale": "Rigidez", "text": "Me incomodo quando os processos são alterados sem uma justificativa clara.", "cluster": "Conformidade"}, {"id": 61, "scale": "Cumpridor", "subscale": "Submissão excessiva", "text": "Tenho dificuldade em discordar de pessoas em posições de autoridade.", "cluster": "Conformidade"}, {"id": 62, "scale": "Cumpridor", "subscale": "Submissão excessiva", "text": "Raramente questiono decisões da liderança, mesmo quando discordo.", "cluster": "Conformidade"}, {"id": 63, "scale": "Cumpridor", "subscale": "Necessidade de aprovação", "text": "Fico ansioso quando não sei se as pessoas acima de mim estão satisfeitas com meu trabalho.", "cluster": "Conformidade"}, {"id": 64, "scale": "Cumpridor", "subscale": "Necessidade de aprovação", "text": "Busco validação frequente da liderança antes de avançar em projetos.", "cluster": "Conformidade"}, {"id": 65, "scale": "Cumpridor", "subscale": "Evitação de conflito", "text": "Evito conflitos com superiores mesmo quando acredito que eles estão errados.", "cluster": "Conformidade"}, {"id": 66, "scale": "Cumpridor", "subscale": "Evitação de conflito", "text": "Prefiro concordar com decisões que discordo a criar tensão com a liderança.", "cluster": "Conformidade"}], "mvpi": [{"id": 1, "scale": "Reconhecimento", "subscale": "Visibilidade", "text": "Para mim, ser reconhecido publicamente pelo meu trabalho é muito importante."}, {"id": 2, "scale": "Reconhecimento", "subscale": "Visibilidade", "text": "Prefiro um ambiente onde as conquistas individuais são celebradas."}, {"id": 3, "scale": "Reconhecimento", "subscale": "Status", "text": "O cargo e o status que ocupo importam muito para mim."}, {"id": 4, "scale": "Reconhecimento", "subscale": "Status", "text": "Ambientes onde todos são tratados da mesma forma independente do cargo me motivam."}, {"id": 5, "scale": "Reconhecimento", "subscale": "Prestígio", "text": "Trabalhar para uma empresa reconhecida é importante para mim."}, {"id": 6, "scale": "Reconhecimento", "subscale": "Prestígio", "text": "Não me importo com a reputação da empresa enquanto o trabalho for significativo."}, {"id": 7, "scale": "Poder", "subscale": "Influência", "text": "Quero ter influência real sobre as decisões da organização."}, {"id": 8, "scale": "Poder", "subscale": "Influência", "text": "Assumir responsabilidades de liderança me motiva profundamente."}, {"id": 9, "scale": "Poder", "subscale": "Controle", "text": "Me sinto mais realizado quando tenho controle sobre os resultados do meu trabalho."}, {"id": 10, "scale": "Poder", "subscale": "Controle", "text": "Prefiro ambientes onde posso trabalhar com autonomia total."}, {"id": 11, "scale": "Poder", "subscale": "Competição", "text": "Ambientes competitivos me energizam e me fazem produzir melhor."}, {"id": 12, "scale": "Poder", "subscale": "Competição", "text": "Prefiro colaboração à competição no ambiente de trabalho."}, {"id": 13, "scale": "Hedonismo", "subscale": "Prazer no trabalho", "text": "Para mim, é essencial que o trabalho seja divertido e agradável."}, {"id": 14, "scale": "Hedonismo", "subscale": "Prazer no trabalho", "text": "Escolho projetos também pelo prazer que trarão, não apenas pelo resultado."}, {"id": 15, "scale": "Hedonismo", "subscale": "Equilíbrio", "text": "Valorizo muito o equilíbrio entre vida profissional e pessoal."}, {"id": 16, "scale": "Hedonismo", "subscale": "Equilíbrio", "text": "Estou disposto a sacrificar tempo pessoal quando o trabalho exige."}, {"id": 17, "scale": "Hedonismo", "subscale": "Ambiente positivo", "text": "Um ambiente de trabalho leve e positivo é um fator decisivo para mim."}, {"id": 18, "scale": "Hedonismo", "subscale": "Ambiente positivo", "text": "Consigo me manter motivado em ambientes de alta pressão por tempo prolongado."}, {"id": 19, "scale": "Altruísmo", "subscale": "Propósito social", "text": "Quero que meu trabalho contribua para algo maior do que os resultados da empresa."}, {"id": 20, "scale": "Altruísmo", "subscale": "Propósito social", "text": "O impacto social do meu trabalho é tão importante quanto a remuneração."}, {"id": 21, "scale": "Altruísmo", "subscale": "Cuidado com as pessoas", "text": "Organizações que cuidam genuinamente do bem-estar dos funcionários me atraem muito."}, {"id": 22, "scale": "Altruísmo", "subscale": "Cuidado com as pessoas", "text": "Prefiro empresas com forte cultura de responsabilidade social."}, {"id": 23, "scale": "Altruísmo", "subscale": "Colaboração", "text": "Para mim, ajudar colegas a crescer é tão satisfatório quanto meu próprio crescimento."}, {"id": 24, "scale": "Altruísmo", "subscale": "Colaboração", "text": "Sinto satisfação profunda ao ver que contribuí para o sucesso de alguém."}, {"id": 25, "scale": "Afiliação", "subscale": "Relacionamentos", "text": "Ter bons relacionamentos no trabalho é fundamental para minha motivação."}, {"id": 26, "scale": "Afiliação", "subscale": "Relacionamentos", "text": "Me sinto desconfortável em ambientes com pouca interação interpessoal."}, {"id": 27, "scale": "Afiliação", "subscale": "Pertencimento", "text": "Faz diferença para mim sentir que faço parte de um grupo coeso."}, {"id": 28, "scale": "Afiliação", "subscale": "Pertencimento", "text": "Valorizo muito a cultura e os valores do time em que trabalho."}, {"id": 29, "scale": "Afiliação", "subscale": "Colaboração social", "text": "Prefiro trabalhar em equipe a trabalhar de forma independente."}, {"id": 30, "scale": "Afiliação", "subscale": "Colaboração social", "text": "Ambientes muito individualistas me desmotivam com o tempo."}, {"id": 31, "scale": "Tradição", "subscale": "Valores morais", "text": "Princípios éticos e morais claros são inegociáveis para mim no trabalho."}, {"id": 32, "scale": "Tradição", "subscale": "Valores morais", "text": "Tenho dificuldade em trabalhar para empresas cujos valores não se alinham aos meus."}, {"id": 33, "scale": "Tradição", "subscale": "Respeito à hierarquia", "text": "Respeitar e seguir a hierarquia organizacional é importante para mim."}, {"id": 34, "scale": "Tradição", "subscale": "Respeito à hierarquia", "text": "Valorizo ambientes com estruturas claras de autoridade e responsabilidade."}, {"id": 35, "scale": "Tradição", "subscale": "Estabilidade", "text": "Prefiro empresas com culturas e processos bem estabelecidos."}, {"id": 36, "scale": "Tradição", "subscale": "Estabilidade", "text": "Me sinto mais seguro em organizações com histórico sólido e previsível."}, {"id": 37, "scale": "Segurança", "subscale": "Estabilidade financeira", "text": "A estabilidade e segurança do emprego são fatores muito importantes na minha escolha profissional."}, {"id": 38, "scale": "Segurança", "subscale": "Estabilidade financeira", "text": "Prefiro uma remuneração fixa e previsível a variáveis de alto risco."}, {"id": 39, "scale": "Segurança", "subscale": "Ambiente previsível", "text": "Ambientes com processos e rotinas claras me deixam mais produtivo."}, {"id": 40, "scale": "Segurança", "subscale": "Ambiente previsível", "text": "Prefiro saber o que esperar no trabalho a lidar com muita incerteza."}, {"id": 41, "scale": "Segurança", "subscale": "Aversão a risco", "text": "Evito situações profissionais que envolvam riscos financeiros ou de carreira significativos."}, {"id": 42, "scale": "Segurança", "subscale": "Aversão a risco", "text": "Valorizo benefícios e proteções contratuais acima de oportunidades de crescimento incerto."}, {"id": 43, "scale": "Comércio", "subscale": "Orientação financeira", "text": "Para mim, a remuneração é um dos fatores mais importantes na escolha de um trabalho."}, {"id": 44, "scale": "Comércio", "subscale": "Orientação financeira", "text": "Avalio oportunidades de trabalho principalmente pelo seu retorno financeiro."}, {"id": 45, "scale": "Comércio", "subscale": "Negócios", "text": "Me interesso naturalmente por modelos de negócio, lucro e eficiência financeira."}, {"id": 46, "scale": "Comércio", "subscale": "Negócios", "text": "Gosto de entender como as decisões que tomo afetam o resultado financeiro da empresa."}, {"id": 47, "scale": "Comércio", "subscale": "Empreendedorismo", "text": "Seria motivado por um modelo de remuneração atrelado diretamente ao meu desempenho."}, {"id": 48, "scale": "Comércio", "subscale": "Empreendedorismo", "text": "Pensar em criar meu próprio negócio ou projeto me anima genuinamente."}, {"id": 49, "scale": "Estética", "subscale": "Qualidade", "text": "Tenho altos padrões de qualidade e excelência no trabalho."}, {"id": 50, "scale": "Estética", "subscale": "Qualidade", "text": "Me incomoda entregar algo que não esteja bem feito, mesmo sob pressão de tempo."}, {"id": 51, "scale": "Estética", "subscale": "Design e forma", "text": "Valorizo ambientes de trabalho bem organizados, limpos e visualmente agradáveis."}, {"id": 52, "scale": "Estética", "subscale": "Design e forma", "text": "A forma como as coisas são apresentadas importa tanto para mim quanto o conteúdo."}, {"id": 53, "scale": "Estética", "subscale": "Criatividade", "text": "Ambientes que estimulam criatividade e originalidade me motivam mais."}, {"id": 54, "scale": "Estética", "subscale": "Criatividade", "text": "Me sinto mais realizado quando posso imprimir minha identidade no trabalho."}, {"id": 55, "scale": "Ciência", "subscale": "Dados e evidências", "text": "Tomo decisões baseado em dados e evidências, não em intuição."}, {"id": 56, "scale": "Ciência", "subscale": "Dados e evidências", "text": "Me sinto desconfortável tomando decisões importantes sem informação suficiente."}, {"id": 57, "scale": "Ciência", "subscale": "Rigor analítico", "text": "Valorizo abordagens sistemáticas e analíticas para resolver problemas."}, {"id": 58, "scale": "Ciência", "subscale": "Rigor analítico", "text": "Gosto de aprofundar minha compreensão sobre como as coisas funcionam."}, {"id": 59, "scale": "Ciência", "subscale": "Tecnologia", "text": "Me interesso naturalmente por novas tecnologias e suas aplicações práticas."}, {"id": 60, "scale": "Ciência", "subscale": "Tecnologia", "text": "Ambientes que valorizam inovação e pensamento baseado em ciência me atraem."}]};
+
+// ═══════════════════════════════════════════════════════════════════
+//  CONFIGURAÇÃO DE SCORING
+//  Edite aqui os thresholds, rótulos e pesos globais
+// ═══════════════════════════════════════════════════════════════════
+const DEFAULT_CONFIG = {
+  // HPI: score máx por escala = 12 (itens por escala)
+  hpi: {
+    thresholds: { alto: 8, baixo: 4 },   // ≥8=alto, ≥4=médio, <4=baixo
+    labels: { alto: 'Alto', medio: 'Médio', baixo: 'Baixo' }
+  },
+  // HDS: score máx por escala = 6
+  hds: {
+    thresholds: { risco: 4, atencao: 2 }, // ≥4=risco, ≥2=atenção, <2=ok
+    labels: { risco: 'Risco', atencao: 'Atenção', ok: 'OK' }
+  },
+  // MVPI: média de 1–5
+  mvpi: {
+    thresholds: { alto: 3.5, baixo: 2.5 },
+    labels: { alto: 'Central', medio: 'Moderado', baixo: 'Periférico' }
+  },
+  // Informações do assessment
+  meta: {
+    title: 'Avaliação de Perfil Profissional',
+    subtitle: 'Inspirado no Hogan Assessment Systems',
+    company: '',
+    modules: ['hpi','hds','mvpi'],
+    webhookUrl: 'http://localhost:5678/webhook/avaliacoes',
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════════
+//  DESCRIÇÕES DAS ESCALAS — edite para personalizar os relatórios
+// ═══════════════════════════════════════════════════════════════════
+const SCALE_DESCRIPTIONS = {
+  hpi: {
+    'Ajustamento':              'Estabilidade emocional e resiliência sob pressão',
+    'Ambição':                  'Orientação a resultados, liderança e energia',
+    'Sociabilidade':            'Necessidade e conforto com interação social',
+    'Sensibilidade Interpessoal':'Empatia, tato e habilidade relacional',
+    'Prudência':                'Autocontrole, organização e confiabilidade',
+    'Inquisitividade':          'Curiosidade intelectual e pensamento estratégico',
+    'Aprendizado':              'Orientação ao desenvolvimento e crescimento',
+  },
+  hds: {
+    'Excitável':   'Volatilidade emocional sob estresse',
+    'Cético':      'Desconfiança e cinismo interpessoal',
+    'Cauteloso':   'Medo de errar e indecisão excessiva',
+    'Reservado':   'Distanciamento e baixa comunicação',
+    'Tranquilo':   'Resistência passiva e procrastinação',
+    'Audacioso':   'Arrogância e resistência a feedback',
+    'Travesso':    'Impulsividade e manipulação',
+    'Colorido':    'Necessidade de atenção e dramatismo',
+    'Imaginativo': 'Pensamento excêntrico e desconexão prática',
+    'Diligente':   'Perfeccionismo e microgerenciamento',
+    'Cumpridor':   'Submissão excessiva à autoridade',
+  },
+  mvpi: {
+    'Reconhecimento': 'Valoriza visibilidade, status e prestígio',
+    'Poder':          'Motivado por influência, controle e liderança',
+    'Hedonismo':      'Busca prazer, equilíbrio e ambiente positivo',
+    'Altruísmo':      'Movido por propósito social e cuidado com outros',
+    'Afiliação':      'Valoriza relacionamentos e pertencimento',
+    'Tradição':       'Orientado por valores morais e hierarquia',
+    'Segurança':      'Prioriza estabilidade e previsibilidade',
+    'Comércio':       'Motivado por retorno financeiro e negócios',
+    'Estética':       'Valoriza qualidade, design e criatividade',
+    'Ciência':        'Orientado por dados, rigor e tecnologia',
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════════
+//  STATE — não edite diretamente
+// ═══════════════════════════════════════════════════════════════════
+let state = {
+  screen: 'welcome',
+  answers: { hpi: {}, hds: {}, mvpi: {} },
+  participant: { nome: '', telefone: '' },
+  config: JSON.parse(JSON.stringify(DEFAULT_CONFIG)),
+  items: JSON.parse(JSON.stringify(SOURCE_DATA)),
+  editTarget: null,
+  adminTab: 'items',
+};
+
+// ── load from localStorage ──
+function loadState() {
+  try {
+    const saved = localStorage.getItem('hogan_config');
+    if (saved) { const c = JSON.parse(saved); state.config = c.config || state.config; state.items = c.items || state.items; }
+  } catch(e) {}
+}
+function saveState() {
+  try { localStorage.setItem('hogan_config', JSON.stringify({ config: state.config, items: state.items })); } catch(e) {}
+}
+
+// ── answers persistence ──
+function saveAnswers() {
+  try { localStorage.setItem('hogan_answers', JSON.stringify(state.answers)); } catch(e) {}
+}
+function loadAnswers() {
+  try {
+    const s = localStorage.getItem('hogan_answers');
+    if (s) { const a = JSON.parse(s); if (a && typeof a === 'object') state.answers = { hpi:{}, hds:{}, mvpi:{}, ...a }; }
+  } catch(e) {}
+}
+function clearSavedAnswers() {
+  try { localStorage.removeItem('hogan_answers'); } catch(e) {}
+}
+
+// ── máscara de telefone ──
+function maskPhone(input) {
+  // Remove tudo que não for dígito e limita a 11 dígitos
+  const digits = input.value.replace(/\D/g, '').substring(0, 11);
+  const len    = digits.length;
+  let masked   = '';
+
+  if (len === 0) {
+    masked = '';
+  } else if (len <= 2) {
+    masked = '(' + digits;
+  } else if (len <= 6) {
+    masked = '(' + digits.substring(0, 2) + ') ' + digits.substring(2);
+  } else if (len === 11) {
+    // Celular: (XX) XXXXX-XXXX
+    masked = '(' + digits.substring(0, 2) + ') ' + digits.substring(2, 7) + '-' + digits.substring(7);
+  } else {
+    // Fixo / incompleto: (XX) XXXX-XXXX
+    masked = '(' + digits.substring(0, 2) + ') ' + digits.substring(2, 6) + '-' + digits.substring(6);
+  }
+
+  input.value = masked;
+}
+
+function applyPhoneMask(value) {
+  const el = document.createElement('input');
+  el.value = value || '';
+  maskPhone(el);
+  return el.value;
+}
+
+// ── participant persistence ──
+function saveParticipant() {
+  try { localStorage.setItem('hogan_participant', JSON.stringify(state.participant)); } catch(e) {}
+}
+function loadParticipant() {
+  try {
+    const s = localStorage.getItem('hogan_participant');
+    if (s) { const p = JSON.parse(s); if (p && p.nome) state.participant = p; }
+  } catch(e) {}
+}
+
+loadState();
+loadAnswers();
+loadParticipant();
+
+// ═══════════════════════════════════════════════════════════════════
+//  SCORING ENGINE
+// ═══════════════════════════════════════════════════════════════════
+function getWeight(module, itemId) {
+  const key = `${module}_${itemId}`;
+  return state.config[`weight_${key}`] || 1;
+}
+
+function calcHPI() {
+  const scales = {};
+  for (const item of state.items.hpi) {
+    if (!scales[item.scale]) scales[item.scale] = { raw: 0, max: 0, count: 0 };
+    const ans = state.answers.hpi[item.id];
+    const w = getWeight('hpi', item.id);
+    if (ans !== undefined) {
+      let scored = ans === 'V' ? 1 : 0;
+      if (item.scoring === 'R') scored = 1 - scored;
+      scales[item.scale].raw += scored * w;
+    }
+    scales[item.scale].max += w;
+    scales[item.scale].count++;
+  }
+  return scales;
+}
+
+function calcHDS() {
+  const scales = {};
+  for (const item of state.items.hds) {
+    if (!scales[item.scale]) scales[item.scale] = { raw: 0, max: 0, cluster: item.cluster };
+    const ans = state.answers.hds[item.id];
+    const w = getWeight('hds', item.id);
+    if (ans !== undefined) {
+      scales[item.scale].raw += (ans === 'V' ? 1 : 0) * w;
+    }
+    scales[item.scale].max += w;
+  }
+  return scales;
+}
+
+function calcMVPI() {
+  const scales = {};
+  for (const item of state.items.mvpi) {
+    if (!scales[item.scale]) scales[item.scale] = { sum: 0, count: 0 };
+    const ans = state.answers.mvpi[item.id];
+    if (ans !== undefined) scales[item.scale].sum += ans * getWeight('mvpi', item.id);
+    scales[item.scale].count += getWeight('mvpi', item.id);
+  }
+  return scales;
+}
+
+function hpiLabel(pct, cfg) {
+  if (pct >= cfg.thresholds.alto / 12) return { label: cfg.labels.alto, cls: 'lbl-alto' };
+  if (pct >= cfg.thresholds.baixo / 12) return { label: cfg.labels.medio, cls: 'lbl-medio' };
+  return { label: cfg.labels.baixo, cls: 'lbl-baixo' };
+}
+function hdsLabel(raw, max, cfg) {
+  const pct = raw / max;
+  if (pct >= cfg.thresholds.risco / 6) return { label: cfg.labels.risco, cls: 'lbl-risco' };
+  if (pct >= cfg.thresholds.atencao / 6) return { label: cfg.labels.atencao, cls: 'lbl-atencao' };
+  return { label: cfg.labels.ok, cls: 'lbl-ok' };
+}
+function mvpiLabel(avg, cfg) {
+  if (avg >= cfg.thresholds.alto) return { label: cfg.labels.alto, cls: 'lbl-alto' };
+  if (avg >= cfg.thresholds.baixo) return { label: cfg.labels.medio, cls: 'lbl-medio' };
+  return { label: cfg.labels.baixo, cls: 'lbl-baixo' };
+}
+
+function countAnswered(module) {
+  return Object.keys(state.answers[module]).length;
+}
+function totalItems(module) { return state.items[module].length; }
+
+// ═══════════════════════════════════════════════════════════════════
+//  RENDER ENGINE
+// ═══════════════════════════════════════════════════════════════════
+const app = document.getElementById('app');
+
+function updateHeader(metaHTML) {
+  const el = document.getElementById('headerMeta');
+  if (el) el.innerHTML = metaHTML || '';
+}
+
+function render() {
+  updateGlobalProgress();
+  if (state.screen === 'welcome') renderWelcome();
+  else if (state.screen === 'hpi')  renderModule('hpi');
+  else if (state.screen === 'hds')  renderModule('hds');
+  else if (state.screen === 'mvpi') renderModule('mvpi');
+  else if (state.screen === 'result') renderResult();
+}
+
+function updateGlobalProgress() {
+  const modules = state.config.meta.modules;
+  const total = modules.reduce((s,m) => s + totalItems(m), 0);
+  const done  = modules.reduce((s,m) => s + countAnswered(m), 0);
+  const pct   = total > 0 ? (done / total * 100) : 0;
+  const fill  = document.getElementById('globalFill');
+  if (fill) fill.style.width = pct + '%';
+  const colors = { hpi: 'var(--accent-hpi)', hds: 'var(--accent-hds)', mvpi: 'var(--accent-mvpi)' };
+  if (fill) fill.style.background = colors[state.screen] || 'var(--accent-hpi)';
+}
+
+// ─── WELCOME ─────────────────────────────────────────────────────
+function renderWelcome() {
+  const m = state.config.meta;
+  const totalQ = state.config.meta.modules.reduce((s,mod) => s + totalItems(mod), 0);
+  const totalAnswered = Object.values(state.answers).reduce((s,a) => s + Object.keys(a).length, 0);
+  const hasSaved = totalAnswered > 0;
+  const histCount = loadHistory().length;
+
+  updateHeader(m.company ? `<strong>${m.company}</strong>` : '');
+  app.innerHTML = `
+  <div class="welcome fade-up">
+    <div class="welcome-eyebrow">${m.subtitle}</div>
+    <h1 class="welcome-title">${m.title.split(' ').slice(0,-1).join(' ')} <em>${m.title.split(' ').slice(-1)}</em></h1>
+    <p class="welcome-desc">Este assessment avalia três dimensões do seu perfil profissional: seu potencial, seus riscos comportamentais e seus motivadores internos.</p>
+    <div class="modules-preview">
+      <div class="mod-card fade-up">
+        <div class="mod-card-accent" style="background:var(--accent-hpi)"></div>
+        <div class="mod-card-title">HPI — Lado Brilhante</div>
+        <div class="mod-card-sub">Como você se comporta no melhor de si</div>
+        <div class="mod-card-count" style="color:var(--accent-hpi)">${totalItems('hpi')} afirmações</div>
+      </div>
+      <div class="mod-card fade-up-2">
+        <div class="mod-card-accent" style="background:var(--accent-hds)"></div>
+        <div class="mod-card-title">HDS — Derailers</div>
+        <div class="mod-card-sub">O que emerge sob pressão</div>
+        <div class="mod-card-count" style="color:var(--accent-hds)">${totalItems('hds')} afirmações</div>
+      </div>
+      <div class="mod-card fade-up-3">
+        <div class="mod-card-accent" style="background:var(--accent-mvpi)"></div>
+        <div class="mod-card-title">MVPI — Valores</div>
+        <div class="mod-card-sub">O que te motiva e engaja</div>
+        <div class="mod-card-count" style="color:var(--accent-mvpi)">${totalItems('mvpi')} afirmações</div>
+      </div>
+    </div>
+    <div class="participant-form fade-up">
+      <div class="participant-form-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Identificação do participante
+      </div>
+      <div class="participant-field">
+        <label class="participant-label">Nome completo <span style="color:var(--error)">*</span></label>
+        <input
+          type="text" id="participantNome" class="participant-input"
+          placeholder="Seu nome completo"
+          value="${state.participant.nome || ''}"
+          autocomplete="name"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('participantTel').focus();}"
+        />
+      </div>
+      <div class="participant-field">
+        <label class="participant-label">WhatsApp / Telefone</label>
+        <input
+          type="tel" id="participantTel" class="participant-input"
+          placeholder="(11) 99999-9999"
+          value="${applyPhoneMask(state.participant.telefone)}"
+          autocomplete="tel"
+          oninput="maskPhone(this)"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();startAssessment();}"
+        />
+      </div>
+    </div>
+
+    <div class="start-wrap">
+      ${hasSaved ? `
+      <button class="btn-start" style="background:var(--brand-mid);color:#fff" onclick="continueAssessment()">
+        ↩ Continuar (${totalAnswered}/${totalQ} respondidas)
+      </button>` : ''}
+      <button class="btn-start" ${hasSaved ? 'style="background:var(--bg3);border:1px solid var(--border2);color:var(--text-sec)"' : ''} onclick="startAssessment()">
+        ${hasSaved ? 'Recomeçar do zero' : 'Iniciar assessment →'}
+      </button>
+      <span class="time-note">⏱ ~25–35 min · ${totalQ} afirmações no total</span>
+    </div>
+  </div>`;
+}
+
+// ─── MODULE ──────────────────────────────────────────────────────
+function renderModule(module) {
+  const items = state.items[module];
+  const answered = countAnswered(module);
+  const total = items.length;
+  const pct = Math.round(answered / total * 100);
+  const accents = { hpi: 'hpi', hds: 'hds', mvpi: 'mvpi' };
+  const badgeClass = `badge-${module}`;
+  const fillClass = `fill-${module}`;
+  const btnClass = `${module}-btn`;
+  const modules = state.config.meta.modules;
+  const modIdx = modules.indexOf(module);
+  const nextMod = modules[modIdx + 1] || 'result';
+
+  const titles = {
+    hpi:  ['HPI · Lado Brilhante', 'Indique se cada afirmação é Verdadeira ou Falsa para você.'],
+    hds:  ['HDS · Derailers', 'Seja honesto. Não há respostas certas ou erradas — o objetivo é autoconhecimento.'],
+    mvpi: ['MVPI · Valores & Motivadores', 'Indique o quanto cada afirmação representa o que você valoriza no trabalho.'],
+  };
+
+  // group by scale
+  const groups = {};
+  for (const item of items) {
+    if (!groups[item.scale]) groups[item.scale] = [];
+    groups[item.scale].push(item);
+  }
+
+  const pillsHTML = modules.map(m => {
+    const done = countAnswered(m) === totalItems(m);
+    const active = m === module;
+    const cls = active ? `mod-pill active-${m}` : `mod-pill${done ? ' done' : ''}`;
+    const labels = { hpi:'HPI', hds:'HDS', mvpi:'MVPI' };
+    return `<span class="${cls}">${labels[m]}${done && !active ? ' ✓' : ''}</span>`;
+  }).join('');
+
+  let groupsHTML = '';
+  for (const [scale, scaleItems] of Object.entries(groups)) {
+    groupsHTML += `
+    <div class="scale-group">
+      <div class="scale-header">
+        <span class="scale-name" style="color:var(--accent-${module})">${scale}</span>
+        <span class="scale-count">${scaleItems.length} afirmações</span>
+      </div>
+      ${scaleItems.map(item => renderItem(item, module)).join('')}
+    </div>`;
+  }
+
+  updateHeader(`<strong>${answered}</strong>/${total} respondidas`);
+  app.innerHTML = `
+  <div class="section-intro fade-up">
+    <div class="module-nav">${pillsHTML}</div>
+    <div class="section-badge ${badgeClass}">${titles[module][0]}</div>
+    <h2 class="section-title">${titles[module][0].split('·')[1].trim()}</h2>
+    <p class="section-desc">${titles[module][1]}</p>
+    <div class="section-progress">
+      <span>${pct}% respondido</span>
+      <div class="section-progress-bar"><div class="section-progress-fill ${fillClass}" style="width:${pct}%"></div></div>
+      <span>${answered}/${total}</span>
+    </div>
+  </div>
+  ${groupsHTML}
+  <div class="nav-bar">
+    <div class="nav-info">
+      <strong>${total - answered}</strong> afirmações restantes neste módulo
+    </div>
+    <div class="nav-btns">
+      ${modIdx > 0 ? `<button class="btn-sec" onclick="goModule('${modules[modIdx-1]}')">← Anterior</button>` : ''}
+      <button class="btn-primary ${btnClass}" onclick="goModule('${nextMod}')" ${answered < total ? 'disabled' : ''}>
+        ${nextMod === 'result' ? 'Ver resultado →' : `Próximo módulo →`}
+      </button>
+    </div>
+  </div>`;
+}
+
+function renderItem(item, module) {
+  const ans = state.answers[module][item.id];
+
+  if (module === 'mvpi') {
+    const btns = [1,2,3,4,5].map(v =>
+      `<button class="btn-likert${ans === v ? ' sel' : ''}" onclick="answer('${module}',${item.id},${v})">${v}</button>`
+    ).join('');
+    return `
+    <div class="item-card${ans !== undefined ? ' answered' : ''}" id="item-${module}-${item.id}">
+      <div class="item-meta">
+        <span class="item-num">${item.id}</span>
+        <span>${item.subscale}</span>
+      </div>
+      <div class="item-text">${item.text}</div>
+      <div class="likert-wrap">
+        <div class="likert-labels"><span>Discordo totalmente</span><span>Concordo totalmente</span></div>
+        <div class="likert-btns">${btns}</div>
+      </div>
+    </div>`;
+  } else {
+    return `
+    <div class="item-card${ans !== undefined ? ' answered' : ''}${ans === 'V' ? ' sel-V-card' : ''}" id="item-${module}-${item.id}">
+      <div class="item-meta">
+        <span class="item-num">${item.id}</span>
+        <span>${item.subscale}</span>
+      </div>
+      <div class="item-text">${item.text}</div>
+      <div class="item-answers">
+        <button class="btn-vf${ans === 'V' ? ' ' + (module==='hds'?'hds-sel-V':'sel-V') : ''}" onclick="answer('${module}',${item.id},'V')">Verdadeiro</button>
+        <button class="btn-vf${ans === 'F' ? ' sel-F' : ''}" onclick="answer('${module}',${item.id},'F')">Falso</button>
+      </div>
+    </div>`;
+  }
+}
+
+// ─── RESULT ──────────────────────────────────────────────────────
+function renderResult() {
+  const hpiScales  = calcHPI();
+  const hdsScales  = calcHDS();
+  const mvpiScales = calcMVPI();
+  const hpiCfg  = state.config.hpi;
+  const hdsCfg  = state.config.hds;
+  const mvpiCfg = state.config.mvpi;
+
+  // HPI rows
+  let hpiHTML = '';
+  for (const [scale, data] of Object.entries(hpiScales)) {
+    const pct = data.max > 0 ? data.raw / data.max : 0;
+    const lbl = hpiLabel(pct, hpiCfg);
+    const score = Math.round(data.raw * 10) / 10;
+    const desc = SCALE_DESCRIPTIONS.hpi[scale] || '';
+    hpiHTML += `
+    <div class="scale-result">
+      <div><div class="sr-name">${scale}</div><div class="sr-sub">${desc}</div></div>
+      <div class="sr-bar sr-bar-track"><div class="sr-bar-fill fill-hpi" style="width:0%" data-pct="${Math.round(pct*100)}"></div></div>
+      <div class="sr-score" style="color:var(--accent-hpi)">${score}</div>
+      <div><span class="sr-label ${lbl.cls}">${lbl.label}</span></div>
+    </div>`;
+  }
+
+  // HDS cards
+  let hdsHTML = '<div class="risk-cards">';
+  const hdsEntries = Object.entries(hdsScales).sort((a,b) => (b[1].raw/b[1].max) - (a[1].raw/a[1].max));
+  for (const [scale, data] of hdsEntries) {
+    const pct = data.max > 0 ? data.raw / data.max : 0;
+    const lbl = hdsLabel(data.raw, data.max, hdsCfg);
+    const lvl = lbl.cls === 'lbl-risco' ? 'high' : lbl.cls === 'lbl-atencao' ? 'med' : 'low';
+    const score = Math.round(data.raw * 10) / 10;
+    const fillColor = lvl === 'high' ? 'var(--accent-hds)' : lvl === 'med' ? 'var(--accent-hpi)' : 'var(--muted)';
+    hdsHTML += `
+    <div class="risk-card ${lvl}">
+      <div class="risk-card-name">${scale}</div>
+      <div class="risk-card-cluster">${data.cluster}</div>
+      <span class="sr-label ${lbl.cls}" style="display:inline-block;margin-bottom:8px">${lbl.label}</span>
+      <div><span class="risk-card-score">${score}</span><span class="risk-card-max"> / ${data.max.toFixed(0)}</span></div>
+      <div class="risk-card-bar"><div class="risk-card-fill" data-pct="${Math.round(pct*100)}" style="background:${fillColor};width:0%"></div></div>
+    </div>`;
+  }
+  hdsHTML += '</div>';
+
+  // MVPI cards
+  let mvpiHTML = '<div class="mvpi-grid">';
+  const mvpiEntries = Object.entries(mvpiScales).sort((a,b) => (b[1].sum/b[1].count) - (a[1].sum/a[1].count));
+  for (const [scale, data] of mvpiEntries) {
+    const avg = data.count > 0 ? data.sum / data.count : 0;
+    const pct = (avg - 1) / 4;
+    const lbl = mvpiLabel(avg, mvpiCfg);
+    const desc = SCALE_DESCRIPTIONS.mvpi[scale] || '';
+    mvpiHTML += `
+    <div class="mvpi-card">
+      <div class="mvpi-card-name">${scale}</div>
+      <div class="mvpi-card-avg">${avg.toFixed(1)}</div>
+      <div class="mvpi-card-bar"><div class="mvpi-card-fill" data-pct="${Math.round(pct*100)}" style="width:0%"></div></div>
+      <div class="mvpi-card-label">${desc} · <span class="sr-label ${lbl.cls}" style="display:inline">${lbl.label}</span></div>
+    </div>`;
+  }
+  mvpiHTML += '</div>';
+
+  updateHeader('Resultado');
+  app.innerHTML = `
+  <div class="result-page fade-up">
+    <div class="result-hero">
+      <h1 class="result-hero-title">Perfil de Personalidade</h1>
+      ${state.participant.nome ? `
+      <div class="result-participant">
+        <span class="result-participant-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          ${state.participant.nome}
+        </span>
+        ${state.participant.telefone ? `<span class="result-participant-badge" style="background:rgba(11,116,115,0.10);border-color:rgba(11,116,115,0.25);color:var(--brand-mid)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.1 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 16.92z"/></svg>
+          ${state.participant.telefone}
+        </span>` : ''}
+      </div>` : ''}
+      <p class="result-hero-sub" style="margin-top:8px">Gerado em ${new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</p>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-title"><span style="background:var(--accent-hpi)"></span> HPI — Lado Brilhante</div>
+      ${hpiHTML}
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-title"><span style="background:var(--accent-hds)"></span> HDS — Derailers sob Pressão</div>
+      ${hdsHTML}
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-title"><span style="background:var(--accent-mvpi)"></span> MVPI — Valores & Motivadores</div>
+      ${mvpiHTML}
+    </div>
+
+    <div class="result-actions">
+      <button class="btn-action btn-restart" onclick="startOver()">↩ Refazer</button>
+      <button class="btn-action btn-restart" onclick="showHistory()">📋 Histórico</button>
+      <button class="btn-action btn-restart" onclick="exportResultJSON()">⬇ Baixar JSON</button>
+      <button class="btn-action btn-print" onclick="window.print()">🖨 Salvar PDF</button>
+    </div>
+  </div>`;
+
+  // animate bars after paint
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      document.querySelectorAll('[data-pct]').forEach(el => {
+        el.style.width = el.dataset.pct + '%';
+      });
+    }, 100);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  ACTIONS
+// ═══════════════════════════════════════════════════════════════════
+function collectParticipant() {
+  const nomeEl = document.getElementById('participantNome');
+  const telEl  = document.getElementById('participantTel');
+  if (!nomeEl) return true; // not on welcome screen, skip
+  const nome = nomeEl.value.trim();
+  if (!nome) {
+    nomeEl.classList.add('error');
+    nomeEl.focus();
+    showToast('Informe seu nome para continuar');
+    nomeEl.addEventListener('input', () => nomeEl.classList.remove('error'), { once: true });
+    return false;
+  }
+  state.participant = {
+    nome,
+    telefone: telEl ? telEl.value.trim() : '',
+  };
+  saveParticipant();
+  return true;
+}
+
+function startAssessment() {
+  if (!collectParticipant()) return;
+  state.answers = { hpi:{}, hds:{}, mvpi:{} };
+  clearSavedAnswers();
+  const first = state.config.meta.modules[0];
+  state.screen = first;
+  render();
+  window.scrollTo(0,0);
+}
+
+function goModule(mod) {
+  if (mod === 'result' && state.screen !== 'result') saveToHistory();
+  state.screen = mod;
+  render();
+  window.scrollTo(0,0);
+}
+
+function answer(module, id, value) {
+  state.answers[module][id] = value;
+  saveAnswers();
+  // update just this card UI
+  const card = document.getElementById(`item-${module}-${id}`);
+  if (!card) { render(); return; }
+  if (module === 'mvpi') {
+    card.querySelectorAll('.btn-likert').forEach((b,i) => {
+      b.classList.toggle('sel', i+1 === value);
+    });
+  } else {
+    const [bV, bF] = card.querySelectorAll('.btn-vf');
+    bV.className = `btn-vf${value === 'V' ? ' ' + (module==='hds'?'hds-sel-V':'sel-V') : ''}`;
+    bF.className = `btn-vf${value === 'F' ? ' sel-F' : ''}`;
+    if (value === 'V') card.classList.add('sel-V-card'); else card.classList.remove('sel-V-card');
+  }
+  card.classList.add('answered');
+  // update counts
+  const answered = countAnswered(module);
+  const total = totalItems(module);
+  const meta = document.querySelector('.topbar-meta');
+  if (meta) meta.textContent = `${answered}/${total} respondidas`;
+  const pct = Math.round(answered/total*100);
+  const bar = document.querySelector('.section-progress-fill');
+  if (bar) bar.style.width = pct+'%';
+  const pctSpans = document.querySelectorAll('.section-progress span');
+  if (pctSpans[0]) pctSpans[0].textContent = pct+'% respondido';
+  if (pctSpans[1]) pctSpans[1].textContent = `${answered}/${total}`;
+  // enable/disable next btn
+  const nextBtn = document.querySelector('.nav-bar .btn-primary');
+  if (nextBtn) nextBtn.disabled = answered < total;
+  // update global bar
+  updateGlobalProgress();
+}
+
+function startOver() {
+  state.answers = { hpi:{}, hds:{}, mvpi:{} };
+  clearSavedAnswers();
+  state.screen = 'welcome';
+  render();
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  INLINE EDIT
+// ═══════════════════════════════════════════════════════════════════
+function openEdit(module, id) {
+  const item = state.items[module].find(i => i.id === id);
+  if (!item) return;
+  state.editTarget = { module, id };
+  document.getElementById('editMeta').textContent = `${module.toUpperCase()} · ${item.scale} · ${item.subscale}`;
+  document.getElementById('editText').value = item.text;
+  if (module !== 'mvpi') {
+    document.getElementById('editScoring').value = item.scoring || 'N';
+    document.getElementById('editScoring').style.display = '';
+  } else {
+    document.getElementById('editScoring').style.display = 'none';
+  }
+  const wKey = `weight_${module}_${id}`;
+  document.getElementById('editWeight').value = state.config[wKey] || 1;
+  document.getElementById('editOverlay').classList.add('open');
+}
+function closeEdit() {
+  document.getElementById('editOverlay').classList.remove('open');
+  state.editTarget = null;
+}
+function saveEdit() {
+  const { module, id } = state.editTarget;
+  const item = state.items[module].find(i => i.id === id);
+  item.text = document.getElementById('editText').value.trim();
+  if (module !== 'mvpi') item.scoring = document.getElementById('editScoring').value;
+  const w = parseFloat(document.getElementById('editWeight').value);
+  if (!isNaN(w) && w > 0) state.config[`weight_${module}_${id}`] = w;
+  saveState();
+  closeEdit();
+  render();
+  showToast('Afirmação atualizada');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  ADMIN PANEL
+// ═══════════════════════════════════════════════════════════════════
+function openAdmin() {
+  renderAdminItems();
+  document.getElementById('adminOverlay').classList.add('open');
+}
+function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); }
+function saveAndClose() { saveState(); closeAdmin(); render(); showToast('Configurações salvas'); }
+
+function switchAdminTab(tab, btn) {
+  document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  ['items','scores','meta','export'].forEach(t => {
+    document.getElementById('admin'+t.charAt(0).toUpperCase()+t.slice(1)).style.display = t === tab ? '' : 'none';
+  });
+  if (tab === 'items') renderAdminItems();
+  if (tab === 'scores') renderAdminScores();
+  if (tab === 'meta') renderAdminMeta();
+  if (tab === 'export') renderAdminExport();
+}
+
+function renderAdminItems() {
+  const container = document.getElementById('adminItems');
+  const modules = [
+    { key:'hpi', label:'HPI — Lado Brilhante', color:'var(--accent-hpi)' },
+    { key:'hds', label:'HDS — Derailers',       color:'var(--accent-hds)' },
+    { key:'mvpi',label:'MVPI — Valores',         color:'var(--accent-mvpi)' },
+  ];
+  container.innerHTML = `<p style="font-size:12px;color:var(--muted);margin-bottom:16px">Clique em <strong style="color:var(--text)">Editar</strong> para alterar o texto, scoring ou peso de cada afirmação.</p>`;
+  for (const mod of modules) {
+    container.innerHTML += `<div class="admin-section-label" style="color:${mod.color}">${mod.label}</div>`;
+    for (const item of state.items[mod.key]) {
+      container.innerHTML += `
+      <div class="item-edit-row">
+        <div class="item-edit-top">
+          <span class="item-edit-num">#${item.id}</span>
+          <span class="item-edit-scale">${item.scale} · ${item.subscale}</span>
+          ${item.scoring ? `<span class="item-edit-scoring">${item.scoring}</span>` : ''}
+          <button class="btn-sm primary" style="margin-left:auto" onclick="closeAdmin();openEdit('${mod.key}',${item.id})">Editar</button>
+        </div>
+        <div class="item-edit-text">${item.text}</div>
+      </div>`;
+    }
+  }
+}
+
+function renderAdminScores() {
+  const container = document.getElementById('adminScores');
+  const cfg = state.config;
+  container.innerHTML = `
+  <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Configure os thresholds de classificação. Pesos individuais são editados por afirmação (aba Afirmações).</p>
+  <div class="admin-section-label">HPI — Thresholds (escala 0–12)</div>
+  <div class="config-grid">
+    <div class="config-row"><label class="config-label">Score mínimo para Alto</label>
+      <input type="number" class="admin-input" id="cfg-hpi-alto" value="${cfg.hpi.thresholds.alto}" min="0" max="12" step="1"></div>
+    <div class="config-row"><label class="config-label">Score mínimo para Médio</label>
+      <input type="number" class="admin-input" id="cfg-hpi-baixo" value="${cfg.hpi.thresholds.baixo}" min="0" max="12" step="1"></div>
+  </div>
+  <div class="admin-section-label">HDS — Thresholds (escala 0–6)</div>
+  <div class="config-grid">
+    <div class="config-row"><label class="config-label">Score mínimo para Risco</label>
+      <input type="number" class="admin-input" id="cfg-hds-risco" value="${cfg.hds.thresholds.risco}" min="0" max="6" step="1"></div>
+    <div class="config-row"><label class="config-label">Score mínimo para Atenção</label>
+      <input type="number" class="admin-input" id="cfg-hds-atencao" value="${cfg.hds.thresholds.atencao}" min="0" max="6" step="1"></div>
+  </div>
+  <div class="admin-section-label">MVPI — Thresholds (escala 1–5)</div>
+  <div class="config-grid">
+    <div class="config-row"><label class="config-label">Média mínima para Central</label>
+      <input type="number" class="admin-input" id="cfg-mvpi-alto" value="${cfg.mvpi.thresholds.alto}" min="1" max="5" step="0.1"></div>
+    <div class="config-row"><label class="config-label">Média mínima para Moderado</label>
+      <input type="number" class="admin-input" id="cfg-mvpi-baixo" value="${cfg.mvpi.thresholds.baixo}" min="1" max="5" step="0.1"></div>
+  </div>
+  <div style="margin-top:20px">
+    <button class="btn-sm primary" onclick="applyScores()">Aplicar thresholds</button>
+  </div>`;
+}
+
+function applyScores() {
+  const v = id => parseFloat(document.getElementById(id).value);
+  state.config.hpi.thresholds.alto  = v('cfg-hpi-alto');
+  state.config.hpi.thresholds.baixo = v('cfg-hpi-baixo');
+  state.config.hds.thresholds.risco  = v('cfg-hds-risco');
+  state.config.hds.thresholds.atencao= v('cfg-hds-atencao');
+  state.config.mvpi.thresholds.alto  = v('cfg-mvpi-alto');
+  state.config.mvpi.thresholds.baixo = v('cfg-mvpi-baixo');
+  showToast('Thresholds atualizados');
+}
+
+function renderAdminMeta() {
+  const m = state.config.meta;
+  document.getElementById('adminMeta').innerHTML = `
+  <div class="admin-section-label">Informações do Assessment</div>
+  <label class="config-label">Título</label>
+  <input class="admin-input" id="meta-title" value="${m.title}">
+  <label class="config-label">Subtítulo</label>
+  <input class="admin-input" id="meta-subtitle" value="${m.subtitle}">
+  <label class="config-label">Empresa / Contexto</label>
+  <input class="admin-input" id="meta-company" value="${m.company}">
+  <div class="admin-section-label" style="margin-top:18px">Webhook de envio automático</div>
+  <label class="config-label">URL — enviada ao finalizar o assessment</label>
+  <input class="admin-input" id="meta-webhook" value="${m.webhookUrl || ''}" placeholder="http://localhost:5678/webhook/avaliacoes">
+  <p style="font-size:11px;color:var(--muted);margin-top:-4px;margin-bottom:10px">POST com o JSON completo (participante + scores + respostas). Deixe vazio para desativar.</p>
+  <button class="btn-sm primary" onclick="applyMeta()">Aplicar</button>`;
+}
+
+function applyMeta() {
+  state.config.meta.title      = document.getElementById('meta-title').value;
+  state.config.meta.subtitle   = document.getElementById('meta-subtitle').value;
+  state.config.meta.company    = document.getElementById('meta-company').value;
+  state.config.meta.webhookUrl = document.getElementById('meta-webhook').value.trim();
+  showToast('Metadados atualizados');
+}
+
+function renderAdminExport() {
+  document.getElementById('adminExport').innerHTML = `
+  <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.7">
+    Exporte o estado atual (afirmações + configurações) como JSON para backup ou para atualizar o HTML manualmente.
+  </p>
+  <button class="btn-sm primary" onclick="exportJSON()">⬇ Exportar configuração JSON</button>
+  <div class="admin-section-label" style="margin-top:24px">Importar JSON</div>
+  <textarea class="edit-textarea" id="importArea" placeholder='Cole o JSON exportado aqui...' style="height:140px;margin-bottom:10px"></textarea>
+  <button class="btn-sm primary" onclick="importJSON()">⬆ Importar</button>
+  <div class="admin-section-label" style="margin-top:24px">Reset</div>
+  <button class="btn-sm danger" onclick="resetToDefault()">↺ Restaurar padrões originais</button>`;
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify({config:state.config, items:state.items}, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'hogan_config.json'; a.click();
+}
+function importJSON() {
+  try {
+    const d = JSON.parse(document.getElementById('importArea').value);
+    if (d.config) state.config = d.config;
+    if (d.items)  state.items  = d.items;
+    saveState(); showToast('Importado com sucesso');
+  } catch(e) { showToast('JSON inválido'); }
+}
+function resetToDefault() {
+  if (!confirm('Restaurar todos os dados originais? Isso apagará edições salvas.')) return;
+  state.config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  state.items  = JSON.parse(JSON.stringify(SOURCE_DATA));
+  saveState(); closeAdmin(); render(); showToast('Dados restaurados');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════════════════════════
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = isError ? 'var(--error)' : 'var(--brand)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), isError ? 4000 : 2200);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  AUTO-FILL (MODO TESTE)
+// ═══════════════════════════════════════════════════════════════════
+function autoFillAll() {
+  const vf = ['V', 'F'];
+  for (const item of state.items.hpi) {
+    if (state.answers.hpi[item.id] === undefined)
+      state.answers.hpi[item.id] = vf[Math.random() < 0.5 ? 0 : 1];
+  }
+  for (const item of state.items.hds) {
+    if (state.answers.hds[item.id] === undefined)
+      state.answers.hds[item.id] = vf[Math.random() < 0.5 ? 0 : 1];
+  }
+  for (const item of state.items.mvpi) {
+    if (state.answers.mvpi[item.id] === undefined)
+      state.answers.mvpi[item.id] = Math.floor(Math.random() * 5) + 1;
+  }
+  saveAnswers();
+  render();
+  showToast('Todas as respostas preenchidas aleatoriamente');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  CONTINUAR ASSESSMENT
+// ═══════════════════════════════════════════════════════════════════
+function continueAssessment() {
+  if (!collectParticipant()) return;
+  const modules = state.config.meta.modules;
+  for (const mod of modules) {
+    if (countAnswered(mod) < totalItems(mod)) {
+      state.screen = mod;
+      render();
+      window.scrollTo(0,0);
+      return;
+    }
+  }
+  saveToHistory();
+  state.screen = 'result';
+  render();
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  HISTORY
+// ═══════════════════════════════════════════════════════════════════
+function buildScoreSummary() {
+  const hpiScales  = calcHPI();
+  const hdsScales  = calcHDS();
+  const mvpiScales = calcMVPI();
+  const hpiCfg  = state.config.hpi;
+  const hdsCfg  = state.config.hds;
+  const mvpiCfg = state.config.mvpi;
+
+  const hpi = Object.entries(hpiScales).map(([scale, d]) => {
+    const pct = d.max > 0 ? d.raw / d.max : 0;
+    const lbl = hpiLabel(pct, hpiCfg);
+    return { scale, raw: Math.round(d.raw*10)/10, max: Math.round(d.max*10)/10, pct: Math.round(pct*100), label: lbl.label, cls: lbl.cls };
+  });
+  const hds = Object.entries(hdsScales).map(([scale, d]) => {
+    const pct = d.max > 0 ? d.raw / d.max : 0;
+    const lbl = hdsLabel(d.raw, d.max, hdsCfg);
+    return { scale, raw: Math.round(d.raw*10)/10, max: Math.round(d.max*10)/10, pct: Math.round(pct*100), label: lbl.label, cls: lbl.cls, cluster: d.cluster };
+  }).sort((a,b) => b.pct - a.pct);
+  const mvpi = Object.entries(mvpiScales).map(([scale, d]) => {
+    const avg = d.count > 0 ? d.sum / d.count : 0;
+    const lbl = mvpiLabel(avg, mvpiCfg);
+    return { scale, avg: Math.round(avg*100)/100, pct: Math.round((avg-1)/4*100), label: lbl.label, cls: lbl.cls };
+  }).sort((a,b) => b.avg - a.avg);
+
+  return { hpi, hds, mvpi };
+}
+
+function saveToHistory() {
+  try {
+    const total = Object.values(state.answers).reduce((s,a) => s + Object.keys(a).length, 0);
+    if (!total) return;
+
+    const history = loadHistory();
+    const now = new Date();
+    const scores = buildScoreSummary();
+    const entry = {
+      id: now.getTime().toString(),
+      timestamp: now.toISOString(),
+      dateFormatted: now.toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' }) +
+                     ' · ' + now.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }),
+      participant: { ...state.participant },
+      answers: JSON.parse(JSON.stringify(state.answers)),
+      scores,
+      totalAnswered: {
+        hpi: countAnswered('hpi'),
+        hds: countAnswered('hds'),
+        mvpi: countAnswered('mvpi'),
+      }
+    };
+    history.unshift(entry);
+    localStorage.setItem('hogan_history', JSON.stringify(history.slice(0, 30)));
+
+    sendResultToWebhook(entry);
+  } catch(e) {}
+}
+
+async function sendResultToWebhook(entry) {
+  const url = (state.config.meta.webhookUrl || '').trim();
+  if (!url) return;
+
+  const payload = {
+    timestamp:    entry.timestamp,
+    assessment:   state.config.meta.title,
+    participant:  entry.participant,
+    totalAnswered: entry.totalAnswered,
+    scores:       entry.scores,
+    answers:      entry.answers,
+  };
+
+  // Indicador visual no header
+  updateHeader('<span style="color:rgba(255,255,255,0.55);font-size:11px">⏳ Enviando resultado...</span>');
+
+  try {
+    const res = await fetch(url, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    });
+    if (res.ok) {
+      showToast('✓ Resultado enviado ao banco de dados');
+    } else {
+      showToast('Aviso: servidor retornou ' + res.status, true);
+      console.warn('[Hogan webhook] HTTP', res.status, url);
+    }
+  } catch (err) {
+    showToast('Erro ao enviar resultado: ' + err.message, true);
+    console.error('[Hogan webhook]', err);
+  } finally {
+    // Restaura header para "Resultado"
+    updateHeader('Resultado');
+  }
+}
+
+function loadHistory() {
+  try { const s = localStorage.getItem('hogan_history'); return s ? JSON.parse(s) : []; } catch(e) { return []; }
+}
+
+function deleteHistoryEntry(id) {
+  const h = loadHistory().filter(e => e.id !== id);
+  localStorage.setItem('hogan_history', JSON.stringify(h));
+  renderHistoryModal();
+  showToast('Entrada removida');
+}
+
+function viewHistoryEntry(id) {
+  const entry = loadHistory().find(e => e.id === id);
+  if (!entry) return;
+  // Guarda respostas atuais e substitui temporariamente
+  state._savedAnswers = JSON.parse(JSON.stringify(state.answers));
+  state.answers = entry.answers;
+  closeHistory();
+  state.screen = 'result';
+  render();
+  window.scrollTo(0,0);
+}
+
+// ── HISTORY MODAL ──────────────────────────────────────────────────
+function showHistory() {
+  renderHistoryModal();
+  document.getElementById('historyOverlay').classList.add('open');
+}
+function closeHistory() {
+  document.getElementById('historyOverlay').classList.remove('open');
+  // Restaura respostas atuais se estava vendo histórico
+  if (state._savedAnswers) {
+    state.answers = state._savedAnswers;
+    delete state._savedAnswers;
+  }
+}
+
+function renderHistoryModal() {
+  const history = loadHistory();
+  const container = document.getElementById('historyList');
+  if (!history.length) {
+    container.innerHTML = `
+    <div class="history-empty">
+      <div class="history-empty-icon">📋</div>
+      <p>Nenhum resultado salvo ainda.</p>
+      <p style="font-size:12px;margin-top:6px;color:var(--muted)">Complete o assessment para salvar automaticamente.</p>
+    </div>`;
+    return;
+  }
+  container.innerHTML = history.map(entry => {
+    const totalAns = (entry.totalAnswered.hpi||0) + (entry.totalAnswered.hds||0) + (entry.totalAnswered.mvpi||0);
+    const topHPI  = (entry.scores.hpi||[]).slice(0,3).map(s =>
+      `<span class="sr-label ${s.cls}" style="display:inline">${s.scale}: ${s.label}</span>`).join('');
+    const alertHDS = (entry.scores.hds||[]).filter(s => s.cls !== 'lbl-ok').slice(0,3).map(s =>
+      `<span class="sr-label ${s.cls}" style="display:inline">${s.scale}</span>`).join('');
+    const topMVPI = (entry.scores.mvpi||[]).slice(0,3).map(s =>
+      `<span class="sr-label lbl-alto" style="display:inline">${s.scale}: ${s.avg}</span>`).join('');
+    return `
+    <div class="history-entry">
+      <div class="history-entry-top">
+        <div>
+          <div class="history-entry-date">${entry.participant && entry.participant.nome ? entry.participant.nome : entry.dateFormatted}</div>
+          <div class="history-entry-meta">${entry.participant && entry.participant.nome ? entry.dateFormatted + ' · ' : ''}${totalAns} respostas${entry.participant && entry.participant.telefone ? ' · ' + entry.participant.telefone : ''}</div>
+        </div>
+        <div class="history-entry-actions">
+          <button class="btn-sm" onclick="viewHistoryEntry('${entry.id}')">Ver resultado</button>
+          <button class="btn-sm primary" onclick="exportHistoryJSON('${entry.id}')">⬇ JSON</button>
+          <button class="btn-sm danger" onclick="deleteHistoryEntry('${entry.id}')">✕</button>
+        </div>
+      </div>
+      ${topHPI  ? `<div class="history-section-lbl">HPI — Lado Brilhante</div><div class="history-tags">${topHPI}</div>` : ''}
+      ${alertHDS ? `<div class="history-section-lbl">HDS — Derailers em atenção</div><div class="history-tags">${alertHDS}</div>` : ''}
+      ${topMVPI ? `<div class="history-section-lbl">MVPI — Top valores</div><div class="history-tags">${topMVPI}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('historyOverlay').addEventListener('click', function(e) {
+  if (e.target === e.currentTarget) closeHistory();
+});
+
+// ═══════════════════════════════════════════════════════════════════
+//  EXPORTAÇÃO
+// ═══════════════════════════════════════════════════════════════════
+function exportResultJSON() {
+  const scores = buildScoreSummary();
+  const data = {
+    exportDate: new Date().toISOString(),
+    assessment: state.config.meta.title,
+    participant: { ...state.participant },
+    totalAnswered: {
+      hpi: countAnswered('hpi'),
+      hds: countAnswered('hds'),
+      mvpi: countAnswered('mvpi'),
+    },
+    scores,
+    answers: state.answers,
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `hogan_resultado_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  showToast('JSON baixado com sucesso');
+}
+
+function exportHistoryJSON(id) {
+  const entry = loadHistory().find(e => e.id === id);
+  if (!entry) return;
+  const data = {
+    exportDate: new Date().toISOString(),
+    assessmentDate: entry.timestamp,
+    assessment: state.config.meta.title,
+    totalAnswered: entry.totalAnswered,
+    scores: entry.scores,
+    answers: entry.answers,
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `hogan_${entry.id}.json`;
+  a.click();
+  showToast('JSON baixado');
+}
+
+// ── init ──
+render();
+</script>
+</body>
+</html>

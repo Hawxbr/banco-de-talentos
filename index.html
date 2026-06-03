@@ -74,7 +74,6 @@
       height: 32px;
       width: auto;
       display: block;
-      /* logo is white, shows perfectly on dark header */
     }
     .logo-divider {
       width: 1px;
@@ -350,9 +349,7 @@
     .summary-err { color: var(--error); font-weight: 600; }
 
     /* ── BULK LOG ── */
-    .bulk-log-wrap {
-      margin-top: 20px;
-    }
+    .bulk-log-wrap { margin-top: 20px; }
     .bulk-log-header {
       display: flex;
       align-items: center;
@@ -364,11 +361,7 @@
       font-weight: 700;
       color: var(--text);
     }
-    .bulk-stats {
-      display: flex;
-      gap: 16px;
-      font-size: 12px;
-    }
+    .bulk-stats { display: flex; gap: 16px; font-size: 12px; }
     .stat-ok  { color: var(--success); font-weight: 600; }
     .stat-err { color: var(--error);   font-weight: 600; }
     .stat-pen { color: var(--text-muted); }
@@ -470,6 +463,7 @@
       color: #ffffff;
     }
     .btn-danger:hover { background: #a80d27; }
+    .btn-sm { padding: 6px 13px; font-size: 12px; }
 
     /* ── TOAST ── */
     #toastContainer {
@@ -515,52 +509,114 @@
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
-    .search-textarea {
-      width: 100%;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      padding: 12px 14px;
-      resize: vertical;
-      min-height: 110px;
-      transition: border-color 0.15s;
-      outline: none;
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sec);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
     }
-    .search-textarea:focus {
-      border-color: var(--accent);
-      background: var(--surface);
-      box-shadow: 0 0 0 3px rgba(0,161,147,0.10);
+    .section-label-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
-    .search-textarea::placeholder { color: var(--text-muted); }
 
-    .filters-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      margin-top: 14px;
-    }
-    @media (max-width: 580px) { .filters-grid { grid-template-columns: 1fr; } }
-    .filter-input {
+    /* ── KEYWORD TAG INPUT ── */
+    .keyword-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      padding: 9px 12px;
-      outline: none;
-      transition: border-color 0.15s;
-      width: 100%;
+      padding: 7px 10px;
+      cursor: text;
+      min-height: 44px;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .filter-input:focus {
+    .keyword-wrap:focus-within {
       border-color: var(--accent);
       background: var(--surface);
       box-shadow: 0 0 0 3px rgba(0,161,147,0.10);
     }
-    .filter-input::placeholder { color: var(--text-muted); }
+    .keyword-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px 4px 11px;
+      background: var(--brand);
+      color: #fff;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+      animation: chipIn 0.15s ease;
+    }
+    @keyframes chipIn {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .keyword-chip-remove {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.65);
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      line-height: 1;
+      transition: color 0.12s;
+      flex-shrink: 0;
+    }
+    .keyword-chip-remove:hover { color: #fff; }
+    .keyword-text-input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      min-width: 160px;
+      flex: 1;
+      padding: 2px 0;
+    }
+    .keyword-text-input::placeholder { color: var(--text-muted); }
+    .keyword-add-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1.5px dashed var(--border-dark);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 300;
+    }
+    .keyword-add-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
     .filter-group label {
       display: block;
       font-size: 11px;
@@ -603,6 +659,7 @@
       align-items: flex-start;
       transition: all 0.15s;
       position: relative;
+      cursor: pointer;
     }
     .candidate-card:hover {
       border-color: var(--brand-mid);
@@ -619,6 +676,344 @@
       transition: opacity 0.15s;
     }
     .candidate-card:hover::before { opacity: 1; }
+    .candidate-expand {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 26px;
+      height: 26px;
+      border-radius: var(--radius-xs);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.15s, background 0.15s;
+      pointer-events: none;
+    }
+    .candidate-card:hover .candidate-expand {
+      opacity: 1;
+    }
+
+    /* ── DETAIL MODAL ── */
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 600;
+      background: rgba(20,52,62,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .detail-overlay.open { opacity: 1; pointer-events: auto; }
+    .detail-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 640px;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-md);
+      transform: translateY(20px) scale(0.98);
+      transition: transform 0.22s ease;
+      overflow: hidden;
+    }
+    .detail-overlay.open .detail-modal { transform: translateY(0) scale(1); }
+    .detail-header {
+      padding: 20px 24px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+      background: var(--surface);
+    }
+    .detail-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .detail-title-wrap { flex: 1; min-width: 0; }
+    .detail-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .detail-role-text {
+      font-size: 12px;
+      color: var(--text-sec);
+      margin-top: 2px;
+    }
+    .detail-close {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .detail-close:hover { background: var(--surface2); color: var(--text); border-color: var(--border-dark); }
+    .detail-body {
+      padding: 22px 24px 28px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .detail-section { margin-bottom: 22px; }
+    .detail-section:last-child { margin-bottom: 0; }
+    .detail-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      padding-bottom: 7px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 20px;
+    }
+    @media (max-width: 480px) { .detail-grid { grid-template-columns: 1fr; } }
+    .detail-field { display: flex; flex-direction: column; gap: 3px; }
+    .detail-field.full { grid-column: 1 / -1; }
+    .detail-field-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .detail-field-value {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.55;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+    .detail-field-value a {
+      color: var(--brand-mid);
+      text-decoration: none;
+    }
+    .detail-field-value a:hover { text-decoration: underline; }
+    .detail-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .detail-score-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .detail-score-chip.high { background: rgba(26,122,66,0.08); color: var(--success); border: 1px solid rgba(26,122,66,0.22); }
+    .detail-score-chip.mid  { background: rgba(201,125,0,0.08);  color: var(--warn);    border: 1px solid rgba(201,125,0,0.22); }
+    .detail-score-chip.low  { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+    .detail-ai-note {
+      padding: 12px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--brand-mid);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 13px;
+      color: var(--text-sec);
+      line-height: 1.6;
+    }
+    .detail-raw-field {
+      padding: 8px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xs);
+      font-size: 12px;
+      color: var(--text-sec);
+      display: flex;
+      gap: 8px;
+    }
+    /* ── Hogan no detail modal ── */
+    .hogan-section-wrap {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+    .hogan-loading {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--text-muted); padding: 6px 0;
+    }
+    .hogan-mini-spinner {
+      width: 14px; height: 14px;
+      border: 2px solid var(--border); border-top-color: var(--accent);
+      border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0;
+    }
+    .hogan-date-badge {
+      font-size: 11px; color: var(--text-muted);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 6px;
+    }
+    .hogan-date-badge span {
+      padding: 2px 8px; border-radius: var(--radius-xs);
+      background: var(--accent-soft); border: 1px solid rgba(0,161,147,0.18);
+      color: var(--brand-mid); font-weight: 600;
+    }
+    .hogan-modules { display: flex; flex-direction: column; gap: 14px; }
+    .hogan-module-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; margin-bottom: 8px; padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .hogan-scale-row {
+      display: grid; grid-template-columns: 130px 1fr 36px 60px;
+      align-items: center; gap: 8px;
+      padding: 5px 0; font-size: 12px;
+    }
+    .hogan-scale-name { font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hogan-bar-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .hogan-bar-fill { height: 100%; border-radius: 2px; }
+    .hogan-score { text-align: right; font-weight: 600; color: var(--text); font-size: 11px; }
+    .hogan-lbl { font-size: 10px; padding: 2px 7px; border-radius: 10px; text-align: center; font-weight: 600; white-space: nowrap; }
+    .hogan-lbl.alto   { background: var(--accent-soft); color: var(--brand-mid); border: 1px solid rgba(0,161,147,0.25); }
+    .hogan-lbl.medio  { background: rgba(201,125,0,0.09); color: var(--warn); border: 1px solid rgba(201,125,0,0.20); }
+    .hogan-lbl.baixo  { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+    .hogan-lbl.risco  { background: rgba(200,16,46,0.07); color: var(--error); border: 1px solid rgba(200,16,46,0.18); }
+    .hogan-lbl.atencao{ background: rgba(201,125,0,0.09); color: var(--warn); border: 1px solid rgba(201,125,0,0.20); }
+    .hogan-lbl.ok     { background: rgba(26,122,66,0.07); color: var(--success); border: 1px solid rgba(26,122,66,0.18); }
+    .hogan-mvpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .hogan-mvpi-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 5px 8px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: var(--radius-xs);
+      font-size: 11px;
+    }
+    .hogan-mvpi-name { color: var(--text); font-weight: 500; }
+    .hogan-mvpi-val  { font-weight: 700; color: var(--brand-mid); }
+    /* ── Lista de avaliações ── */
+    .aval-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
+    .aval-list-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 12px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      cursor: pointer; transition: all 0.15s; gap: 10px;
+    }
+    .aval-list-item:hover { border-color: var(--brand-mid); background: var(--accent-soft); }
+    .aval-list-item:hover .aval-list-arrow { color: var(--brand-mid); }
+    .aval-list-meta { display: flex; flex-direction: column; gap: 2px; }
+    .aval-list-tipo { font-size: 12px; font-weight: 600; color: var(--text); text-transform: uppercase; letter-spacing: 0.04em; }
+    .aval-list-date { font-size: 11px; color: var(--text-muted); }
+    .aval-list-arrow { color: var(--border-dark); font-size: 14px; flex-shrink: 0; transition: color 0.15s; }
+
+    /* ── Modal de avaliação (z-index acima do detail modal) ── */
+    .aval-overlay {
+      position: fixed; inset: 0; z-index: 700;
+      background: rgba(20,52,62,0.60);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .aval-overlay.open { opacity: 1; pointer-events: auto; }
+    .aval-modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); width: 100%; max-width: 660px;
+      max-height: 90vh; display: flex; flex-direction: column;
+      box-shadow: var(--shadow-md);
+      transform: translateY(20px) scale(0.98); transition: transform 0.22s ease;
+    }
+    .aval-overlay.open .aval-modal { transform: translateY(0) scale(1); }
+    .aval-modal-header {
+      padding: 18px 22px 14px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+    }
+    .aval-modal-logo-wrap {
+      display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+      background: var(--brand); border-radius: var(--radius-sm);
+      padding: 7px 12px;
+    }
+    .aval-modal-logo-wrap img { height: 22px; width: auto; display: block; }
+    .aval-modal-logo-divider { width: 1px; height: 18px; background: rgba(255,255,255,0.25); }
+    .aval-modal-logo-label { display: flex; flex-direction: column; gap: 1px; }
+    .aval-modal-logo-title { font-size: 11px; font-weight: 700; color: #fff; letter-spacing: -0.01em; line-height: 1.2; }
+    .aval-modal-logo-sub   { font-size: 9px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.05em; }
+    .aval-modal-title { font-size: 15px; font-weight: 700; color: var(--text); }
+    .aval-modal-sub   { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .aval-modal-close {
+      margin-left: auto; width: 30px; height: 30px; border-radius: 50%;
+      border: 1px solid var(--border); background: transparent;
+      color: var(--text-muted); cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+    }
+    .aval-modal-close:hover { background: var(--surface2); color: var(--text); border-color: var(--border2); }
+    .aval-modal-body { padding: 20px 22px 28px; overflow-y: auto; flex: 1; }
+    .aval-module { margin-bottom: 24px; }
+    .aval-module:last-child { margin-bottom: 0; }
+    .aval-module-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; padding-bottom: 8px;
+      border-bottom: 2px solid var(--border); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .aval-scale-row {
+      display: grid; grid-template-columns: 160px 1fr 36px 64px;
+      align-items: center; gap: 8px; padding: 5px 0;
+      border-bottom: 1px solid var(--surface2); font-size: 12px;
+    }
+    .aval-scale-row:last-child { border-bottom: none; }
+    .aval-scale-name { font-weight: 500; color: var(--text); }
+    .aval-bar-track  { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .aval-bar-fill   { height: 100%; border-radius: 3px; }
+    .aval-score      { text-align: right; font-weight: 600; font-size: 11px; color: var(--text); }
+    .aval-lbl        { font-size: 10px; padding: 2px 7px; border-radius: 10px; text-align: center; font-weight: 600; }
+    .aval-lbl.alto   { background: var(--accent-soft); color: var(--brand-mid); border: 1px solid rgba(0,161,147,0.25); }
+    .aval-lbl.medio  { background: rgba(201,125,0,0.09); color: var(--warn); border: 1px solid rgba(201,125,0,0.22); }
+    .aval-lbl.baixo  { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+    .aval-lbl.risco  { background: rgba(200,16,46,0.07); color: var(--error); border: 1px solid rgba(200,16,46,0.20); }
+    .aval-lbl.atencao{ background: rgba(201,125,0,0.09); color: var(--warn); border: 1px solid rgba(201,125,0,0.22); }
+    .aval-lbl.ok     { background: rgba(26,122,66,0.07); color: var(--success); border: 1px solid rgba(26,122,66,0.18); }
+    .aval-mvpi-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .aval-mvpi-item  {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 6px 10px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: var(--radius-xs); font-size: 12px;
+    }
+    .aval-mvpi-name { font-weight: 500; color: var(--text); }
+    .aval-mvpi-val  { font-weight: 700; color: var(--brand-mid); }
+
+    .hogan-no-data {
+      font-size: 12px; color: var(--text-muted); padding: 8px 0; font-style: italic;
+    }
+
+    .detail-raw-key {
+      color: var(--text-muted);
+      font-weight: 600;
+      flex-shrink: 0;
+      min-width: 120px;
+    }
 
     .avatar {
       width: 42px;
@@ -710,6 +1105,214 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── CHAT ── */
+    .chat-section {
+      margin-top: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .chat-header {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface2);
+    }
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .chat-header-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--brand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .chat-header-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .chat-header-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+    .chat-history-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: var(--accent-soft);
+      color: var(--brand-mid);
+      border: 1px solid rgba(0,161,147,0.18);
+      font-weight: 600;
+    }
+    .chat-messages {
+      height: 340px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 20px;
+    }
+    .chat-empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-muted);
+      font-size: 13px;
+      text-align: center;
+      gap: 10px;
+    }
+    .chat-empty-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      border: 1px solid rgba(0,161,147,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-mid);
+    }
+    .chat-msg {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      animation: fadeUp 0.2s ease;
+    }
+    .chat-msg.user { flex-direction: row-reverse; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .chat-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .chat-msg.user .chat-avatar {
+      background: var(--brand);
+      color: #fff;
+    }
+    .chat-msg.assistant .chat-avatar {
+      background: var(--accent-soft);
+      color: var(--brand-mid);
+      border: 1px solid rgba(0,161,147,0.18);
+    }
+    .chat-bubble {
+      max-width: 72%;
+      padding: 11px 15px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .chat-msg.user .chat-bubble {
+      background: var(--brand);
+      color: #fff;
+      border-radius: var(--radius) var(--radius-xs) var(--radius) var(--radius);
+    }
+    .chat-msg.assistant .chat-bubble {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: var(--radius-xs) var(--radius) var(--radius) var(--radius);
+    }
+    .chat-msg.system .chat-bubble {
+      background: var(--accent-soft);
+      border: 1px solid rgba(0,161,147,0.18);
+      color: var(--brand-mid);
+      border-radius: var(--radius);
+      font-size: 12px;
+      font-weight: 500;
+      max-width: 100%;
+      text-align: center;
+    }
+    .chat-msg.system { justify-content: center; }
+    .chat-typing {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 12px 16px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    .chat-typing-dots {
+      display: flex;
+      gap: 3px;
+    }
+    .chat-typing-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: dotBounce 1.2s infinite;
+    }
+    .chat-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .chat-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotBounce {
+      0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    .chat-input-area {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      background: var(--surface);
+    }
+    .chat-input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      padding: 10px 13px;
+      resize: none;
+      min-height: 42px;
+      max-height: 120px;
+      outline: none;
+      transition: border-color 0.15s;
+      line-height: 1.4;
+    }
+    .chat-input:focus {
+      border-color: var(--accent);
+      background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(0,161,147,0.10);
+    }
+    .chat-input::placeholder { color: var(--text-muted); }
+    .chat-input:disabled { opacity: 0.5; cursor: not-allowed; }
+    .chat-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 0 20px 12px;
+      background: var(--surface);
+    }
+
     /* ── SETTINGS MODAL ── */
     .modal-overlay {
       position: fixed;
@@ -735,6 +1338,8 @@
       box-shadow: var(--shadow-md);
       transform: translateY(16px);
       transition: transform 0.2s;
+      max-height: 90vh;
+      overflow-y: auto;
     }
     .modal-overlay.open .modal { transform: translateY(0); }
     .modal-header {
@@ -842,7 +1447,6 @@
       <p>Envie PDFs ou imagens de curriculos. A IA extrai os dados e salva no banco automaticamente.</p>
     </div>
 
-    <!-- Drop zone -->
     <div class="drop-zone" id="dropZone">
       <input type="file" id="fileInput" multiple accept=".pdf,.png,.jpg,.jpeg,.webp" />
       <div class="drop-icon">
@@ -859,10 +1463,8 @@
       </div>
     </div>
 
-    <!-- File list -->
     <div id="fileList"></div>
 
-    <!-- Actions -->
     <div class="upload-actions" id="uploadActions" style="display:none">
       <div class="upload-summary" id="uploadSummary"></div>
       <button class="btn btn-outline" onclick="clearFiles()">
@@ -879,7 +1481,6 @@
       </button>
     </div>
 
-    <!-- Bulk log -->
     <div id="bulkLogWrap" style="display:none" class="bulk-log-wrap">
       <div class="bulk-log-header">
         <h3>Log de Envio em Massa</h3>
@@ -891,7 +1492,6 @@
       <div id="bulkLog" style="display:flex;flex-direction:column;gap:8px"></div>
     </div>
 
-    <!-- Error actions panel -->
     <div id="errorActions" style="display:none" class="error-actions">
       <div class="error-actions-label" id="errorActionsLabel">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -912,52 +1512,99 @@
   <div class="page" id="page-search">
     <div class="page-header">
       <h1>Buscar Talentos</h1>
-      <p>Descreva a vaga e a IA analisa os melhores perfis do banco de dados.</p>
+      <p>Pesquise por palavras-chave no banco e use o chat IA para analisar e pontuar os perfis encontrados.</p>
     </div>
 
+    <!-- PARTE 1: Busca por palavras-chave -->
     <div class="card">
-      <label class="field-label">Descricao da vaga ou perfil desejado</label>
-      <textarea
-        class="search-textarea" id="jobDescription"
-        placeholder="Ex: Desenvolvedor React Senior com experiencia em TypeScript, APIs REST e metodologias ageis. Desejavel conhecimento em AWS e Node.js..."
-      ></textarea>
-
-      <div class="filters-grid">
-        <div class="filter-group">
-          <label>Cargo / Area</label>
-          <input type="text" class="filter-input" id="filterCargo" placeholder="Ex: Desenvolvedor, Analista, Programador" />
-        </div>
-        <div class="filter-group">
-          <label>Localizacao</label>
-          <input type="text" class="filter-input" id="filterLocal" placeholder="Ex: Sao Paulo, Curitiba" />
-        </div>
-        <div class="filter-group">
-          <label>Habilidades</label>
-          <input type="text" class="filter-input" id="filterSkill" placeholder="Ex: React, Python, Node.js" />
-        </div>
+      <div class="section-label">
+        <span class="section-label-num">1</span>
+        Pesquisar no banco de dados
       </div>
-      <p style="font-size:11px;color:var(--text-muted);margin-top:10px">
-        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        Separe multiplos valores com <strong>virgula</strong>. A busca verifica todos os campos do candidato para qualquer um dos termos informados.
-      </p>
+
+      <div class="filter-group">
+        <label>Palavras-chave</label>
+        <div class="keyword-wrap" id="keywordWrap">
+          <input
+            type="text"
+            class="keyword-text-input"
+            id="keywordInput"
+            placeholder="Digite e pressione Enter ou +"
+          />
+          <button type="button" class="keyword-add-btn" id="keywordAddBtn" title="Adicionar palavra-chave">+</button>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:7px">
+          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Cada palavra busca em <strong>todos</strong> os campos do candidato. Adicione quantas quiser com <strong>Enter</strong> ou <strong>+</strong>.
+        </p>
+      </div>
 
       <div class="search-actions">
         <button class="btn btn-outline" onclick="clearSearch()">
           <i data-lucide="x" style="width:14px;height:14px"></i>
           Limpar
         </button>
-        <button class="btn btn-accent" id="searchBtn" onclick="searchCandidates()">
-          <i data-lucide="sparkles" style="width:14px;height:14px"></i>
-          Buscar com IA
+        <button class="btn btn-primary" id="searchBtn" onclick="searchCandidates()">
+          <i data-lucide="database" style="width:14px;height:14px"></i>
+          Buscar no Banco
         </button>
       </div>
     </div>
 
+    <!-- Resultados -->
     <div id="searchResults" style="margin-top:20px">
       <div class="state-empty">
-        <div class="state-icon"><i data-lucide="target" style="width:44px;height:44px"></i></div>
-        <p>Descreva a vaga acima e clique em <strong>Buscar com IA</strong></p>
+        <div class="state-icon"><i data-lucide="users" style="width:44px;height:44px"></i></div>
+        <p>Use os filtros acima e clique em <strong>Buscar no Banco</strong></p>
       </div>
+    </div>
+
+    <!-- PARTE 2: Chat IA (aparece quando ha candidatos) -->
+    <div class="chat-section" id="chatSection" style="display:none">
+      <div class="chat-header">
+        <div class="chat-header-left">
+          <div class="chat-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+          </div>
+          <div>
+            <div class="chat-header-title" style="display:flex;align-items:center;gap:8px">
+              <span class="section-label-num" style="width:22px;height:22px;font-size:11px">2</span>
+              Analisar Candidatos com IA
+              <span class="chat-history-badge" id="chatHistoryBadge" style="display:none">0 msgs</span>
+            </div>
+            <div class="chat-header-sub" id="chatHeaderSub">Pergunte sobre os candidatos encontrados acima</div>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="clearChatHistory()" title="Limpar historico do chat">
+          <i data-lucide="trash-2" style="width:13px;height:13px"></i>
+          Limpar historico
+        </button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-empty-state" id="chatEmptyState">
+          <div class="chat-empty-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+          </div>
+          <p>Pergunte sobre os candidatos.<br><span style="font-size:12px">Ex: "Qual o melhor perfil para React Senior?" ou "Pontue os candidatos para vaga de analista"</span></p>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <textarea
+          class="chat-input"
+          id="chatInput"
+          placeholder="Ex: Qual candidato tem mais experiencia em React? Pontue os perfis para uma vaga de Dev Senior..."
+          rows="1"
+          onkeydown="handleChatKey(event)"
+          oninput="autoResizeChat(this)"
+        ></textarea>
+        <button class="btn btn-accent" id="chatSendBtn" onclick="sendChatMessage()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Enviar
+        </button>
+      </div>
+      <div class="chat-hint">Pressione <strong>Enter</strong> para enviar &nbsp;·&nbsp; <strong>Shift+Enter</strong> para nova linha</div>
     </div>
   </div>
 
@@ -986,9 +1633,21 @@
     <div class="divider"></div>
 
     <div class="setting-group">
-      <label>URL do Webhook – Buscar Candidatos</label>
+      <label>URL do Webhook – Buscar Candidatos (banco)</label>
       <input type="text" class="setting-input" id="cfgSearchUrl" placeholder="http://localhost:5678/webhook/buscar" />
-      <p class="modal-hint">Endpoint POST que recebe {"vaga":"..."} e retorna candidatos ranqueados.</p>
+      <p class="modal-hint">Endpoint POST que recebe {cargo, localizacao, habilidade} e retorna candidatos do banco sem IA.</p>
+    </div>
+
+    <div class="setting-group">
+      <label>URL do Webhook – Chat IA</label>
+      <input type="text" class="setting-input" id="cfgChatUrl" placeholder="http://localhost:5678/webhook/chat" />
+      <p class="modal-hint">Endpoint POST que recebe {mensagem, candidatos, historico} e retorna analise da IA.</p>
+    </div>
+
+    <div class="setting-group">
+      <label>URL do Webhook – Avaliações Hogan</label>
+      <input type="text" class="setting-input" id="cfgAvaliacoesUrl" placeholder="http://localhost:5678/webhook/avaliacoes/candidato" />
+      <p class="modal-hint">Endpoint POST que recebe {telefone} e retorna as avaliações do candidato.</p>
     </div>
 
     <div class="setting-group">
@@ -1014,6 +1673,47 @@
   </div>
 </div>
 
+<!-- ASSESSMENT MODAL (avaliação individual) -->
+<div class="aval-overlay" id="avalOverlay">
+  <div class="aval-modal">
+    <div class="aval-modal-header">
+      <div class="aval-modal-logo-wrap">
+        <img src="https://esaf.com.br/wp-content/uploads/2024/07/esaf_logo.png" alt="ESAF" />
+        <div class="aval-modal-logo-divider"></div>
+        <div class="aval-modal-logo-label">
+          <span class="aval-modal-logo-title">Assessment</span>
+          <span class="aval-modal-logo-sub" id="avalModalLogoSub">Hogan</span>
+        </div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="aval-modal-title" id="avalModalTitle"></div>
+        <div class="aval-modal-sub"   id="avalModalSub"></div>
+      </div>
+      <button type="button" class="aval-modal-close" onclick="closeAvalModal()" title="Fechar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="aval-modal-body" id="avalModalBody"></div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="detail-overlay" id="detailOverlay">
+  <div class="detail-modal" id="detailModal">
+    <div class="detail-header">
+      <div class="detail-avatar" id="detailAvatar">?</div>
+      <div class="detail-title-wrap">
+        <div class="detail-name" id="detailName">—</div>
+        <div class="detail-role-text" id="detailRole"></div>
+      </div>
+      <button type="button" class="detail-close" onclick="closeDetail()" title="Fechar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="detail-body" id="detailBody"></div>
+  </div>
+</div>
+
 <script>
 lucide.createIcons();
 
@@ -1029,13 +1729,16 @@ const SVG = {
   mail:     '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
   phone:    '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.1 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z"/></svg>',
   bot:      '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>',
+  user:     '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
 };
 
 // ── CONFIG ────────────────────────────────────────────────────────────────────
 const DEFAULTS = {
-  uploadUrl:   'http://localhost:5678/webhook/upload',
-  searchUrl:   'http://localhost:5678/webhook/buscar',
-  maxResults:  10,
+  uploadUrl:     'http://localhost:5678/webhook/upload',
+  searchUrl:     'http://localhost:5678/webhook/buscar',
+  chatUrl:       'http://localhost:5678/webhook/chat',
+  avaliacoesUrl: 'http://localhost:5678/webhook/avaliacoes/candidato',
+  maxResults:    10,
   whatsappPhone: '',
 };
 function loadConfig() {
@@ -1066,18 +1769,22 @@ function toast(msg, type, duration) {
 // ── SETTINGS ──────────────────────────────────────────────────────────────────
 function openSettings() {
   const cfg = loadConfig();
-  document.getElementById('cfgUploadUrl').value   = cfg.uploadUrl;
-  document.getElementById('cfgSearchUrl').value   = cfg.searchUrl;
-  document.getElementById('cfgMaxResults').value  = cfg.maxResults;
-  document.getElementById('cfgWhatsapp').value    = cfg.whatsappPhone || '';
+  document.getElementById('cfgUploadUrl').value    = cfg.uploadUrl;
+  document.getElementById('cfgSearchUrl').value    = cfg.searchUrl;
+  document.getElementById('cfgChatUrl').value      = cfg.chatUrl;
+  document.getElementById('cfgAvaliacoesUrl').value= cfg.avaliacoesUrl;
+  document.getElementById('cfgMaxResults').value   = cfg.maxResults;
+  document.getElementById('cfgWhatsapp').value     = cfg.whatsappPhone || '';
   document.getElementById('settingsModal').classList.add('open');
 }
 function closeSettings() { document.getElementById('settingsModal').classList.remove('open'); }
 function saveSettings() {
   saveConfig({
-    uploadUrl:     document.getElementById('cfgUploadUrl').value.trim()  || DEFAULTS.uploadUrl,
-    searchUrl:     document.getElementById('cfgSearchUrl').value.trim()  || DEFAULTS.searchUrl,
-    maxResults:    parseInt(document.getElementById('cfgMaxResults').value) || DEFAULTS.maxResults,
+    uploadUrl:     document.getElementById('cfgUploadUrl').value.trim()     || DEFAULTS.uploadUrl,
+    searchUrl:     document.getElementById('cfgSearchUrl').value.trim()     || DEFAULTS.searchUrl,
+    chatUrl:       document.getElementById('cfgChatUrl').value.trim()       || DEFAULTS.chatUrl,
+    avaliacoesUrl: document.getElementById('cfgAvaliacoesUrl').value.trim() || DEFAULTS.avaliacoesUrl,
+    maxResults:    parseInt(document.getElementById('cfgMaxResults').value)  || DEFAULTS.maxResults,
     whatsappPhone: document.getElementById('cfgWhatsapp').value.replace(/\D/g, ''),
   });
   closeSettings();
@@ -1089,9 +1796,9 @@ document.getElementById('settingsModal').addEventListener('click', function(e) {
 
 // ── UPLOAD FILES ──────────────────────────────────────────────────────────────
 var selectedFiles = [];
-var failedFiles   = [];   // { file, name, error } de cada envio malsucedido
+var failedFiles   = [];
 var ALLOWED = ['pdf','png','jpg','jpeg','webp'];
-var dropZone = document.getElementById('dropZone');
+var dropZone  = document.getElementById('dropZone');
 var fileInput = document.getElementById('fileInput');
 
 dropZone.addEventListener('dragover', function(e) {
@@ -1159,7 +1866,7 @@ function escHtml(s) {
 }
 
 function removeFile(i) { selectedFiles.splice(i, 1); renderFileList(); }
-function clearFiles()  {
+function clearFiles() {
   selectedFiles = [];
   failedFiles   = [];
   document.getElementById('errorActions').style.display = 'none';
@@ -1185,7 +1892,6 @@ function toggleErrorFilter() {
 // ── REENVIAR ARQUIVOS COM ERRO ────────────────────────────────────────────────
 function retryFailed() {
   if (!failedFiles.length) return;
-  // Carrega os arquivos com erro como nova selecao
   selectedFiles = failedFiles.map(function(f) { return f.file; });
   failedFiles   = [];
   errorFilterActive = false;
@@ -1194,7 +1900,6 @@ function retryFailed() {
   document.getElementById('errorActions').style.display = 'none';
   document.getElementById('bulkLogWrap').style.display  = 'none';
   renderFileList();
-  // Inicia o envio em massa automaticamente
   bulkUpload();
 }
 
@@ -1222,7 +1927,7 @@ function showErrorPanel(count) {
   document.getElementById('errorActions').style.display = 'flex';
 }
 
-// ── UPLOAD NORMAL (todos de uma vez) ──────────────────────────────────────────
+// ── UPLOAD NORMAL ─────────────────────────────────────────────────────────────
 async function uploadFiles() {
   if (!selectedFiles.length) return;
   var cfg = loadConfig();
@@ -1293,7 +1998,7 @@ async function uploadFiles() {
   if (failed  > 0) toast(failed  + ' arquivo(s) falharam.', 'error', 6000);
 }
 
-// ── ENVIO EM MASSA (um por vez, com log detalhado) ────────────────────────────
+// ── ENVIO EM MASSA ────────────────────────────────────────────────────────────
 async function bulkUpload() {
   if (!selectedFiles.length) return;
   var cfg = loadConfig();
@@ -1303,14 +2008,12 @@ async function bulkUpload() {
   bulkBtn.disabled = true;
   bulkBtn.innerHTML = spinnerHtml('#fff') + ' Enviando...';
 
-  // Reset estado de erros
   failedFiles = [];
   document.getElementById('errorActions').style.display = 'none';
   errorFilterActive = false;
   document.getElementById('filterErrBtn').classList.remove('active');
   document.getElementById('filterErrBtn').textContent = 'Mostrar so erros';
 
-  // Show log panel
   var logWrap = document.getElementById('bulkLogWrap');
   var logList = document.getElementById('bulkLog');
   logWrap.style.display = 'block';
@@ -1335,7 +2038,6 @@ async function bulkUpload() {
     var statEl = document.getElementById('status-' + i);
     var itemEl = document.getElementById('file-item-' + i);
 
-    // Add row to bulk log
     var logRow = document.createElement('div');
     logRow.id = 'bulk-row-' + i;
     logRow.className = 'file-item';
@@ -1349,11 +2051,8 @@ async function bulkUpload() {
       '</div>' +
       '<div id="bulk-status-' + i + '" class="file-status"><span style="color:var(--text-muted);font-size:12px">Fila</span></div>';
     logList.appendChild(logRow);
-
-    // Scroll log row into view
     logRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-    // Update status in file list
     if (statEl) statEl.innerHTML = '<span style="color:var(--brand-mid);font-size:12px">Enviando...</span>';
     document.getElementById('bulk-status-' + i).innerHTML = '<span style="color:var(--brand-mid);font-size:12px">Enviando...</span>';
     document.getElementById('bulk-response-' + i).textContent = 'Enviando...';
@@ -1421,7 +2120,7 @@ async function bulkUpload() {
   updateSummary(okCount, errCount);
   showErrorPanel(errCount);
 
-  if (okCount > 0) toast(okCount + ' arquivo(s) enviado(s) com sucesso!', 'success');
+  if (okCount  > 0) toast(okCount  + ' arquivo(s) enviado(s) com sucesso!', 'success');
   if (errCount > 0) toast(errCount + ' arquivo(s) falharam. Veja o log abaixo.', 'error', 8000);
 }
 
@@ -1439,8 +2138,8 @@ function updateSummary(ok, err) {
   if (!summary) return;
   var total = selectedFiles.length;
   summary.innerHTML =
-    (ok  > 0 ? '<span class="summary-ok">' + SVG.check + ' ' + ok  + ' ok</span>'     : '') +
-    (err > 0 ? '<span class="summary-err">' + SVG.alert + ' ' + err + ' erro(s)</span>' : '') +
+    (ok  > 0 ? '<span class="summary-ok">'  + SVG.check + ' ' + ok  + ' ok</span>'      : '') +
+    (err > 0 ? '<span class="summary-err">' + SVG.alert + ' ' + err + ' erro(s)</span>'  : '') +
     '<span style="color:var(--text-muted)">' + total + ' total</span>';
 }
 
@@ -1451,46 +2150,153 @@ function spinnerHtml(color) {
 
 function sleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
 
-// ── SEARCH ────────────────────────────────────────────────────────────────────
+// ── KEYWORDS ─────────────────────────────────────────────────────────────────
+var keywords = [];
+
+(function initKeywords() {
+  var input  = document.getElementById('keywordInput');
+  var addBtn = document.getElementById('keywordAddBtn');
+  var wrap   = document.getElementById('keywordWrap');
+
+  // Enter ou vírgula confirmam a palavra
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      addKeyword();
+    } else if (e.key === 'Backspace' && input.value === '' && keywords.length) {
+      removeKeyword(keywords.length - 1);
+    }
+  });
+
+  // Botão + confirma a palavra
+  addBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    addKeyword();
+    input.focus();
+  });
+
+  // Clicar na área vazia do wrap foca o input
+  wrap.addEventListener('click', function(e) {
+    if (e.target === wrap) input.focus();
+  });
+})();
+
+function addKeyword() {
+  var input = document.getElementById('keywordInput');
+  var val = input.value.trim().replace(/,/g, '').trim();
+  if (!val) return;
+  if (keywords.some(function(k) { return k.toLowerCase() === val.toLowerCase(); })) {
+    input.value = '';
+    toast('Essa palavra ja foi adicionada.', 'info', 2500);
+    return;
+  }
+  keywords.push(val);
+  input.value = '';
+  renderKeywordChips();
+}
+
+function removeKeyword(i) {
+  keywords.splice(i, 1);
+  renderKeywordChips();
+  document.getElementById('keywordInput').focus();
+}
+
+function renderKeywordChips() {
+  var wrap  = document.getElementById('keywordWrap');
+  var input = document.getElementById('keywordInput');
+
+  wrap.querySelectorAll('.keyword-chip').forEach(function(el) { el.remove(); });
+
+  keywords.forEach(function(kw, i) {
+    var chip = document.createElement('span');
+    chip.className = 'keyword-chip';
+
+    var label = document.createTextNode(kw);
+    chip.appendChild(label);
+
+    var removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'keyword-chip-remove';
+    removeBtn.title = 'Remover';
+    removeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    (function(idx) {
+      removeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        removeKeyword(idx);
+      });
+    })(i);
+
+    chip.appendChild(removeBtn);
+    wrap.insertBefore(chip, input);
+  });
+
+  input.placeholder = keywords.length ? 'Adicionar mais...' : 'Digite e pressione Enter ou +';
+}
+
+// ── SEARCH (banco de dados) ───────────────────────────────────────────────────
+var currentCandidates = [];
+
 function clearSearch() {
-  document.getElementById('jobDescription').value = '';
-  document.getElementById('filterCargo').value = '';
-  document.getElementById('filterLocal').value = '';
-  document.getElementById('filterSkill').value = '';
+  keywords = [];
+  renderKeywordChips();
+  document.getElementById('keywordInput').value = '';
+  currentCandidates = [];
   document.getElementById('searchResults').innerHTML =
-    '<div class="state-empty"><div class="state-icon"><i data-lucide="target" style="width:44px;height:44px"></i></div><p>Descreva a vaga acima e clique em <strong>Buscar com IA</strong></p></div>';
+    '<div class="state-empty"><div class="state-icon"><i data-lucide="users" style="width:44px;height:44px"></i></div><p>Use os filtros acima e clique em <strong>Buscar no Banco</strong></p></div>';
+  document.getElementById('chatSection').style.display = 'none';
   lucide.createIcons();
 }
 
 async function searchCandidates() {
-  var vaga = document.getElementById('jobDescription').value.trim();
-  if (!vaga) { toast('Descreva a vaga ou perfil desejado antes de buscar.', 'error'); return; }
+  // Adiciona palavra digitada mas nao confirmada ainda
+  var input = document.getElementById('keywordInput');
+  if (input.value.trim()) addKeyword();
+
+  if (!keywords.length) {
+    toast('Adicione ao menos uma palavra-chave para buscar.', 'error');
+    return;
+  }
 
   var cfg = loadConfig();
   var btn = document.getElementById('searchBtn');
   btn.disabled = true;
-  btn.innerHTML = spinnerHtml('#fff') + ' Analisando...';
+  btn.innerHTML = spinnerHtml('#fff') + ' Buscando...';
 
   var payload = {
-    vaga:        vaga,
-    cargo:       document.getElementById('filterCargo').value.trim(),
-    localizacao: document.getElementById('filterLocal').value.trim(),
-    habilidade:  document.getElementById('filterSkill').value.trim(),
-    limite:      cfg.maxResults,
+    palavras: keywords,
+    limite:   cfg.maxResults,
   };
 
   document.getElementById('searchResults').innerHTML =
-    '<div class="state-loading"><div class="spinner"></div><p>A IA esta analisando os perfis do banco...</p></div>';
+    '<div class="state-loading"><div class="spinner"></div><p>Buscando candidatos no banco de dados...</p></div>';
 
   try {
     var res = await fetch(cfg.searchUrl, {
-      method: 'POST',
+      method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body:    JSON.stringify(payload),
     });
     if (!res.ok) throw new Error('HTTP ' + res.status + ': ' + res.statusText);
     var data = await res.json();
-    renderResults(data);
+
+    currentCandidates = Array.isArray(data)
+      ? data
+      : (data.candidatos || data.results || data.data || []);
+
+    renderResults(currentCandidates);
+
+    // Mostra chat e notifica nova busca
+    var chatSection = document.getElementById('chatSection');
+    chatSection.style.display = 'block';
+    document.getElementById('chatHeaderSub').textContent =
+      currentCandidates.length + ' candidato(s) carregado(s) – pergunte sobre eles';
+
+    if (currentCandidates.length > 0) {
+      appendSystemMsg('Nova busca: ' + currentCandidates.length + ' candidato(s) carregado(s) e prontos para analise.');
+    }
+
+    chatSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
   } catch (err) {
     document.getElementById('searchResults').innerHTML =
       '<div class="state-empty">' +
@@ -1502,24 +2308,18 @@ async function searchCandidates() {
     toast('Erro ao conectar com o webhook de busca.', 'error', 6000);
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg> Buscar com IA';
+    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg> Buscar no Banco';
   }
 }
 
-function renderResults(data) {
-  var candidates = Array.isArray(data) ? data
-    : (data.candidatos || data.results || data.data || []);
+function renderResults(candidates) {
   var container = document.getElementById('searchResults');
 
   if (!candidates.length) {
     container.innerHTML =
-      '<div class="state-empty"><div class="state-icon"><svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><p>Nenhum candidato encontrado para esta busca.</p></div>';
+      '<div class="state-empty"><div class="state-icon"><svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><p>Nenhum candidato encontrado para estes filtros.</p></div>';
     return;
   }
-
-  candidates = candidates.slice().sort(function(a, b) {
-    return (b.score || b.match || 0) - (a.score || a.match || 0);
-  });
 
   var header =
     '<div class="results-header">' +
@@ -1527,10 +2327,12 @@ function renderResults(data) {
       '<span class="results-count">' + candidates.length + ' resultado(s)</span>' +
     '</div>';
 
-  container.innerHTML = header + '<div id="candidatesList">' + candidates.map(candidateCard).join('') + '</div>';
+  container.innerHTML = header + '<div id="candidatesList">' +
+    candidates.map(function(c, idx) { return candidateCard(c, idx); }).join('') +
+  '</div>';
 }
 
-function candidateCard(c) {
+function candidateCard(c, idx) {
   var rawScore = c.score != null ? c.score : (c.match != null ? c.match : null);
   var pct = rawScore !== null ? Math.round(rawScore > 1 ? rawScore : rawScore * 100) : null;
   var scoreClass = pct !== null ? (pct >= 75 ? 'high' : pct >= 50 ? 'mid' : 'low') : 'low';
@@ -1542,13 +2344,24 @@ function candidateCard(c) {
   var location = c.localizacao || c.cidade || '';
   var email    = c.email || '';
   var phone    = c.telefone || '';
-  var aiNote   = c.justificativa || c.analise || '';
+  var aiNote      = c.justificativa || c.analise || '';
+  var hoganResult = c.hogan_resultado || null;
+  var hoganData   = c.hogan_data || null;
 
   var initials = name.trim().split(/\s+/).slice(0,2).map(function(w){ return w[0] || ''; }).join('').toUpperCase() || '?';
 
   var tags = skills
     ? skills.split(/[,;|]/).slice(0,5).map(function(s){ return '<span class="tag">' + escHtml(s.trim()) + '</span>'; }).join('')
     : '';
+
+  // Badge Hogan se tiver avaliação
+  if (hoganResult) {
+    var hoganDate = hoganData ? new Date(hoganData).toLocaleDateString('pt-BR', {day:'2-digit',month:'short',year:'numeric'}) : '';
+    tags += '<span class="tag" style="background:rgba(11,116,115,0.12);border-color:rgba(11,116,115,0.25);color:var(--brand-mid);font-weight:600">' +
+              '<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:2px"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/></svg>' +
+              'Hogan' + (hoganDate ? ' · ' + hoganDate : '') +
+            '</span>';
+  }
 
   var metaItems = [
     location && '<span class="meta-item">' + SVG.mapPin + escHtml(location) + '</span>',
@@ -1564,19 +2377,547 @@ function candidateCard(c) {
     ? '<div class="score-badge"><div class="score-circle ' + scoreClass + '">' + scoreLabel + '</div><span class="score-label">Match</span></div>'
     : '';
 
+  var expandIcon = '<div class="candidate-expand"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></div>';
+
   return (
-    '<div class="candidate-card">' +
+    '<div class="candidate-card" onclick="openDetail(' + idx + ')">' +
+      expandIcon +
       '<div class="avatar">' + escHtml(initials) + '</div>' +
       '<div class="candidate-info">' +
         '<div class="candidate-name">' + escHtml(name) + '</div>' +
-        (role     ? '<div class="candidate-role">' + escHtml(role) + '</div>' : '') +
-        (tags     ? '<div class="candidate-tags">' + tags + '</div>' : '') +
+        (role      ? '<div class="candidate-role">' + escHtml(role) + '</div>' : '') +
+        (tags      ? '<div class="candidate-tags">' + tags + '</div>' : '') +
         (metaItems ? '<div class="candidate-meta">' + metaItems + '</div>' : '') +
         aiSection +
       '</div>' +
       scoreHtml +
     '</div>'
   );
+}
+
+// ── DETAIL MODAL ──────────────────────────────────────────────────────────────
+
+// Labels amigáveis para os campos conhecidos
+var FIELD_LABELS = {
+  telefone:             'Telefone',
+  email:                'E-mail',
+  localizacao:          'Localização',
+  cidade:               'Cidade',
+  estado:               'Estado',
+  cargo_pretendido:     'Cargo pretendido',
+  cargo:                'Cargo',
+  habilidades:          'Habilidades',
+  skills:               'Habilidades',
+  idiomas:              'Idiomas',
+  certificacoes:        'Certificações',
+  nivel_experiencia:    'Nível de experiência',
+  experiencia_resumida: 'Experiência',
+  experiencia:          'Experiência',
+  formacao:             'Formação',
+  pretensao_salarial:   'Pretensão salarial',
+  disponibilidade:      'Disponibilidade',
+  modalidade:           'Modalidade',
+  linkedin:             'LinkedIn',
+  portfolio:            'Portfólio',
+  observacoes:          'Observações',
+  nome_arquivo:         'Arquivo',
+  criado_em:            'Cadastrado em',
+};
+
+// Campos a omitir do grid geral
+var DETAIL_SKIP = {
+  id: 1, nome_completo: 1, nome: 1, score: 1, match: 1,
+  justificativa: 1, analise: 1,
+  hogan_resultado: 1, hogan_tipo: 1, hogan_data: 1,
+};
+
+// Campos de habilidades (renderizados como chips)
+var SKILLS_KEYS = { habilidades: 1, skills: 1, idiomas: 1, certificacoes: 1 };
+
+// Campos que ocupam linha inteira
+var FULL_KEYS = { experiencia_resumida: 1, experiencia: 1, formacao: 1, observacoes: 1 };
+
+var FIELD_MAP = {
+  id:                    { label: 'ID',                  sec: null },
+  nome_completo:         { label: 'Nome',                sec: null },
+  nome:                  { label: 'Nome',                sec: null },
+  cargo_pretendido:      { label: 'Cargo pretendido',    sec: 'identificacao' },
+  cargo:                 { label: 'Cargo',               sec: 'identificacao' },
+  email:                 { label: 'E-mail',              sec: 'contato' },
+  telefone:              { label: 'Telefone',            sec: 'contato' },
+  localizacao:           { label: 'Localização',         sec: 'contato' },
+  cidade:                { label: 'Cidade',              sec: 'contato' },
+  estado:                { label: 'Estado',              sec: 'contato' },
+  linkedin:              { label: 'LinkedIn',            sec: 'contato' },
+  portfolio:             { label: 'Portfólio / Site',    sec: 'contato' },
+  habilidades:           { label: 'Habilidades',         sec: 'habilidades' },
+  skills:                { label: 'Habilidades',         sec: 'habilidades' },
+  idiomas:               { label: 'Idiomas',             sec: 'habilidades' },
+  certificacoes:         { label: 'Certificações',       sec: 'habilidades' },
+  nivel_experiencia:     { label: 'Nível de experiência',sec: 'experiencia' },
+  experiencia_resumida:  { label: 'Experiência',         sec: 'experiencia' },
+  experiencia:           { label: 'Experiência',         sec: 'experiencia' },
+  formacao:              { label: 'Formação',            sec: 'formacao' },
+  curso:                 { label: 'Curso',               sec: 'formacao' },
+  instituicao:           { label: 'Instituição',         sec: 'formacao' },
+  ano_formatura:         { label: 'Ano de formatura',    sec: 'formacao' },
+  pretensao_salarial:    { label: 'Pretensão salarial',  sec: 'outros' },
+  disponibilidade:       { label: 'Disponibilidade',     sec: 'outros' },
+  tipo_contrato:         { label: 'Tipo de contrato',    sec: 'outros' },
+  modalidade:            { label: 'Modalidade',          sec: 'outros' },
+  observacoes:           { label: 'Observações',         sec: 'outros' },
+  score:                 { label: 'Score IA',            sec: null },
+  justificativa:         { label: 'Análise IA',          sec: null },
+  analise:               { label: 'Análise IA',          sec: null },
+  created_at:            { label: 'Cadastrado em',       sec: null },
+  data_cadastro:         { label: 'Cadastrado em',       sec: null },
+};
+
+var SEC_LABELS = {
+  identificacao: 'Identificação',
+  contato:       'Contato',
+  habilidades:   'Habilidades & Idiomas',
+  experiencia:   'Experiência Profissional',
+  formacao:      'Formação Acadêmica',
+  outros:        'Outras Informações',
+  extra:         'Demais Campos',
+};
+
+function openDetail(idx) {
+  try {
+    var c = currentCandidates[idx];
+    if (!c) return;
+
+    var name     = c.nome_completo || c.nome || 'Candidato';
+    var role     = c.cargo_pretendido || c.cargo || '';
+    var phone    = String(c.telefone || '');
+    var initials = name.trim().split(/\s+/).slice(0, 2)
+                    .map(function(w) { return w[0] || ''; })
+                    .join('').toUpperCase() || '?';
+
+    document.getElementById('detailAvatar').textContent = initials;
+    document.getElementById('detailName').textContent   = name;
+    document.getElementById('detailRole').textContent   = role;
+
+    var html = '';
+
+    // ── Score / Análise IA ────────────────────────────────────────
+    var rawScore = (c.score != null) ? c.score : ((c.match != null) ? c.match : null);
+    var aiNote   = c.justificativa || c.analise || '';
+    if (rawScore !== null || aiNote) {
+      var pct = rawScore !== null ? Math.round(rawScore > 1 ? rawScore : rawScore * 100) : null;
+      var cls = pct !== null ? (pct >= 75 ? 'high' : pct >= 50 ? 'mid' : 'low') : 'low';
+      html += '<div class="detail-section">';
+      html += '<div class="detail-section-title">✦ Análise IA</div>';
+      if (pct !== null) html += '<div style="margin-bottom:10px"><span class="detail-score-chip ' + cls + '">' + pct + '% de compatibilidade</span></div>';
+      if (aiNote) html += '<div class="detail-ai-note">' + escHtml(aiNote) + '</div>';
+      html += '</div>';
+    }
+
+    // ── Todos os campos do candidato ──────────────────────────────
+    html += '<div class="detail-section">';
+    html += '<div class="detail-section-title">👤 Dados do Candidato</div>';
+    html += '<div class="detail-grid">';
+
+    var keys = Object.keys(c);
+    for (var ki = 0; ki < keys.length; ki++) {
+      var key = keys[ki];
+      if (DETAIL_SKIP[key]) continue;
+
+      var val = c[key];
+      if (val === null || val === undefined || val === '') continue;
+      if (typeof val === 'object') continue; // ignora objetos aninhados
+
+      var strVal = String(val);
+      var label  = FIELD_LABELS[key] || key.replace(/_/g, ' ');
+      var isFull = !!(FULL_KEYS[key] || strVal.length > 80 || strVal.indexOf('\n') >= 0);
+      var isLink = key === 'linkedin' || key === 'portfolio' || /^https?:\/\//i.test(strVal);
+      var isSkill = !!(SKILLS_KEYS[key]);
+
+      var valHtml;
+      if (isLink) {
+        valHtml = '<a href="' + escHtml(strVal) + '" target="_blank" rel="noopener">' + escHtml(strVal) + '</a>';
+      } else if (isSkill) {
+        valHtml = '<div class="detail-tags">' +
+          strVal.split(/[,;|]/).map(function(s) {
+            return '<span class="tag">' + escHtml(s.trim()) + '</span>';
+          }).join('') +
+          '</div>';
+      } else {
+        valHtml = escHtml(strVal);
+      }
+
+      html += '<div class="detail-field' + (isFull ? ' full' : '') + '">';
+      html += '<span class="detail-field-label">' + escHtml(label) + '</span>';
+      html += '<span class="detail-field-value">' + valHtml + '</span>';
+      html += '</div>';
+    }
+
+    html += '</div></div>';
+
+    // ── Hogan ─────────────────────────────────────────────────────
+    var hoganInline = c.hogan_resultado || null;
+    if (hoganInline || phone) {
+      html += '<div class="hogan-section-wrap" id="hoganSection">';
+      html += '<div class="detail-section-title">🏷 Assessment Hogan</div>';
+      if (!hoganInline) {
+        html += '<div class="hogan-loading" id="hoganLoading"><div class="hogan-mini-spinner"></div><span>Buscando avaliação...</span></div>';
+      }
+      html += '<div id="hoganContent"></div>';
+      html += '</div>';
+    }
+
+    document.getElementById('detailBody').innerHTML = html;
+    document.getElementById('detailOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    // Hogan: inline ou busca assíncrona
+    if (hoganInline) {
+      renderHoganInDetail([{ resultado: hoganInline, criado_em: c.hogan_data }]);
+    } else if (phone) {
+      fetchHoganForCandidate(phone);
+    }
+
+  } catch(err) {
+    console.error('openDetail error:', err);
+  }
+}
+
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── HOGAN NO MODAL DE DETALHES ────────────────────────────────────────────────
+async function fetchHoganForCandidate(phone) {
+  var cfg = loadConfig();
+  var url = cfg.avaliacoesUrl;
+  if (!url) {
+    var el = document.getElementById('hoganLoading');
+    if (el) el.remove();
+    return;
+  }
+  try {
+    var res = await fetch(url, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ telefone: phone }),
+    });
+    var data = await res.json();
+    var avaliacoes = Array.isArray(data) ? data : (data.avaliacoes || data.data || []);
+    renderHoganInDetail(avaliacoes);
+  } catch(err) {
+    var loading = document.getElementById('hoganLoading');
+    if (loading) loading.innerHTML = '<span style="color:var(--text-muted);font-size:12px;font-style:italic">Avaliação não disponível</span>';
+  }
+}
+
+// Armazena avaliacoes do candidato atual para o modal
+var currentAvaliacoes = [];
+
+function renderHoganInDetail(avaliacoes) {
+  var loading = document.getElementById('hoganLoading');
+  var content = document.getElementById('hoganContent');
+  if (loading) loading.remove();
+  if (!content) return;
+
+  if (!avaliacoes || !avaliacoes.length) {
+    content.innerHTML = '<p class="hogan-no-data">Nenhuma avaliação Hogan encontrada para este candidato.</p>';
+    return;
+  }
+
+  // Normaliza resultado de cada avaliação
+  currentAvaliacoes = avaliacoes.map(function(a) {
+    var r = a.resultado;
+    if (typeof r === 'string') { try { r = JSON.parse(r); } catch(e) { r = null; } }
+    return { criado_em: a.criado_em, tipo_avaliacao: a.tipo_avaliacao, resultado: r };
+  });
+
+  // Lista clicável de todas as avaliações
+  var html = '<div class="aval-list">';
+  currentAvaliacoes.forEach(function(aval, i) {
+    var tipo  = (aval.tipo_avaliacao || 'hogan').toUpperCase();
+    var data  = aval.criado_em
+      ? new Date(aval.criado_em).toLocaleDateString('pt-BR', {day:'2-digit', month:'long', year:'numeric',hour:'2-digit',minute:'2-digit'})
+      : '—';
+    var participant = aval.resultado && aval.resultado.participant ? aval.resultado.participant : null;
+    var sub = participant && participant.nome ? participant.nome : '';
+
+    html += '<div class="aval-list-item" onclick="openAvalModal(' + i + ')">';
+    html +=   '<div class="aval-list-meta">';
+    html +=     '<span class="aval-list-tipo">' + escHtml(tipo) + '</span>';
+    html +=     '<span class="aval-list-date">' + escHtml(data) + (sub ? ' · ' + escHtml(sub) : '') + '</span>';
+    html +=   '</div>';
+    html +=   '<span class="aval-list-arrow">›</span>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  content.innerHTML = html;
+}
+
+// ── MODAL DE AVALIAÇÃO INDIVIDUAL ────────────────────────────────────────────
+function openAvalModal(idx) {
+  var aval = currentAvaliacoes[idx];
+  if (!aval) return;
+
+  var resultado = aval.resultado || {};
+  var scores    = resultado.scores || {};
+  var tipo      = (aval.tipo_avaliacao || 'hogan').toUpperCase();
+  var data      = aval.criado_em
+    ? new Date(aval.criado_em).toLocaleDateString('pt-BR', {day:'2-digit', month:'long', year:'numeric'})
+    : '';
+  var participant = resultado.participant || {};
+
+  document.getElementById('avalModalLogoSub').textContent = tipo;
+  document.getElementById('avalModalTitle').textContent    = participant.nome || 'Candidato';
+  document.getElementById('avalModalSub').textContent      = data;
+
+  var html = '';
+
+  // HPI — todas as escalas
+  if (scores.hpi && scores.hpi.length) {
+    html += '<div class="aval-module">';
+    html += '<div class="aval-module-title" style="color:var(--brand-mid)">✦ HPI — Lado Brilhante</div>';
+    scores.hpi.forEach(function(s) {
+      var barColor = s.cls === 'lbl-alto' ? 'var(--accent)' : s.cls === 'lbl-medio' ? 'var(--warn)' : 'var(--border-dark)';
+      var lblCls   = (s.cls || 'lbl-baixo').replace('lbl-', '');
+      html += '<div class="aval-scale-row">';
+      html += '<div class="aval-scale-name">' + escHtml(s.scale || '') + '</div>';
+      html += '<div class="aval-bar-track"><div class="aval-bar-fill" style="width:' + (s.pct||0) + '%;background:' + barColor + '"></div></div>';
+      html += '<div class="aval-score">' + (s.raw !== undefined ? s.raw : '') + '</div>';
+      html += '<div><span class="aval-lbl ' + lblCls + '">' + escHtml(s.label || '') + '</span></div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+
+  // HDS — todas as escalas (não só as em risco)
+  if (scores.hds && scores.hds.length) {
+    html += '<div class="aval-module">';
+    html += '<div class="aval-module-title" style="color:var(--error)">⚠ HDS — Derailers</div>';
+    var hdsSorted = scores.hds.slice().sort(function(a,b){ return (b.pct||0)-(a.pct||0); });
+    hdsSorted.forEach(function(s) {
+      var barColor = s.cls === 'lbl-risco' ? 'var(--error)' : s.cls === 'lbl-atencao' ? 'var(--warn)' : 'var(--border)';
+      var lblCls   = (s.cls || 'lbl-ok').replace('lbl-', '');
+      html += '<div class="aval-scale-row">';
+      html += '<div class="aval-scale-name">' + escHtml(s.scale || '') + '</div>';
+      html += '<div class="aval-bar-track"><div class="aval-bar-fill" style="width:' + (s.pct||0) + '%;background:' + barColor + '"></div></div>';
+      html += '<div class="aval-score">' + (s.raw !== undefined ? s.raw : '') + '</div>';
+      html += '<div><span class="aval-lbl ' + lblCls + '">' + escHtml(s.label || '') + '</span></div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+
+  // MVPI — todos os valores ordenados
+  if (scores.mvpi && scores.mvpi.length) {
+    html += '<div class="aval-module">';
+    html += '<div class="aval-module-title" style="color:var(--brand)">★ MVPI — Valores & Motivadores</div>';
+    html += '<div class="aval-mvpi-grid">';
+    var mvpiSorted = scores.mvpi.slice().sort(function(a,b){ return (b.avg||0)-(a.avg||0); });
+    mvpiSorted.forEach(function(s) {
+      var lblCls = (s.cls || 'lbl-baixo').replace('lbl-', '');
+      html += '<div class="aval-mvpi-item">';
+      html += '<span class="aval-mvpi-name">' + escHtml(s.scale || '') + '</span>';
+      html += '<div style="display:flex;align-items:center;gap:6px">';
+      html += '<span class="aval-mvpi-val">' + (s.avg !== undefined ? s.avg.toFixed(1) : '—') + '</span>';
+      html += '<span class="aval-lbl ' + lblCls + '">' + escHtml(s.label || '') + '</span>';
+      html += '</div></div>';
+    });
+    html += '</div></div>';
+  }
+
+  if (!html) {
+    html = '<p class="hogan-no-data">Dados de scores não disponíveis para esta avaliação.</p>';
+  }
+
+  document.getElementById('avalModalBody').innerHTML = html;
+  document.getElementById('avalOverlay').classList.add('open');
+}
+
+function closeAvalModal() {
+  document.getElementById('avalOverlay').classList.remove('open');
+}
+
+document.getElementById('avalOverlay').addEventListener('click', function(e) {
+  if (e.target === e.currentTarget) closeAvalModal();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    if (document.getElementById('avalOverlay').classList.contains('open')) {
+      closeAvalModal();
+    } else {
+      closeDetail();
+    }
+  }
+});
+
+document.getElementById('detailOverlay').addEventListener('click', function(e) {
+  if (e.target === e.currentTarget) closeDetail();
+});
+
+// ── CHAT IA ───────────────────────────────────────────────────────────────────
+var chatHistory = []; // [{role:'user'|'assistant', content:'...'}]
+
+function updateChatBadge() {
+  var badge = document.getElementById('chatHistoryBadge');
+  if (chatHistory.length > 0) {
+    badge.style.display = 'inline-flex';
+    badge.textContent = chatHistory.length + ' msg' + (chatHistory.length !== 1 ? 's' : '');
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function appendSystemMsg(text) {
+  var emptyState = document.getElementById('chatEmptyState');
+  if (emptyState) emptyState.remove();
+
+  var msgEl = document.createElement('div');
+  msgEl.className = 'chat-msg system';
+  msgEl.innerHTML = '<div class="chat-bubble">' + escHtml(text) + '</div>';
+  document.getElementById('chatMessages').appendChild(msgEl);
+  scrollChatToBottom();
+}
+
+function appendChatMsg(role, text) {
+  var emptyState = document.getElementById('chatEmptyState');
+  if (emptyState) emptyState.remove();
+
+  var isUser = role === 'user';
+  var avatarHtml = isUser
+    ? '<div class="chat-avatar">' + SVG.user + '</div>'
+    : '<div class="chat-avatar">' + SVG.bot + '</div>';
+
+  var msgEl = document.createElement('div');
+  msgEl.className = 'chat-msg ' + role;
+  msgEl.innerHTML =
+    avatarHtml +
+    '<div class="chat-bubble">' + escHtml(text) + '</div>';
+
+  document.getElementById('chatMessages').appendChild(msgEl);
+  scrollChatToBottom();
+}
+
+function appendTypingIndicator() {
+  var emptyState = document.getElementById('chatEmptyState');
+  if (emptyState) emptyState.remove();
+
+  var el = document.createElement('div');
+  el.className = 'chat-msg assistant';
+  el.id = 'chatTyping';
+  el.innerHTML =
+    '<div class="chat-avatar">' + SVG.bot + '</div>' +
+    '<div class="chat-bubble" style="padding:10px 16px">' +
+      '<div class="chat-typing-dots"><span></span><span></span><span></span></div>' +
+    '</div>';
+  document.getElementById('chatMessages').appendChild(el);
+  scrollChatToBottom();
+}
+
+function removeTypingIndicator() {
+  var el = document.getElementById('chatTyping');
+  if (el) el.remove();
+}
+
+function scrollChatToBottom() {
+  var msgs = document.getElementById('chatMessages');
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function clearChatHistory() {
+  chatHistory = [];
+  var msgs = document.getElementById('chatMessages');
+  msgs.innerHTML =
+    '<div class="chat-empty-state" id="chatEmptyState">' +
+      '<div class="chat-empty-icon">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>' +
+      '</div>' +
+      '<p>Historico limpo.<br><span style="font-size:12px">Faca uma nova pergunta sobre os candidatos.</span></p>' +
+    '</div>';
+  updateChatBadge();
+}
+
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
+}
+
+function autoResizeChat(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+async function sendChatMessage() {
+  var input = document.getElementById('chatInput');
+  var msg = input.value.trim();
+  if (!msg) return;
+
+  if (!currentCandidates.length) {
+    toast('Busque candidatos primeiro antes de usar o chat.', 'error');
+    return;
+  }
+
+  var cfg = loadConfig();
+  var sendBtn = document.getElementById('chatSendBtn');
+
+  // Add to UI and history
+  appendChatMsg('user', msg);
+  chatHistory.push({ role: 'user', content: msg });
+  updateChatBadge();
+
+  // Clear input
+  input.value = '';
+  input.style.height = 'auto';
+  sendBtn.disabled = true;
+  input.disabled = true;
+
+  appendTypingIndicator();
+
+  try {
+    var payload = {
+      mensagem:   msg,
+      candidatos: currentCandidates,
+      historico:  chatHistory.slice(0, -1), // history before current message
+    };
+
+    var res = await fetch(cfg.chatUrl, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    });
+
+    if (!res.ok) throw new Error('HTTP ' + res.status + ': ' + res.statusText);
+
+    var data = await res.json();
+    var resposta =
+      (typeof data === 'string') ? data :
+      (data.resposta || data.response || data.content ||
+       (data.message && data.message.content) ||
+       (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) ||
+       JSON.stringify(data));
+
+    removeTypingIndicator();
+    appendChatMsg('assistant', resposta);
+    chatHistory.push({ role: 'assistant', content: resposta });
+    updateChatBadge();
+
+  } catch (err) {
+    removeTypingIndicator();
+    var errText = 'Erro ao conectar com a IA: ' + err.message;
+    appendChatMsg('assistant', errText);
+    // Remove the failed user message from history
+    chatHistory.pop();
+    updateChatBadge();
+    toast('Erro ao conectar com o webhook de chat.', 'error', 6000);
+  } finally {
+    sendBtn.disabled = false;
+    input.disabled = false;
+    input.focus();
+  }
 }
 </script>
 </body>

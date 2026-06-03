@@ -1,0 +1,234 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "avaliacoes",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2180,
+        -560
+      ],
+      "id": "ad74ea87-1b25-4687-8eab-2c2392a7dff0",
+      "name": "Receber Avaliação",
+      "webhookId": "843a0a6e-81ad-4495-98ef-3aac3fb1d695"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\n\n// Valida campos obrigatórios\nif (!body.participant?.telefone) {\n  throw new Error('Campo obrigatório ausente: participant.telefone');\n}\nif (!body.scores) {\n  throw new Error('Campo obrigatório ausente: scores');\n}\n\nconst telefone = body.participant.telefone.replace(/\\D/g, '');\nconst exportDate = body.exportDate || null;\n\n// Monta objeto resultado sem os dados de answers (muito volumoso) — inclua se quiser\nconst resultado = JSON.stringify(body);\n\nreturn [{\n  json: {\n    telefone,\n    tipo_avaliacao: 'hogan',\n    export_date: exportDate,\n    resultado\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1960,
+        -560
+      ],
+      "id": "1fe5d7cc-2468-49b0-a89c-e72691f5204f",
+      "name": "Preparar Dados"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT telefone FROM candidatos WHERE REGEXP_REPLACE(telefone, '[^0-9]', '', 'g') = '{{ $json.telefone }}' LIMIT 1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -1740,
+        -560
+      ],
+      "id": "cc816433-f306-425b-9247-1a4568cd4bca",
+      "name": "Verificar Candidato",
+      "credentials": {
+        "postgres": {
+          "id": "t6nrrjZHceBz1qJ5",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst encontrou = items.length > 0 && !!items[0].json?.telefone;\n\nif (!encontrou) {\n  return [{\n    json: {\n      valido: \"false\",\n      telefone: $('Preparar Dados').item.json.telefone,\n      tipo_avaliacao: $('Preparar Dados').item.json.tipo_avaliacao,\n      export_date: $('Preparar Dados').item.json.export_date,\n      resultado: $('Preparar Dados').item.json.resultado\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    valido: \"true\",\n    telefone: items[0].json.telefone,\n    tipo_avaliacao: $('Preparar Dados').item.json.tipo_avaliacao,\n    export_date: $('Preparar Dados').item.json.export_date,\n    resultado: $('Preparar Dados').item.json.resultado\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1520,
+        -560
+      ],
+      "id": "c2810310-7e18-4822-9cfd-417ee3eacbd8",
+      "name": "Tratar Candidato"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "candidato-valido",
+              "leftValue": "={{ $json.valido }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1300,
+        -560
+      ],
+      "id": "f3f9fc83-afa7-4e32-8867-f704327e2c67",
+      "name": "Candidato Existe?"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO candidato_avaliacoes (telefone_candidato, tipo_avaliacao, export_date, resultado)\nVALUES (\n  '{{ $json.telefone }}',\n  '{{ $json.tipo_avaliacao }}',\n  {{ $json.export_date ? `'${$json.export_date}'` : 'NULL' }},\n  '{{ $json.resultado.replace(/'/g, \"''\") }}'\n)",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -1080,
+        -660
+      ],
+      "id": "1e971a95-d48d-423d-8fb3-c5275966e4d6",
+      "name": "Salvar Avaliação",
+      "credentials": {
+        "postgres": {
+          "id": "t6nrrjZHceBz1qJ5",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ sucesso: true, mensagem: 'Avaliação salva com sucesso', telefone: $('Tratar Candidato').item.json.telefone }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -860,
+        -660
+      ],
+      "id": "913c79cd-411f-4f65-a2ab-0df06a202efe",
+      "name": "Resposta Sucesso"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ JSON.stringify({ sucesso: false, mensagem: 'Candidato não encontrado no banco. Envie o currículo antes da avaliação.', telefone: $json.telefone }) }}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -1080,
+        -460
+      ],
+      "id": "c36ea85f-83c0-4a4b-aeb8-4b290c1f3321",
+      "name": "Resposta Erro"
+    }
+  ],
+  "connections": {
+    "Receber Avaliação": {
+      "main": [
+        [
+          {
+            "node": "Preparar Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Dados": {
+      "main": [
+        [
+          {
+            "node": "Verificar Candidato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Candidato": {
+      "main": [
+        [
+          {
+            "node": "Tratar Candidato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tratar Candidato": {
+      "main": [
+        [
+          {
+            "node": "Candidato Existe?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Candidato Existe?": {
+      "main": [
+        [
+          {
+            "node": "Salvar Avaliação",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta Erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar Avaliação": {
+      "main": [
+        [
+          {
+            "node": "Resposta Sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "17dd8513543fcd007fcbf2cc7b308d8668611290d926c6048b7fe95ea7af77ef"
+  }
+}
