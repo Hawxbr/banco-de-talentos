@@ -12,10 +12,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -2140,
-        560
+        100,
+        2080
       ],
-      "id": "2ca501fd-8cec-4384-8b19-1e9d7135fa69",
+      "id": "efc76b29-6158-448e-b76c-7a47720779d6",
       "name": "Webhook",
       "webhookId": "f5deb7e0-2d86-4877-8577-d441938168b4"
     },
@@ -26,10 +26,10 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        -1920,
-        560
+        320,
+        2080
       ],
-      "id": "67c55d4d-a061-49f6-bb97-eb79fda72d62",
+      "id": "4aa928b7-a118-4704-8287-cf85da78d25c",
       "name": "Limpar Temp"
     },
     {
@@ -39,10 +39,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1700,
-        560
+        540,
+        2080
       ],
-      "id": "088a8c81-0975-4082-8901-66418aa0a175",
+      "id": "738043bf-6d73-414c-b67b-70496f6f9bbc",
       "name": "Restaurar Binário"
     },
     {
@@ -73,10 +73,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1220,
-        560
+        1020,
+        2080
       ],
-      "id": "a5030451-d12c-4c7a-9255-3d0c2b258735",
+      "id": "22807267-e844-4ac4-a185-85355c9dce65",
       "name": "É PDF?"
     },
     {
@@ -86,10 +86,10 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        -1000,
-        440
+        1240,
+        1960
       ],
-      "id": "0ab1c83d-e481-4156-b3f6-0feda95e9dec",
+      "id": "35e1d880-afe3-4637-b8bf-d158901b342f",
       "name": "OCR PDF"
     },
     {
@@ -99,10 +99,10 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        -1000,
-        680
+        1240,
+        2200
       ],
-      "id": "e6d714aa-622c-4e99-8c8d-daae606ae05a",
+      "id": "96343ced-86a8-46d2-b7d4-3fa5c122a366",
       "name": "OCR Imagem"
     },
     {
@@ -112,10 +112,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -460,
-        560
+        1780,
+        2080
       ],
-      "id": "6193cecc-ab84-4b57-adcb-7e3ad30341ca",
+      "id": "5a4af313-959d-4e1c-a8f4-18d91d02f626",
       "name": "Parse JSON"
     },
     {
@@ -125,10 +125,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -180,
-        560
+        2060,
+        2080
       ],
-      "id": "3d073917-b360-431a-8f43-4bfb6a109d9a",
+      "id": "7219058b-164e-4600-baff-59079845b9fb",
       "name": "Limpar Texto"
     },
     {
@@ -158,10 +158,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        380,
-        560
+        2620,
+        2080
       ],
-      "id": "1307e711-d1b7-48d4-8122-b49bec27a516",
+      "id": "782e4b08-e190-4fe0-bd11-9a4964f5d7c1",
       "name": "Dados Completos?"
     },
     {
@@ -181,14 +181,14 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        600,
-        720
+        2840,
+        2240
       ],
-      "id": "3fcf2efe-0435-473c-8ea4-c219c18a360f",
+      "id": "d51a18c5-53a3-4993-92ee-bbb80227398e",
       "name": "OpenAI Fix T1",
       "credentials": {
         "openAiApi": {
-          "id": "PnKMlSiSgiq3YqKI",
+          "id": "qR7Z3wSPgJYp0XKm",
           "name": "OpenAi account"
         }
       },
@@ -201,10 +201,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        920,
-        960
+        3160,
+        2480
       ],
-      "id": "6ddbe81e-c9cd-4efc-91d6-bd37a0d9442f",
+      "id": "bd8eeedc-633a-49a9-9a86-22fdc688baf7",
       "name": "Parse Validar T1"
     },
     {
@@ -235,10 +235,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1040,
-        720
+        3280,
+        2240
       ],
-      "id": "f7048528-ec22-4b0a-8a5a-33acbeb8d28a",
+      "id": "5745aeed-7efc-4860-a39a-e16c719cf404",
       "name": "T1 OK?"
     },
     {
@@ -248,10 +248,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1440,
-        560
+        3680,
+        2080
       ],
-      "id": "3d3caaeb-7e2e-4be4-8f4b-a17cbf3595ed",
+      "id": "11ff2aa8-fb54-4feb-85f9-59d9b3f066ce",
       "name": "Montar INSERT SQL IA"
     },
     {
@@ -263,14 +263,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        1920,
-        560
+        4160,
+        2080
       ],
-      "id": "e03cfdaa-8e85-47d8-b665-2cdd64560036",
+      "id": "1ee0b497-c342-4b4b-bd88-57114a0907e4",
       "name": "Salvar no Banco IA",
       "credentials": {
         "postgres": {
-          "id": "t6nrrjZHceBz1qJ5",
+          "id": "rTrShRTTrTrus5IG",
           "name": "Postgres account"
         }
       }
@@ -282,10 +282,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2140,
-        560
+        4380,
+        2080
       ],
-      "id": "ba3302be-ca98-4367-aa13-06617581f8eb",
+      "id": "fd3c13b0-c43d-4547-a4c2-e32afe435c21",
       "name": "Resposta Sucesso IA"
     },
     {
@@ -293,10 +293,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1260,
-        720
+        3500,
+        2240
       ],
-      "id": "c12800bf-4c9d-4ea1-aeb5-51a3aaa710fb",
+      "id": "8055a5f4-46da-46b8-bed5-a89a33b36eb5",
       "name": "Wait 5s",
       "webhookId": "aa000010-0000-4000-a000-000000000010"
     },
@@ -320,14 +320,14 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        1480,
-        720
+        3720,
+        2240
       ],
-      "id": "8e158921-53d7-4d32-8b0a-0a4e8d08b890",
+      "id": "c1e3b10a-57ce-4152-be90-3982c5591309",
       "name": "OpenAI Fix T2",
       "credentials": {
         "openAiApi": {
-          "id": "PnKMlSiSgiq3YqKI",
+          "id": "qR7Z3wSPgJYp0XKm",
           "name": "OpenAi account"
         }
       },
@@ -340,10 +340,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1760,
-        1160
+        4000,
+        2680
       ],
-      "id": "9ec6ea66-ddd3-4796-bc49-aacd2b3be75f",
+      "id": "a7a9172d-9cb1-4493-a48a-067c10e44faa",
       "name": "Parse Validar T2"
     },
     {
@@ -374,10 +374,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1920,
-        720
+        4160,
+        2240
       ],
-      "id": "521ca50f-fa41-4638-9682-e9e0f580945d",
+      "id": "d9361659-6365-4e35-a920-53a221528478",
       "name": "T2 OK?"
     },
     {
@@ -387,10 +387,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2140,
-        720
+        4380,
+        2240
       ],
-      "id": "32c5e509-3372-4b64-b1ec-a1a71715a558",
+      "id": "8bacffc6-bdae-40fd-a8c9-e15d90ab0987",
       "name": "Wait 15s",
       "webhookId": "aa000014-0000-4000-a000-000000000014"
     },
@@ -414,14 +414,14 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        2360,
-        720
+        4600,
+        2240
       ],
-      "id": "356095dd-72e4-4182-816c-ff8b63e4f9ab",
+      "id": "6741c3d3-0905-487a-a51a-18ed06080364",
       "name": "OpenAI Fix T3",
       "credentials": {
         "openAiApi": {
-          "id": "PnKMlSiSgiq3YqKI",
+          "id": "qR7Z3wSPgJYp0XKm",
           "name": "OpenAi account"
         }
       },
@@ -434,10 +434,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2680,
-        1020
+        4920,
+        2540
       ],
-      "id": "7c2fc647-7bfd-4593-a24a-fb2390510186",
+      "id": "a8d0f8b7-4546-4179-b06c-fe1d9e303421",
       "name": "Parse Validar T3"
     },
     {
@@ -468,10 +468,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2800,
-        720
+        5040,
+        2240
       ],
-      "id": "7f41d43b-14c1-4b82-82f6-109ede0a467c",
+      "id": "1bd98c5a-c693-4605-914b-124cbae386fd",
       "name": "T3 OK?"
     },
     {
@@ -481,10 +481,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        3020,
-        720
+        5260,
+        2240
       ],
-      "id": "54370c9e-cb74-4059-a6e4-335d2ab2c80b",
+      "id": "3a87878c-d20e-4983-8709-9d42ab377d9c",
       "name": "Wait 30s",
       "webhookId": "aa000018-0000-4000-a000-000000000018"
     },
@@ -508,14 +508,14 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        3240,
-        720
+        5480,
+        2240
       ],
-      "id": "04459465-7a91-43f7-962a-0325fa393661",
+      "id": "d3e91b91-6e5b-4379-afd1-b5dac2a8ab64",
       "name": "OpenAI Fix T4 Final",
       "credentials": {
         "openAiApi": {
-          "id": "PnKMlSiSgiq3YqKI",
+          "id": "qR7Z3wSPgJYp0XKm",
           "name": "OpenAi account"
         }
       },
@@ -528,10 +528,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3480,
-        1060
+        5720,
+        2580
       ],
-      "id": "392f1a40-3d6d-4765-be07-af8a401e31f5",
+      "id": "3b8c88b3-d830-4ead-a1e4-4addecf6921b",
       "name": "Parse Validar T4"
     },
     {
@@ -562,10 +562,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        3680,
-        720
+        5920,
+        2240
       ],
-      "id": "c0d3290b-4d68-4f5c-8b2c-ecb44d198d35",
+      "id": "4d5225db-f166-4065-b812-cb1d6080dddc",
       "name": "T4 OK?"
     },
     {
@@ -575,10 +575,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3900,
-        720
+        6140,
+        2240
       ],
-      "id": "46c08f46-0e02-471b-8a12-d1d03babe136",
+      "id": "fa3baefe-591c-45d1-b2e7-702b73122104",
       "name": "Log Erro Final"
     },
     {
@@ -588,10 +588,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4120,
-        720
+        6360,
+        2240
       ],
-      "id": "10fabb76-f6fe-4cd0-af93-11ea7f9146ea",
+      "id": "35eac10b-bc03-44e5-9fd5-1e6ae7909c2f",
       "name": "Preparar SQL Revisao"
     },
     {
@@ -603,14 +603,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        4340,
-        720
+        6580,
+        2240
       ],
-      "id": "66653464-315a-4e65-9a64-f3187a33818d",
+      "id": "c5229eda-c538-47eb-b87e-cc9e62f49285",
       "name": "Salvar Revisao Manual",
       "credentials": {
         "postgres": {
-          "id": "t6nrrjZHceBz1qJ5",
+          "id": "rTrShRTTrTrus5IG",
           "name": "Postgres account"
         }
       }
@@ -622,10 +622,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4560,
-        720
+        6800,
+        2240
       ],
-      "id": "24182ec3-2ff6-43a3-8aab-b8fb8c565e99",
+      "id": "ba3f5429-1562-485f-8828-1e2503baface",
       "name": "Resposta Erro Final"
     },
     {
@@ -648,14 +648,14 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        40,
-        560
+        2280,
+        2080
       ],
-      "id": "3647d45e-fc8a-48f5-ae89-f335cc2288f1",
+      "id": "116d2116-31de-42c7-be0d-c84406853c85",
       "name": "Verificação de dados",
       "credentials": {
         "openAiApi": {
-          "id": "PnKMlSiSgiq3YqKI",
+          "id": "qR7Z3wSPgJYp0XKm",
           "name": "OpenAi account"
         }
       },
@@ -668,10 +668,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1540,
-        -1280
+        700,
+        80
       ],
-      "id": "0bca8fb0-3dd2-414c-83b8-af6d931a2681",
+      "id": "962f5da6-bfca-4b85-97f0-631a4b77c98a",
       "name": "Montar Resposta"
     },
     {
@@ -684,10 +684,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -2200,
-        -1280
+        40,
+        80
       ],
-      "id": "a598f34a-6bd5-49e3-8dd8-d19c9221867b",
+      "id": "40330b31-2125-4677-af73-d943add8ee8e",
       "name": "Webhook Buscar1",
       "webhookId": "96a37c55-8154-4bac-b0b5-f4534ced1819"
     },
@@ -698,10 +698,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1980,
-        -1280
+        260,
+        80
       ],
-      "id": "ebbfc7f5-e96b-4c48-809f-edf40eb44298",
+      "id": "b6d6c34e-01f4-41fc-8700-13bfdf9b1384",
       "name": "Montar SQL1"
     },
     {
@@ -713,14 +713,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        -1760,
-        -1280
+        480,
+        80
       ],
-      "id": "9d1796ca-76f4-4b36-9763-2fc501c62af4",
+      "id": "fc4ef314-c676-4480-809d-6b5f8f1e6542",
       "name": "Buscar no Banco1",
       "credentials": {
         "postgres": {
-          "id": "t6nrrjZHceBz1qJ5",
+          "id": "rTrShRTTrTrus5IG",
           "name": "Postgres account"
         }
       }
@@ -735,10 +735,10 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        -1480,
-        560
+        760,
+        2080
       ],
-      "id": "2b19b1a0-f76d-4f54-a09f-4f587f035cde",
+      "id": "66be0407-ded8-48e7-86f5-503dd816523f",
       "name": "Salvar Arquivo1"
     },
     {
@@ -748,10 +748,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1360,
-        -1060
+        880,
+        520
       ],
-      "id": "e61f6e58-cb3d-43ca-b2e4-e46e3ff77887",
+      "id": "427405c7-b4ee-4d29-aa2e-43376e374a47",
       "name": "Verificar Resposta"
     },
     {
@@ -781,10 +781,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1160,
-        -1060
+        1080,
+        520
       ],
-      "id": "51cda21c-894a-4f5e-be6b-abfdde934987",
+      "id": "1861ba5c-d968-49f1-aba0-f15c54121cf9",
       "name": "Tem Erro?"
     },
     {
@@ -794,10 +794,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -940,
-        -1180
+        1300,
+        280
       ],
-      "id": "8e84176b-b56d-4ff5-9c58-c36af51a3f33",
+      "id": "14bdc365-1523-4945-a060-916c6ae42705",
       "name": "Aguardar e Retry"
     },
     {
@@ -827,10 +827,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -720,
-        -1180
+        1520,
+        280
       ],
-      "id": "2118ab0c-b505-4331-a5d7-ac676b8801c6",
+      "id": "536b9689-7b72-4611-b372-7fc1da67a8de",
       "name": "Pode Tentar?"
     },
     {
@@ -840,10 +840,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -500,
-        -1040
+        1740,
+        420
       ],
-      "id": "384464bf-fa45-462a-bebb-cadca6ee523b",
+      "id": "db229ef7-61e4-47ba-a11b-825ddec9bb84",
       "name": "Erro Final"
     },
     {
@@ -853,10 +853,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -940,
-        -900
+        1300,
+        560
       ],
-      "id": "f06b7b91-619b-47a2-9024-513f11b6afb4",
+      "id": "42783792-78ad-4927-bf63-de5a180eec80",
       "name": "Resposta OK"
     },
     {
@@ -869,10 +869,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -2200,
-        -1060
+        40,
+        400
       ],
-      "id": "dd9de5c0-800f-434a-a99d-8c4cab9ca8cb",
+      "id": "46405b1c-5015-4cb5-9ea6-9b3bfc3c3ace",
       "name": "Webhook Chat1",
       "webhookId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
     },
@@ -883,10 +883,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1980,
-        -1060
+        260,
+        400
       ],
-      "id": "fa5d47e3-b370-4b80-be87-1c865a294713",
+      "id": "73ee6357-cd1b-4a3a-b92b-4fa5d21d2feb",
       "name": "Preparar Chat1"
     },
     {
@@ -900,7 +900,7 @@
         "messages": {
           "values": [
             {
-              "content": "=Você é um assistente especialista em recrutamento e seleção de talentos.\n\nVocê tem acesso aos seguintes candidatos que foram pré-selecionados:\n\n{{ $json.candidatosStr }}\n\nSua função é responder perguntas sobre esses candidatos de forma clara e objetiva.\nPode comparar candidatos, destacar habilidades, recomendar o mais adequado para uma vaga, apontar pontos fortes e fracos.\nResponda sempre em português, de forma profissional e direta.\nSe não houver candidatos, informe educadamente.",
+              "content": "=Você é um assistente especialista em recrutamento e seleção.\n\nVocê tem acesso aos seguintes candidatos:\n\n{{ $json.candidatosStr }}\n\nResponda apenas com base nos dados fornecidos acima.\n\n### Suas funções\n\n* Responder perguntas sobre candidatos.\n* Comparar candidatos.\n* Identificar habilidades e experiências relevantes.\n* Recomendar os candidatos mais adequados para uma vaga.\n* Destacar pontos fortes e possíveis pontos de atenção.\n\n### Regras\n\n* Responda sempre em português do Brasil.\n* Utilize sempre Markdown válido.\n* Organize a resposta com títulos, listas, tabelas e negrito quando necessário.\n* Seja profissional, claro e objetivo.\n* Não invente informações.\n* Se uma informação não estiver disponível, informe isso claramente.\n* Se não houver candidatos disponíveis, responda: \"Nenhum candidato foi encontrado para análise.\"\n* Ao recomendar candidatos, explique brevemente os motivos da recomendação com base nos dados encontrados.\n\nRetorne apenas a resposta em Markdown, sem explicações adicionais sobre o formato.\n",
               "role": "system"
             },
             {
@@ -913,14 +913,14 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        -1740,
-        -920
+        500,
+        540
       ],
-      "id": "47b86c70-bc2e-4104-bd56-8cb7d54da8a5",
+      "id": "156d17c3-8daa-4edd-8f6f-08f4da4169d8",
       "name": "GPT Chat1",
       "credentials": {
         "openAiApi": {
-          "id": "PnKMlSiSgiq3YqKI",
+          "id": "qR7Z3wSPgJYp0XKm",
           "name": "OpenAi account"
         }
       },
@@ -933,10 +933,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1000,
-        300
+        3340,
+        1820
       ],
-      "id": "0b4c215f-ea8c-4e6f-98f3-ae42de183ae5",
+      "id": "52853679-3d61-42b6-94f1-3a1c93ae4d2b",
       "name": "Tratar Resultado Busca"
     },
     {
@@ -946,10 +946,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        620,
-        400
+        2860,
+        1920
       ],
-      "id": "407e8769-bd80-429e-bd55-264aa172b9a9",
+      "id": "b9637395-588a-4baa-9e0f-a27c58c15a97",
       "name": "Extrair Telefone1"
     },
     {
@@ -961,14 +961,15 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        880,
-        300
+        3120,
+        1820
       ],
-      "id": "08a9ea99-51e9-48f6-a522-37310c6ef288",
+      "id": "cc42e4fb-1b35-4625-816d-8325241740b1",
       "name": "Buscar no Banco2",
+      "alwaysOutputData": true,
       "credentials": {
         "postgres": {
-          "id": "t6nrrjZHceBz1qJ5",
+          "id": "rTrShRTTrTrus5IG",
           "name": "Postgres account"
         }
       }
@@ -1000,10 +1001,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1120,
-        300
+        3560,
+        1820
       ],
-      "id": "80862fa0-0d76-4657-8ee8-0dccde368dc3",
+      "id": "35bc7bc6-7dd9-436b-a7f4-1e6e34d8bcec",
       "name": "Já Existe?1"
     },
     {
@@ -1026,14 +1027,14 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        1420,
-        200
+        3860,
+        1720
       ],
-      "id": "70bfe17b-7753-4933-bd93-63f13a388659",
+      "id": "285ad20d-e4fd-4730-9ec2-1433ce8b4f33",
       "name": "Gerar UPDATE SQL1",
       "credentials": {
         "openAiApi": {
-          "id": "PnKMlSiSgiq3YqKI",
+          "id": "qR7Z3wSPgJYp0XKm",
           "name": "OpenAi account"
         }
       }
@@ -1058,14 +1059,14 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        1420,
-        380
+        3860,
+        1900
       ],
-      "id": "31a38577-f1a3-4a93-8ab5-8355503ba54c",
+      "id": "e2debafd-c2ef-4fa3-a824-75c08c82fdf8",
       "name": "Gerar INSERT SQL",
       "credentials": {
         "openAiApi": {
-          "id": "PnKMlSiSgiq3YqKI",
+          "id": "qR7Z3wSPgJYp0XKm",
           "name": "OpenAi account"
         }
       }
@@ -1077,10 +1078,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1920,
-        280
+        4360,
+        1800
       ],
-      "id": "affc9853-db20-4786-81c1-e6da3265b8a2",
+      "id": "b0f117d1-34e8-432a-947e-0a7f5dabf05c",
       "name": "Extrair SQL"
     },
     {
@@ -1092,14 +1093,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        2140,
-        280
+        4580,
+        1800
       ],
-      "id": "43ff5e95-32e8-4d24-acc0-d8af4adc05a9",
+      "id": "1b5414dc-1d4b-4a36-9d9a-ada1abb93476",
       "name": "Salvar no Banco",
       "credentials": {
         "postgres": {
-          "id": "t6nrrjZHceBz1qJ5",
+          "id": "rTrShRTTrTrus5IG",
           "name": "Postgres account"
         }
       }
@@ -1114,10 +1115,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -2180,
-        -560
+        40,
+        900
       ],
-      "id": "ad74ea87-1b25-4687-8eab-2c2392a7dff0",
+      "id": "5595ccb9-4c07-477e-a1cf-a93ffa5c4c6a",
       "name": "Receber Avaliação",
       "webhookId": "843a0a6e-81ad-4495-98ef-3aac3fb1d695"
     },
@@ -1128,10 +1129,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1960,
-        -560
+        260,
+        900
       ],
-      "id": "1fe5d7cc-2468-49b0-a89c-e72691f5204f",
+      "id": "ff51f0cc-e2ac-4394-b060-540c98bdf31a",
       "name": "Preparar Dados"
     },
     {
@@ -1143,14 +1144,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        -1740,
-        -560
+        480,
+        900
       ],
-      "id": "cc816433-f306-425b-9247-1a4568cd4bca",
+      "id": "5061d991-da6f-4052-9432-6e8c3b679e6b",
       "name": "Verificar Candidato",
       "credentials": {
         "postgres": {
-          "id": "t6nrrjZHceBz1qJ5",
+          "id": "rTrShRTTrTrus5IG",
           "name": "Postgres account"
         }
       }
@@ -1162,10 +1163,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1520,
-        -560
+        700,
+        900
       ],
-      "id": "c2810310-7e18-4822-9cfd-417ee3eacbd8",
+      "id": "21e79727-be2e-4411-9500-9deaf941612a",
       "name": "Tratar Candidato"
     },
     {
@@ -1195,10 +1196,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1300,
-        -560
+        920,
+        900
       ],
-      "id": "f3f9fc83-afa7-4e32-8867-f704327e2c67",
+      "id": "a28a8147-29a8-4303-a20a-0b758615d4fe",
       "name": "Candidato Existe?"
     },
     {
@@ -1210,14 +1211,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        -1080,
-        -660
+        1140,
+        800
       ],
-      "id": "1e971a95-d48d-423d-8fb3-c5275966e4d6",
+      "id": "0732194e-3d7a-4009-8f90-86b3714efcb6",
       "name": "Salvar Avaliação",
       "credentials": {
         "postgres": {
-          "id": "t6nrrjZHceBz1qJ5",
+          "id": "rTrShRTTrTrus5IG",
           "name": "Postgres account"
         }
       }
@@ -1231,10 +1232,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        -860,
-        -660
+        1360,
+        800
       ],
-      "id": "913c79cd-411f-4f65-a2ab-0df06a202efe",
+      "id": "12356c29-e069-4922-bb11-114a6af40401",
       "name": "Resposta Sucesso"
     },
     {
@@ -1248,10 +1249,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        -1080,
-        -460
+        1140,
+        1000
       ],
-      "id": "c36ea85f-83c0-4a4b-aeb8-4b290c1f3321",
+      "id": "fff32e86-b6d8-4492-93c1-0da9b0380c5d",
       "name": "Resposta Erro"
     },
     {
@@ -1264,10 +1265,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -2180,
-        -60
+        60,
+        1700
       ],
-      "id": "bf2f24da-004e-40fc-a356-33242455e4d3",
+      "id": "2d2e8807-b2f1-4bb0-afd6-207b4c8281e9",
       "name": "Webhook Buscar Avaliações",
       "webhookId": "e82af7d6-a883-443e-95e8-417e44222a05"
     },
@@ -1278,10 +1279,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1960,
-        -60
+        280,
+        1700
       ],
-      "id": "8967faac-4c5d-4ee6-a265-fd03656ce2c4",
+      "id": "95889cfa-4a6f-496e-b921-f3140b5af97c",
       "name": "Normalizar Telefone e Montar SQL"
     },
     {
@@ -1293,14 +1294,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        -1740,
-        -60
+        500,
+        1700
       ],
-      "id": "ab56817b-8ade-4be9-ba61-b070674431a4",
+      "id": "008b9b06-1445-4379-9961-461b367cf279",
       "name": "Buscar Avaliações no Banco",
       "credentials": {
         "postgres": {
-          "id": "t6nrrjZHceBz1qJ5",
+          "id": "rTrShRTTrTrus5IG",
           "name": "Postgres account"
         }
       }
@@ -1312,11 +1313,196 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1520,
-        -60
+        720,
+        1700
       ],
-      "id": "b8753e30-1f8d-4b4d-a6b3-88ccbe3a7884",
+      "id": "5408b869-5b09-47cb-98df-9cac982a155e",
       "name": "Formatar Resposta"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sugerir-keywords",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        40,
+        1300
+      ],
+      "id": "96945d17-d7ea-4159-ae4c-a9cf9851c5bd",
+      "name": "Webhook Sugerir Keywords",
+      "webhookId": "fa49e347-9db2-43e2-83a0-60084202f8c6"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json;\n\nconst vaga = (body.vaga || '').trim();\n\nif (!vaga) {\n  throw new Error('Campo \"vaga\" é obrigatório.');\n}\n\nreturn [{ json: {\n  vaga,\n  tentativa: 1,\n  maxTentativas: 3\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        1300
+      ],
+      "id": "fe1d77e5-f111-4c8c-a52b-182ac742ace3",
+      "name": "Preparar Requisição"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Você é um especialista em recrutamento e seleção.\n\nSua tarefa é analisar a descrição de uma vaga e gerar exatamente 20 palavras-chave relevantes que podem aparecer em currículos de candidatos qualificados para essa vaga.\n\n### Regras\n\n* Retorne APENAS um array JSON com exatamente 20 strings, sem nenhum texto adicional, sem markdown, sem explicações.\n* Cada item deve ser uma única palavra ou expressão curta (no máximo 3 palavras).\n* Inclua: habilidades técnicas, ferramentas, tecnologias, soft skills relevantes, áreas de conhecimento, certificações comuns, cargos anteriores típicos.\n* Palavras devem estar em português do Brasil, exceto termos técnicos que são usados em inglês (ex: Excel, Python, SQL).\n* Não repita palavras. Não inclua a própria vaga como palavra-chave.\n* Formato de retorno obrigatório: [\"palavra1\", \"palavra2\", ..., \"palavra20\"]\n\nExemplo de retorno para vaga de Analista de TI:\n[\"suporte técnico\", \"Windows Server\", \"Active Directory\", \"redes\", \"TCP/IP\", \"firewall\", \"ITIL\", \"helpdesk\", \"Office 365\", \"virtualização\", \"VMware\", \"backup\", \"monitoramento\", \"Linux\", \"PowerShell\", \"troubleshooting\", \"atendimento ao usuário\", \"infraestrutura\", \"segurança da informação\", \"cloud\"]",
+              "role": "system"
+            },
+            {
+              "content": "={{ $json.vaga }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        520,
+        1400
+      ],
+      "id": "5986828e-675f-4433-b072-60181679dfd0",
+      "name": "GPT Sugerir Keywords",
+      "credentials": {
+        "openAiApi": {
+          "id": "qR7Z3wSPgJYp0XKm",
+          "name": "OpenAi account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extrai o conteúdo da resposta do GPT\nconst content =\n  $json.content ||\n  ($json.message && $json.message.content) ||\n  ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) ||\n  null;\n\nconst ctx = $('Preparar Requisição').first().json;\n\nif (!content) {\n  return [{ json: {\n    erro: true,\n    tentativa: ctx.tentativa,\n    maxTentativas: ctx.maxTentativas,\n    vaga: ctx.vaga\n  }}];\n}\n\n// Tenta parsear o JSON retornado pelo GPT\nlet keywords = [];\ntry {\n  // Remove possível markdown em volta (```json ... ```)\n  const cleaned = content.replace(/```[a-z]*\\n?/gi, '').replace(/```/g, '').trim();\n  keywords = JSON.parse(cleaned);\n  if (!Array.isArray(keywords)) throw new Error('Não é um array');\n} catch(e) {\n  // Tenta extrair com regex caso o GPT retorne algo fora do formato\n  const matches = content.match(/\"([^\"]{1,60})\"/g);\n  if (matches) {\n    keywords = matches.map(m => m.replace(/\"/g, '').trim()).filter(Boolean);\n  }\n}\n\nif (!keywords.length) {\n  return [{ json: {\n    erro: true,\n    tentativa: ctx.tentativa,\n    maxTentativas: ctx.maxTentativas,\n    vaga: ctx.vaga\n  }}];\n}\n\nreturn [{ json: {\n  erro: false,\n  keywords: keywords.slice(0, 20)\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        900,
+        1400
+      ],
+      "id": "6532d82c-6a99-4a39-9f92-bf54b0a85bdb",
+      "name": "Verificar Resposta1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-erro",
+              "leftValue": "={{ $json.erro }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1100,
+        1400
+      ],
+      "id": "f4fc68e9-6a65-488a-bb4d-00ef06b50870",
+      "name": "Tem Erro?1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const tentativa = $json.tentativa || 1;\nconst maxTentativas = $json.maxTentativas || 3;\n\nif (tentativa >= maxTentativas) {\n  return [{ json: {\n    podetentar: false,\n    tentativa,\n    maxTentativas,\n    vaga: $json.vaga\n  }}];\n}\n\nawait new Promise(resolve => setTimeout(resolve, 5000));\n\nreturn [{ json: {\n  podetentar: true,\n  tentativa: tentativa + 1,\n  maxTentativas,\n  vaga: $json.vaga\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        1180
+      ],
+      "id": "6f6bbfd1-2c0e-45a7-8dfd-59bafdca85e0",
+      "name": "Aguardar e Retry1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-pode",
+              "leftValue": "={{ $json.podetentar }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1540,
+        1180
+      ],
+      "id": "5a79f9db-89f5-426f-b3c5-41b36244aea5",
+      "name": "Pode Tentar?1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: {\n  keywords: null,\n  erro: true,\n  mensagem: 'Não foi possível gerar palavras-chave após 3 tentativas. Tente novamente em instantes.'\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        1320
+      ],
+      "id": "b70dfa9d-0acc-4ff7-badb-6e5d17690e81",
+      "name": "Erro Final1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: {\n  keywords: $json.keywords\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        1460
+      ],
+      "id": "e6acfb24-d36c-437d-9ddf-344f71a3550f",
+      "name": "Resposta OK1"
     }
   ],
   "connections": {
@@ -2023,11 +2209,108 @@
           }
         ]
       ]
+    },
+    "Webhook Sugerir Keywords": {
+      "main": [
+        [
+          {
+            "node": "Preparar Requisição",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Requisição": {
+      "main": [
+        [
+          {
+            "node": "GPT Sugerir Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Sugerir Keywords": {
+      "main": [
+        [
+          {
+            "node": "Verificar Resposta1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Verificar Resposta1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Resposta1": {
+      "main": [
+        [
+          {
+            "node": "Tem Erro?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tem Erro?1": {
+      "main": [
+        [
+          {
+            "node": "Aguardar e Retry1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta OK1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aguardar e Retry1": {
+      "main": [
+        [
+          {
+            "node": "Pode Tentar?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pode Tentar?1": {
+      "main": [
+        [
+          {
+            "node": "GPT Sugerir Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Erro Final1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "pinData": {},
   "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "17dd8513543fcd007fcbf2cc7b308d8668611290d926c6048b7fe95ea7af77ef"
+    "instanceId": "be849aff0a023d54164b9c3ae1cefcde2038b2e94232341cc094e32d6fa2e5ef"
   }
 }
